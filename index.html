@@ -1,2073 +1,47 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>James | Portfolio</title>
-  <meta name="description" content="Premium portfolio website of James, a frontend web developer building modern, responsive websites and digital experiences." />
-  <link rel="icon" href="logo.jpg" type="image/jpeg" />
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-<style>
-/* =========================
-   RESET / BASE
-========================= */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-:root {
-  --bg: #06070b;
-  --bg-soft: #0c0f16;
-  --bg-elevated: #111522;
-  --bg-card: rgba(15, 18, 28, 0.78);
-  --bg-card-strong: rgba(18, 23, 35, 0.94);
-  --bg-glass: rgba(255, 255, 255, 0.04);
-  --line: rgba(255, 255, 255, 0.08);
-  --line-strong: rgba(255, 255, 255, 0.15);
-  --text: #f5f7fb;
-  --text-soft: #c6cede;
-  --text-muted: #939db2;
-  --accent: #d9b56d;
-  --accent-2: #82aefb;
-  --accent-3: #8de0c2;
-  --accent-deep: #9d7a37;
-  --shadow-lg: 0 32px 80px rgba(0, 0, 0, 0.46);
-  --shadow-md: 0 18px 45px rgba(0, 0, 0, 0.34);
-  --shadow-sm: 0 10px 26px rgba(0, 0, 0, 0.22);
-  --radius-xl: 32px;
-  --radius-lg: 24px;
-  --radius-md: 18px;
-  --radius-sm: 14px;
-  --container: 1240px;
-  --header-h: 74px;
-  --transition: 0.3s ease;
-  --transition-slow: 0.5s ease;
-}
-
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--header-h) + 16px);
-}
-
-body {
-  margin: 0;
-  font-family: "Inter", sans-serif;
-  color: var(--text);
-  line-height: 1.65;
-  overflow-x: hidden;
-  background:
-    radial-gradient(circle at 0% 0%, rgba(130, 174, 251, 0.12), transparent 30%),
-    radial-gradient(circle at 100% 12%, rgba(217, 181, 109, 0.12), transparent 28%),
-    radial-gradient(circle at 50% 100%, rgba(141, 224, 194, 0.06), transparent 30%),
-    linear-gradient(180deg, #05060a 0%, #090b11 28%, #070910 100%);
-}
-
-body.menu-open {
-  overflow: hidden;
-}
-
-img {
-  display: block;
-  max-width: 100%;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-button,
-input,
-textarea {
-  font: inherit;
-}
-
-button {
-  border: none;
-  background: none;
-  cursor: pointer;
-}
-
-input,
-textarea {
-  outline: none;
-}
-
-::selection {
-  background: rgba(217, 181, 109, 0.22);
-  color: #fff;
-}
-
-/* =========================
-   UTILITIES
-========================= */
-.container {
-  width: min(calc(100% - 2rem), var(--container));
-  margin-inline: auto;
-}
-
-.section {
-  position: relative;
-  padding: 5.8rem 0;
-  z-index: 2;
-}
-
-.section-heading {
-  max-width: 860px;
-  margin-bottom: 2.5rem;
-}
-
-.section-heading h2 {
-  margin: 0.95rem 0 0.95rem;
-  font-family: "Sora", sans-serif;
-  font-size: clamp(2rem, 4vw, 3.45rem);
-  line-height: 1.08;
-  letter-spacing: -0.04em;
-}
-
-.section-heading p {
-  margin: 0;
-  color: var(--text-soft);
-  max-width: 720px;
-  font-size: 1.03rem;
-}
-
-.section-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.65rem;
-  min-height: 44px;
-  padding: 0.65rem 0.95rem;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 0.92rem;
-  color: var(--accent);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--line);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
-}
-
-.section-tag i {
-  color: var(--accent-2);
-}
-
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.85rem;
-  margin-bottom: 1.2rem;
-}
-
-.eyebrow__line {
-  width: 42px;
-  height: 1px;
-  background: linear-gradient(to right, var(--accent), transparent);
-}
-
-.eyebrow__text {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  color: var(--text-soft);
-  font-size: 0.95rem;
-  font-weight: 700;
-}
-
-.eyebrow__text i {
-  color: var(--accent);
-}
-
-/* =========================
-   AMBIENCE
-========================= */
-.page-noise {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.03;
-  background-image:
-    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.8) 0.6px, transparent 0.7px),
-    radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.4) 0.6px, transparent 0.7px),
-    radial-gradient(circle at 30% 75%, rgba(255, 255, 255, 0.25) 0.6px, transparent 0.7px);
-  background-size: 180px 180px, 220px 220px, 200px 200px;
-}
-
-.ambient {
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(90px);
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.15;
-}
-
-.ambient--one {
-  width: 300px;
-  height: 300px;
-  left: -70px;
-  top: 80px;
-  background: rgba(130, 174, 251, 0.42);
-}
-
-.ambient--two {
-  width: 290px;
-  height: 290px;
-  right: -70px;
-  top: 320px;
-  background: rgba(217, 181, 109, 0.28);
-}
-
-.ambient--three {
-  width: 250px;
-  height: 250px;
-  left: 35%;
-  bottom: 30px;
-  background: rgba(141, 224, 194, 0.18);
-}
-
-/* =========================
-   BUTTONS
-========================= */
-.btn {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.7rem;
-  min-height: 52px;
-  padding: 0.95rem 1.35rem;
-  border-radius: 999px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  transition:
-    transform var(--transition),
-    background var(--transition),
-    border-color var(--transition),
-    box-shadow var(--transition),
-    color var(--transition);
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-}
-
-.btn--primary {
-  color: #0f1117;
-  background: linear-gradient(135deg, #e6c37c 0%, #d9b56d 45%, #f0d59c 100%);
-  box-shadow: 0 16px 36px rgba(217, 181, 109, 0.24);
-}
-
-.btn--primary:hover {
-  box-shadow: 0 20px 46px rgba(217, 181, 109, 0.32);
-}
-
-.btn--ghost {
-  color: var(--text);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--line);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-
-.btn--ghost:hover {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: var(--line-strong);
-}
-
-.btn--sm {
-  min-height: 46px;
-  padding: 0.85rem 1.15rem;
-  font-size: 0.92rem;
-}
-
-.btn--full {
-  width: 100%;
-}
-
-/* =========================
-   HEADER
-========================= */
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 200;
-  padding: 0.8rem 0;
-  transition:
-    padding var(--transition),
-    background var(--transition),
-    border-color var(--transition),
-    box-shadow var(--transition);
-}
-
-.site-header.is-scrolled {
-  padding: 0.45rem 0;
-  background: rgba(7, 9, 14, 0.78);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.26);
-}
-
-.header__inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  min-height: var(--header-h);
-}
-
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.9rem;
-  min-width: 0;
-}
-
-.brand__mark {
-  width: 48px;
-  height: 48px;
-  border-radius: 16px;
-  display: grid;
-  place-items: center;
-  background:
-    linear-gradient(145deg, rgba(217, 181, 109, 0.18), rgba(130, 174, 251, 0.08)),
-    rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--line);
-  color: var(--accent);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  flex-shrink: 0;
-}
-
-.brand__text {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.brand__name {
-  font-family: "Sora", sans-serif;
-  font-size: 1.08rem;
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-}
-
-.brand__sub {
-  color: var(--text-muted);
-  font-size: 0.8rem;
-}
-
-.nav {
-  display: inline-flex;
-  align-items: center;
-  gap: 1.2rem;
-}
-
-.nav a {
-  position: relative;
-  color: var(--text-soft);
-  font-size: 0.94rem;
-  font-weight: 700;
-  transition: color var(--transition);
-}
-
-.nav a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -0.35rem;
-  width: 100%;
-  height: 2px;
-  border-radius: 999px;
-  background: linear-gradient(to right, var(--accent), var(--accent-2));
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--transition);
-}
-
-.nav a:hover,
-.nav a.is-active {
-  color: var(--text);
-}
-
-.nav a:hover::after,
-.nav a.is-active::after {
-  transform: scaleX(1);
-}
-
-.header__actions {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-}
-
-.icon-btn {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  color: var(--text);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--line);
-  transition:
-    transform var(--transition),
-    background var(--transition),
-    border-color var(--transition),
-    color var(--transition);
-}
-
-.icon-btn:hover {
-  transform: translateY(-2px);
-  color: var(--accent);
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--line-strong);
-}
-
-.nav-toggle {
-  display: none;
-  width: 46px;
-  height: 46px;
-  border-radius: 14px;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 5px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--line);
-  transition: background var(--transition), border-color var(--transition);
-}
-
-.nav-toggle:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.nav-toggle span {
-  width: 20px;
-  height: 2px;
-  border-radius: 999px;
-  background: #fff;
-  transition: transform var(--transition), opacity var(--transition);
-}
-
-.nav-toggle.is-active span:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
-}
-
-.nav-toggle.is-active span:nth-child(2) {
-  opacity: 0;
-}
-
-.nav-toggle.is-active span:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
-}
-
-/* =========================
-   HERO
-========================= */
-.hero {
-  position: relative;
-  display: flex;
-  align-items: center;
-  min-height: calc(100vh - 90px);
-  padding: 2.2rem 0 4.5rem;
-  z-index: 2;
-}
-
-.hero__grid {
-  display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: 2.5rem;
-  align-items: center;
-}
-
-.hero__content {
-  position: relative;
-  z-index: 2;
-}
-
-.hero__title {
-  margin: 0;
-  max-width: 11ch;
-  font-family: "Sora", sans-serif;
-  font-size: clamp(2.8rem, 6vw, 5.6rem);
-  line-height: 0.96;
-  letter-spacing: -0.055em;
-}
-
-.hero__title span {
-  background: linear-gradient(135deg, #ffffff 4%, var(--accent) 45%, var(--accent-2) 94%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.hero__text {
-  margin: 1.35rem 0 0;
-  max-width: 650px;
-  color: var(--text-soft);
-  font-size: 1.06rem;
-}
-
-.hero__cta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.9rem;
-  margin-top: 1.8rem;
-}
-
-.hero__stats {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.95rem;
-  margin-top: 2rem;
-}
-
-.stat-card {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  padding: 1rem;
-  min-height: 110px;
-  border-radius: 22px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
-    rgba(255, 255, 255, 0.028);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-sm);
-  transition:
-    transform var(--transition),
-    border-color var(--transition),
-    box-shadow var(--transition),
-    background var(--transition);
-  transform-style: preserve-3d;
-}
-
-.stat-card:hover {
-  border-color: rgba(217, 181, 109, 0.24);
-  background: rgba(255, 255, 255, 0.045);
-  box-shadow: var(--shadow-md);
-}
-
-.stat-card__icon {
-  width: 46px;
-  height: 46px;
-  border-radius: 15px;
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  color: var(--accent);
-  background: linear-gradient(135deg, rgba(217, 181, 109, 0.18), rgba(130, 174, 251, 0.12));
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.stat-card strong {
-  display: block;
-  font-size: 1rem;
-  font-weight: 800;
-}
-
-.stat-card p {
-  margin: 0.15rem 0 0;
-  color: var(--text-muted);
-  font-size: 0.9rem;
-}
-
-/* =========================
-   HERO VISUAL
-========================= */
-.hero__visual {
-  position: relative;
-  min-height: 520px;
-}
-
-.visual-stack {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.35s ease;
-}
-
-.mockup {
-  position: relative;
-  width: min(100%, 520px);
-  margin-left: auto;
-  border-radius: 30px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02)),
-    rgba(12, 16, 26, 0.94);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.42);
-  overflow: hidden;
-  z-index: 2;
-}
-
-.mockup__topbar {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.9rem 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.mockup__topbar span {
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.18);
-}
-
-.mockup__content {
-  padding: 1.4rem;
-}
-
-.mockup__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  align-self: flex-start;
-  min-height: 36px;
-  padding: 0.5rem 0.8rem;
-  border-radius: 999px;
-  color: #111522;
-  background: linear-gradient(135deg, var(--accent), #f0d28d);
-  font-size: 0.82rem;
-  font-weight: 800;
-  box-shadow: 0 10px 22px rgba(217, 181, 109, 0.18);
-}
-
-.hero-profile-content {
-  display: grid;
-  gap: 1.1rem;
-}
-
-.hero-profile-media {
-  position: relative;
-  aspect-ratio: 4 / 4.4;
-  border-radius: 24px;
-  overflow: hidden;
-  background:
-    linear-gradient(135deg, rgba(217, 181, 109, 0.22), rgba(130, 174, 251, 0.18)),
-    rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--line);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-}
-
-.hero-profile-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.hero-profile-copy h3 {
-  margin: 0;
-  font-family: "Sora", sans-serif;
-  font-size: 1.7rem;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-}
-
-.hero-profile-copy p {
-  margin: 0.55rem 0 0;
-  color: var(--text-soft);
-  font-size: 0.98rem;
-}
-
-.floating-panel {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  padding: 0.95rem 1rem;
-  border-radius: 20px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.02)),
-    rgba(12, 17, 29, 0.88);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: var(--shadow-md);
-  z-index: 3;
-  transition: transform 0.3s ease;
-}
-
-.floating-panel strong {
-  display: block;
-  font-size: 0.95rem;
-}
-
-.floating-panel p {
-  margin: 0.12rem 0 0;
-  color: var(--text-muted);
-  font-size: 0.83rem;
-}
-
-.floating-panel__icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
-  display: grid;
-  place-items: center;
-  color: var(--accent);
-  background: linear-gradient(135deg, rgba(217, 181, 109, 0.2), rgba(130, 174, 251, 0.12));
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  flex-shrink: 0;
-}
-
-.floating-panel--one {
-  left: 0;
-  top: 15%;
-  animation: floatSoft 5.8s ease-in-out infinite;
-}
-
-.floating-panel--two {
-  right: 1%;
-  bottom: 13%;
-  animation: floatSoft 6.4s ease-in-out infinite;
-}
-
-.grid-glow {
-  position: absolute;
-  width: 420px;
-  height: 420px;
-  right: 10%;
-  top: 10%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(130, 174, 251, 0.24), transparent 62%);
-  filter: blur(26px);
-  z-index: 0;
-}
-
-.visual-orbit {
-  position: absolute;
-  width: 56px;
-  height: 56px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.045);
-  border: 1px solid var(--line);
-  color: #fff;
-  box-shadow: var(--shadow-sm);
-  z-index: 2;
-  animation: floatOrb 6s ease-in-out infinite;
-}
-
-.orbit--one {
-  right: 2%;
-  top: 2%;
-  color: var(--accent);
-}
-
-.orbit--two {
-  left: 10%;
-  bottom: 8%;
-  color: var(--accent-2);
-  animation-delay: 0.6s;
-}
-
-.orbit--three {
-  right: 15%;
-  top: 52%;
-  color: var(--accent-3);
-  animation-delay: 1.2s;
-}
-
-.scroll-indicator {
-  position: absolute;
-  left: 50%;
-  bottom: 0.8rem;
-  transform: translateX(-50%);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.7rem;
-  color: var(--text-muted);
-  font-size: 0.74rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  transition: opacity var(--transition), transform var(--transition);
-}
-
-.scroll-indicator i {
-  color: var(--accent);
-  animation: bounceSoft 1.8s infinite;
-}
-
-.scroll-indicator.is-hidden {
-  opacity: 0;
-  transform: translateX(-50%) translateY(14px);
-}
-
-/* =========================
-   TRUST STRIP
-========================= */
-.trust-strip {
-  position: relative;
-  z-index: 2;
-  padding-bottom: 0.4rem;
-}
-
-.trust-strip__inner {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-.trust-item {
-  min-height: 76px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  padding: 1rem 1.05rem;
-  border-radius: 22px;
-  text-align: center;
-  color: var(--text-soft);
-  font-weight: 700;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--line);
-}
-
-.trust-item i {
-  color: var(--accent);
-}
-
-/* =========================
-   ABOUT
-========================= */
-.about__grid {
-  display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: 1.4rem;
-  align-items: start;
-}
-
-.about__content,
-.about__cards {
-  min-width: 0;
-}
-
-.about__content {
-  padding: 1.9rem;
-  border-radius: var(--radius-xl);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015)),
-    rgba(255, 255, 255, 0.022);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-sm);
-}
-
-.about__content p {
-  margin: 0 0 1rem;
-  color: var(--text-soft);
-  font-size: 1.02rem;
-}
-
-.about__content p:last-child {
-  margin-bottom: 0;
-}
-
-.about__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.9rem;
-  margin-top: 1.6rem;
-}
-
-.about__cards {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-.info-card {
-  display: flex;
-  gap: 0.95rem;
-  padding: 1.3rem;
-  min-height: 158px;
-  border-radius: 24px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02)),
-    rgba(255, 255, 255, 0.028);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-sm);
-  transition:
-    transform var(--transition),
-    border-color var(--transition),
-    box-shadow var(--transition);
-  transform-style: preserve-3d;
-}
-
-.info-card:hover {
-  border-color: rgba(130, 174, 251, 0.24);
-  box-shadow: var(--shadow-md);
-}
-
-.info-card__icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 16px;
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  color: var(--accent);
-  background: linear-gradient(135deg, rgba(217, 181, 109, 0.18), rgba(130, 174, 251, 0.12));
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.info-card h3 {
-  margin: 0 0 0.4rem;
-  font-family: "Sora", sans-serif;
-  font-size: 1.02rem;
-}
-
-.info-card p {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: 0.94rem;
-}
-
-/* =========================
-   PROJECTS
-========================= */
-.featured-projects {
-  display: grid;
-  gap: 1.7rem;
-}
-
-.project {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1.02fr 0.98fr;
-  gap: 1.7rem;
-  align-items: center;
-  padding: 1.35rem;
-  border-radius: 32px;
-  overflow: hidden;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.016)),
-    rgba(255, 255, 255, 0.024);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-md);
-}
-
-.project::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 12% 16%, rgba(217, 181, 109, 0.1), transparent 24%),
-    radial-gradient(circle at 86% 80%, rgba(130, 174, 251, 0.08), transparent 28%);
-  pointer-events: none;
-}
-
-.project--reverse {
-  grid-template-columns: 0.98fr 1.02fr;
-}
-
-.project--reverse .project__media {
-  order: 2;
-}
-
-.project--reverse .project__content {
-  order: 1;
-}
-
-.project__media,
-.project__content {
-  position: relative;
-  z-index: 1;
-  transition: transform 0.3s ease;
-}
-
-.project__content {
-  padding: 0.4rem 0.4rem 0.4rem 0;
-}
-
-.project__topline {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.9rem;
-  margin-bottom: 0.8rem;
-}
-
-.project__tag,
-.project__year {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 36px;
-  padding: 0.5rem 0.85rem;
-  border-radius: 999px;
-  font-size: 0.82rem;
-  font-weight: 800;
-}
-
-.project__tag {
-  color: #111522;
-  background: linear-gradient(135deg, var(--accent), #efd28f);
-}
-
-.project__year {
-  color: var(--text-soft);
-  background: rgba(255, 255, 255, 0.045);
-  border: 1px solid var(--line);
-}
-
-.project__content h3 {
-  margin: 0;
-  font-family: "Sora", sans-serif;
-  font-size: clamp(1.6rem, 2.4vw, 2.35rem);
-  line-height: 1.05;
-  letter-spacing: -0.035em;
-}
-
-.project__content p {
-  margin: 0.95rem 0 0;
-  color: var(--text-soft);
-  font-size: 1rem;
-}
-
-.project__highlights {
-  list-style: none;
-  padding: 0;
-  margin: 1.25rem 0 0;
-  display: grid;
-  gap: 0.75rem;
-}
-
-.project__highlights li {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.65rem;
-  color: var(--text-soft);
-  font-weight: 600;
-}
-
-.project__highlights i {
-  color: var(--accent);
-  margin-top: 0.16rem;
-}
-
-.project__stack {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.65rem;
-  margin-top: 1.3rem;
-}
-
-.project__stack span {
-  min-height: 38px;
-  display: inline-flex;
-  align-items: center;
-  padding: 0.55rem 0.82rem;
-  border-radius: 999px;
-  color: var(--text-soft);
-  font-size: 0.84rem;
-  font-weight: 700;
-  background: rgba(255, 255, 255, 0.045);
-  border: 1px solid var(--line);
-}
-
-.project__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.9rem;
-  margin-top: 1.55rem;
-}
-
-/* =========================
-   PROJECT IMAGE SHOTS
-========================= */
-.browser-shot {
-  border-radius: 26px;
-  overflow: hidden;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
-    rgba(10, 13, 22, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.38);
-}
-
-.browser-shot__top {
-  display: flex;
-  gap: 0.45rem;
-  padding: 0.9rem 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.browser-shot__top span {
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.18);
-}
-
-.browser-shot__body {
-  min-height: 380px;
-  position: relative;
-}
-
-.project-image-body {
-  background:
-    linear-gradient(135deg, rgba(217, 181, 109, 0.06), rgba(130, 174, 251, 0.06)),
-    rgba(255, 255, 255, 0.02);
-}
-
-.project-image-body img {
-  width: 100%;
-  height: 100%;
-  min-height: 380px;
-  object-fit: cover;
-  object-position: top center;
-}
-
-/* =========================
-   ARCHIVE / IN PROGRESS
-========================= */
-.archive__grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.1rem;
-}
-
-.archive-card {
-  min-height: 245px;
-  display: flex;
-  flex-direction: column;
-  padding: 1.45rem;
-  border-radius: 26px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.015)),
-    rgba(255, 255, 255, 0.024);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-sm);
-  transition:
-    transform var(--transition),
-    border-color var(--transition),
-    box-shadow var(--transition),
-    background var(--transition);
-  transform-style: preserve-3d;
-}
-
-.archive-card:hover {
-  transform: translateY(-7px);
-  border-color: rgba(217, 181, 109, 0.22);
-  background: rgba(255, 255, 255, 0.04);
-  box-shadow: var(--shadow-md);
-}
-
-.archive-card__icon {
-  width: 50px;
-  height: 50px;
-  display: grid;
-  place-items: center;
-  margin-bottom: 1rem;
-  border-radius: 16px;
-  color: var(--accent);
-  background: linear-gradient(135deg, rgba(217, 181, 109, 0.18), rgba(130, 174, 251, 0.12));
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.archive-card h3 {
-  margin: 0;
-  font-family: "Sora", sans-serif;
-  font-size: 1.15rem;
-}
-
-.archive-card p {
-  margin: 0.8rem 0 1.2rem;
-  color: var(--text-soft);
-}
-
-.archive-card a {
-  margin-top: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  color: var(--accent);
-  font-weight: 700;
-  transition: gap var(--transition), color var(--transition);
-}
-
-.archive-card a:hover {
-  gap: 0.85rem;
-  color: #f1d79a;
-}
-
-/* =========================
-   SKILLS
-========================= */
-.skills__grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.1rem;
-}
-
-.skill-panel {
-  min-height: 255px;
-  padding: 1.5rem;
-  border-radius: 28px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.015)),
-    rgba(255, 255, 255, 0.024);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-sm);
-  transition:
-    transform var(--transition),
-    border-color var(--transition),
-    box-shadow var(--transition);
-  transform-style: preserve-3d;
-}
-
-.skill-panel:hover {
-  border-color: rgba(130, 174, 251, 0.22);
-  box-shadow: var(--shadow-md);
-}
-
-.skill-panel__head {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  margin-bottom: 1.1rem;
-}
-
-.skill-panel__icon {
-  width: 50px;
-  height: 50px;
-  display: grid;
-  place-items: center;
-  border-radius: 16px;
-  color: var(--accent);
-  background: linear-gradient(135deg, rgba(217, 181, 109, 0.18), rgba(130, 174, 251, 0.12));
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  flex-shrink: 0;
-}
-
-.skill-panel h3 {
-  margin: 0;
-  font-family: "Sora", sans-serif;
-  font-size: 1.14rem;
-}
-
-.skill-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.65rem;
-}
-
-.skill-tags span {
-  min-height: 40px;
-  display: inline-flex;
-  align-items: center;
-  padding: 0.62rem 0.9rem;
-  border-radius: 999px;
-  color: var(--text-soft);
-  font-size: 0.9rem;
-  font-weight: 700;
-  background: rgba(255, 255, 255, 0.045);
-  border: 1px solid var(--line);
-}
-
-/* =========================
-   SERVICES
-========================= */
-.services__grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-.service-card {
-  min-height: 220px;
-  padding: 1.45rem;
-  border-radius: 26px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.015)),
-    rgba(255, 255, 255, 0.024);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-sm);
-  transition:
-    transform var(--transition),
-    border-color var(--transition),
-    box-shadow var(--transition);
-  transform-style: preserve-3d;
-}
-
-.service-card:hover {
-  transform: translateY(-7px);
-  border-color: rgba(217, 181, 109, 0.24);
-  box-shadow: var(--shadow-md);
-}
-
-.service-card__icon {
-  width: 52px;
-  height: 52px;
-  display: grid;
-  place-items: center;
-  border-radius: 16px;
-  color: var(--accent);
-  background: linear-gradient(135deg, rgba(217, 181, 109, 0.18), rgba(130, 174, 251, 0.12));
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  margin-bottom: 1rem;
-}
-
-.service-card h3 {
-  margin: 0;
-  font-family: "Sora", sans-serif;
-  font-size: 1.08rem;
-  line-height: 1.2;
-}
-
-.service-card p {
-  margin: 0.75rem 0 0;
-  color: var(--text-soft);
-  font-size: 0.95rem;
-}
-
-/* =========================
-   CONTACT
-========================= */
-.contact__wrap {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 0.95fr;
-  gap: 1.2rem;
-  padding: 1.35rem;
-  border-radius: 32px;
-  overflow: hidden;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015)),
-    rgba(255, 255, 255, 0.024);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-lg);
-}
-
-.contact__wrap::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 18% 20%, rgba(217, 181, 109, 0.1), transparent 25%),
-    radial-gradient(circle at 86% 84%, rgba(130, 174, 251, 0.1), transparent 28%);
-  pointer-events: none;
-}
-
-.contact__content,
-.contact-form {
-  position: relative;
-  z-index: 1;
-}
-
-.contact__content {
-  padding: 0.8rem 0.5rem 0.8rem 0.4rem;
-}
-
-.contact__content h2 {
-  margin: 1rem 0 1rem;
-  font-family: "Sora", sans-serif;
-  font-size: clamp(2rem, 3.5vw, 3.1rem);
-  line-height: 1.04;
-  letter-spacing: -0.04em;
-}
-
-.contact__content p {
-  margin: 0;
-  max-width: 540px;
-  color: var(--text-soft);
-}
-
-.contact__info {
-  display: grid;
-  gap: 0.95rem;
-  margin-top: 1.8rem;
-}
-
-.contact-link {
-  min-height: 66px;
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  padding: 0.95rem 1rem;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid var(--line);
-  transition:
-    transform var(--transition),
-    background var(--transition),
-    border-color var(--transition);
-}
-
-.contact-link:hover {
-  transform: translateY(-3px);
-  background: rgba(255, 255, 255, 0.055);
-  border-color: var(--line-strong);
-}
-
-.contact-link i {
-  width: 42px;
-  height: 42px;
-  display: grid;
-  place-items: center;
-  border-radius: 14px;
-  color: var(--accent);
-  background: linear-gradient(135deg, rgba(217, 181, 109, 0.18), rgba(130, 174, 251, 0.12));
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  flex-shrink: 0;
-}
-
-.contact-link span {
-  color: var(--text-soft);
-  font-weight: 700;
-  word-break: break-word;
-}
-
-.contact-form {
-  padding: 1.15rem;
-  border-radius: 26px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--line);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-}
-
-.form-row {
-  display: grid;
-  gap: 0.6rem;
-  margin-bottom: 0.95rem;
-}
-
-.form-row label {
-  color: var(--text-soft);
-  font-size: 0.94rem;
-  font-weight: 700;
-}
-
-.form-row input,
-.form-row textarea {
-  width: 100%;
-  padding: 0.95rem 1rem;
-  border-radius: 16px;
-  color: var(--text);
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.045);
-  transition:
-    border-color var(--transition),
-    background var(--transition),
-    box-shadow var(--transition);
-}
-
-.form-row input::placeholder,
-.form-row textarea::placeholder {
-  color: var(--text-muted);
-}
-
-.form-row input:focus,
-.form-row textarea:focus {
-  border-color: rgba(217, 181, 109, 0.34);
-  background: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 0 0 4px rgba(217, 181, 109, 0.08);
-}
-
-textarea {
-  resize: vertical;
-  min-height: 150px;
-}
-
-.form-message {
-  margin-top: 0.9rem;
-  padding: 0.9rem 1rem;
-  border-radius: 14px;
-  display: none;
-  font-size: 0.93rem;
-  font-weight: 700;
-  border: 1px solid transparent;
-}
-
-.form-message.success {
-  color: #dff6e8;
-  background: rgba(96, 211, 154, 0.12);
-  border-color: rgba(96, 211, 154, 0.25);
-}
-
-.form-message.error {
-  color: #ffe0e5;
-  background: rgba(255, 107, 125, 0.12);
-  border-color: rgba(255, 107, 125, 0.25);
-}
-
-/* =========================
-   FOOTER
-========================= */
-.site-footer {
-  position: relative;
-  z-index: 2;
-  padding: 1.5rem 0 2.4rem;
-}
-
-.footer__inner {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr auto;
-  gap: 1.3rem;
-  align-items: center;
-  padding-top: 1.8rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.brand--footer .brand__mark {
-  width: 44px;
-  height: 44px;
-  border-radius: 15px;
-}
-
-.footer__brand p {
-  margin: 0.8rem 0 0;
-  max-width: 460px;
-  color: var(--text-muted);
-}
-
-.footer__links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem 1.1rem;
-  justify-content: center;
-}
-
-.footer__links a {
-  color: var(--text-soft);
-  font-weight: 700;
-  transition: color var(--transition);
-}
-
-.footer__links a:hover {
-  color: var(--accent);
-}
-
-.footer__socials {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  justify-content: flex-end;
-}
-
-.footer__socials a {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  color: var(--text);
-  background: rgba(255, 255, 255, 0.045);
-  border: 1px solid var(--line);
-  transition:
-    transform var(--transition),
-    background var(--transition),
-    border-color var(--transition),
-    color var(--transition);
-}
-
-.footer__socials a:hover {
-  transform: translateY(-2px);
-  color: var(--accent);
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--line-strong);
-}
-
-
-/* =========================
-   CURSOR / PROGRESS
-========================= */
-.cursor-glow {
-  position: fixed;
-  left: -180px;
-  top: -180px;
-  width: 340px;
-  height: 340px;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-  filter: blur(22px);
-  background: radial-gradient(circle, rgba(217, 181, 109, 0.12), rgba(130, 174, 251, 0.07), transparent 70%);
-  transform: translate(-9999px, -9999px);
-  transition: transform 0.08s linear;
-}
-
-.scroll-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 3px;
-  z-index: 999;
-  background: linear-gradient(to right, var(--accent), var(--accent-2));
-  box-shadow: 0 0 18px rgba(130, 174, 251, 0.34);
-}
-
-
-/* =========================
-   RESPONSIVE
-========================= */
-@media (max-width: 1180px) {
-  .hero__grid,
-  .about__grid,
-  .contact__wrap,
-  .project,
-  .project--reverse {
-    grid-template-columns: 1fr;
-  }
-
-  .project--reverse .project__media,
-  .project--reverse .project__content {
-    order: initial;
-  }
-
-  .hero {
-    min-height: auto;
-    padding: 2rem 0 4rem;
-  }
-
-  .hero__visual {
-    min-height: 480px;
-  }
-
-  .skills__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .services__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .archive__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .footer__inner {
-    grid-template-columns: 1fr;
-    justify-items: start;
-  }
-
-  .footer__links,
-  .footer__socials {
-    justify-content: flex-start;
-  }
-}
-
-@media (max-width: 980px) {
-  :root {
-    --header-h: 70px;
-  }
-
-  .nav-toggle {
-    display: inline-flex;
-  }
-
-  .nav {
-    position: fixed;
-    left: 0.9rem;
-    right: 0.9rem;
-    top: calc(var(--header-h) + 0.7rem);
-    display: grid;
-    gap: 0.3rem;
-    padding: 0.9rem;
-    border-radius: 24px;
-    background: rgba(10, 13, 21, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: var(--shadow-lg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    transform: translateY(-12px);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition:
-      opacity var(--transition),
-      transform var(--transition),
-      visibility var(--transition);
-  }
-
-  .nav.is-open {
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-  }
-
-  .nav a {
-    padding: 0.9rem 1rem;
-    border-radius: 15px;
-    background: transparent;
-  }
-
-  .nav a:hover,
-  .nav a.is-active {
-    background: rgba(255, 255, 255, 0.04);
-  }
-
-  .nav a::after {
-    display: none;
-  }
-
-  .header__actions .btn--sm {
-    display: none;
-  }
-
-  .hero__grid {
-    gap: 1.9rem;
-  }
-
-  .hero__stats,
-  .trust-strip__inner,
-  .about__cards,
-  .skills__grid,
-  .services__grid,
-  .archive__grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .mockup {
-    margin-inline: auto;
-  }
-
-  .floating-panel--one {
-    left: 2%;
-  }
-
-  .floating-panel--two {
-    right: 2%;
-  }
-
-  .contact__content {
-    padding-right: 0;
-  }
-}
-
-@media (max-width: 760px) {
-  .container {
-    width: min(calc(100% - 1.05rem), var(--container));
-  }
-
-  .section {
-    padding: 4.6rem 0;
-  }
-
-  .site-header {
-    padding: 0.65rem 0;
-  }
-
-  .brand__sub {
-    display: none;
-  }
-
-  .header__actions {
-    gap: 0.5rem;
-  }
-
-  .icon-btn,
-  .nav-toggle {
-    width: 42px;
-    height: 42px;
-  }
-
-  .hero {
-    padding: 1.25rem 0 3.2rem;
-  }
-
-  .hero__title {
-    max-width: 100%;
-  }
-
-  .hero__text {
-    font-size: 1rem;
-  }
-
-  .hero__cta,
-  .about__actions,
-  .project__actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .hero__cta .btn,
-  .about__actions .btn,
-  .project__actions .btn {
-    width: 100%;
-  }
-
-.hero__stats,
-.skills__grid,
-.services__grid,
-.archive__grid {
-  grid-template-columns: 1fr;
-}
-
-.trust-strip__inner,
-.about__cards {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-  .hero__visual {
-    min-height: auto;
-  }
-
-  .mockup {
-    width: 100%;
-    border-radius: 24px;
-  }
-
-  .hero-profile-media {
-    aspect-ratio: 4 / 4.2;
-    border-radius: 20px;
-  }
-
- .floating-panel {
-  position: static;
-  margin-top: 0.85rem;
-  width: 100%;
-}
-  .visual-orbit,
-  .grid-glow {
-    display: none;
-  }
-
-  .project {
-    padding: 1rem;
-    border-radius: 24px;
-  }
-
-  .browser-shot__body,
-  .project-image-body img {
-    min-height: 300px;
-  }
-
-  .contact__wrap {
-    padding: 1rem;
-    border-radius: 26px;
-  }
-
-  .contact-form {
-    padding: 1rem;
-  }
-
-  .footer__inner {
-    gap: 1rem;
-  }
-}
-
-@media (max-width: 520px) {
-  .section-heading h2,
-  .contact__content h2 {
-    font-size: clamp(1.8rem, 9vw, 2.35rem);
-  }
-
-  .section-tag,
-  .eyebrow__text {
-    font-size: 0.84rem;
-  }
-
-  .hero {
-    padding-bottom: 2.8rem;
-  }
-
-  .hero__text,
-  .section-heading p,
-  .project__content p,
-  .about__content p,
-  .service-card p,
-  .archive-card p,
-  .contact__content p {
-    font-size: 0.96rem;
-  }
-
-  .hero__stats {
-    gap: 0.8rem;
-  }
-
-  .stat-card,
-  .info-card,
-  .service-card,
-  .archive-card,
-  .skill-panel {
-    min-height: auto;
-  }
-
-  .project__topline {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .browser-shot__top {
-    padding: 0.8rem 0.9rem;
-  }
-
-  .browser-shot__body,
-  .project-image-body img {
-    min-height: 250px;
-  }
-
-  .project__stack {
-    gap: 0.55rem;
-  }
-
-  .project__stack span,
-  .skill-tags span {
-    font-size: 0.84rem;
-  }
-
-  .contact-link {
-    align-items: flex-start;
-  }
-
-  .cursor-glow {
-    display: none;
-  }
-}
-
-
-
-  .featured-projects {
-  display: grid;
-  gap: 1.7rem;
-}
-
-
-
-  @media (max-width: 760px) {
-  .visual-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 0.9rem;
-  }
-
-  .floating-panel {
-    order: 3;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 0.95rem 1rem;
-    border-radius: 18px;
-  }
-
-  .floating-panel strong {
-    font-size: 0.95rem;
-    line-height: 1.25;
-  }
-
-  .floating-panel p {
-    font-size: 0.88rem;
-    line-height: 1.45;
-  }
-}
-
-  @media (max-width: 760px) {
-  .trust-item,
-  .info-card {
-    min-height: 140px;
-    padding: 1rem;
-  }
-
-  .trust-item {
-    flex-direction: column;
-    justify-content: center;
-    gap: 0.6rem;
-    text-align: center;
-    font-size: 0.92rem;
-  }
-
-  .info-card {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.8rem;
-  }
-
-  .info-card h3 {
-    font-size: 0.98rem;
-  }
-
-  .info-card p {
-    font-size: 0.9rem;
-    line-height: 1.5;
-  }
-}
-
-  @media (max-width: 520px) {
-  .trust-strip__inner,
-  .about__cards {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.8rem;
-  }
-
-  .trust-item,
-  .info-card {
-    border-radius: 20px;
-  }
-
-  .trust-item span {
-    font-size: 0.84rem;
-    line-height: 1.35;
-  }
-
-  .info-card p {
-    font-size: 0.85rem;
-  }
-
-  .featured-projects .project {
-    min-width: 92%;
-    flex-basis: 92%;
-  }
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Powered by JVO — a premium independent digital studio building websites, apps, backend systems, automations, and AI-powered solutions." />
+  <meta name="theme-color" content="#050816" />
+  <title>Powered by JVO</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-
-  <!-- Page Ambient Effects -->
   <div class="page-noise" aria-hidden="true"></div>
   <div class="ambient ambient--one" aria-hidden="true"></div>
   <div class="ambient ambient--two" aria-hidden="true"></div>
   <div class="ambient ambient--three" aria-hidden="true"></div>
 
-  <!-- Header -->
   <header class="site-header" id="top">
     <div class="container header__inner">
-      <a href="#top" class="brand" aria-label="James portfolio home">
+      <a href="#top" class="brand" aria-label="JVO home">
         <span class="brand__mark">
           <i class="fa-solid fa-code"></i>
         </span>
         <span class="brand__text">
-          <span class="brand__name">James</span>
-          <span class="brand__sub">Fullstack Developer • Web Designer</span>
+          <span class="brand__name">JVO</span>
+          <span class="brand__sub">Design • Development • Intelligent Systems</span>
         </span>
       </a>
 
       <nav class="nav" id="mainNav" aria-label="Main navigation">
         <a href="#about">About</a>
         <a href="#projects">Projects</a>
-        <a href="#archive">In Progress</a>
-        <a href="#skills">Skills</a>
         <a href="#services">Services</a>
+        <a href="#process">Process</a>
         <a href="#contact">Contact</a>
       </nav>
 
       <div class="header__actions">
-        <a href="https://github.com/jvo-james" target="_blank" rel="noreferrer" class="icon-btn" aria-label="GitHub profile">
-          <i class="fa-brands fa-github"></i>
-        </a>
-        <a href="#contact" class="btn btn--sm btn--primary">Hire Me</a>
-        <button class="nav-toggle" id="navToggle" aria-label="Open navigation" aria-expanded="false" aria-controls="mainNav">
+        <a href="#contact" class="btn btn--sm btn--primary">Get in Touch</a>
+        <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="mainNav">
           <span></span>
           <span></span>
           <span></span>
@@ -2077,178 +51,146 @@ textarea {
   </header>
 
   <main>
-
-    <!-- Hero -->
-    <section class="hero" id="hero">
+    <section class="hero" id="home">
       <div class="container hero__grid">
-
-        <div class="hero__content reveal">
+        <div class="hero__content" data-reveal>
           <div class="eyebrow">
             <span class="eyebrow__line"></span>
             <span class="eyebrow__text">
-              <i class="fa-solid fa-laptop-code"></i>
-              Fullstack Developer • UI-Focused Builder
+              <i class="fa-solid fa-sparkles"></i>
+              Powered by JVO
             </span>
           </div>
 
-          <h1 class="hero__title">
-            I build
-            <span>high-end websites</span>
-            and fullstack products
-            that look sharp and work hard.
-          </h1>
-
+          <h1 class="hero__title">Design, development, and <span>intelligent systems</span> by JVO.</h1>
           <p class="hero__text">
-            I’m James, a fullstack developer and web designer creating premium websites, web apps, dashboards, brand experiences, and custom digital products. I care about design, performance, responsiveness, and building things that actually feel finished.
+            JVO builds websites, apps, backend systems, automations, and AI-powered solutions for businesses, creators, brands, and organizations that want modern execution and premium digital presence.
           </p>
 
           <div class="hero__cta">
             <a href="#projects" class="btn btn--primary">
-              <i class="fa-solid fa-layer-group"></i>
-              View My Work
+              <i class="fa-solid fa-arrow-right"></i>
+              View Work
             </a>
             <a href="#contact" class="btn btn--ghost">
               <i class="fa-solid fa-paper-plane"></i>
-              Start a Project
+              Get in Touch
             </a>
           </div>
 
           <div class="hero__stats">
             <article class="stat-card">
-              <span class="stat-card__icon"><i class="fa-solid fa-code-branch"></i></span>
+              <span class="stat-card__icon"><i class="fa-solid fa-globe"></i></span>
               <div>
-                <strong>Fullstack</strong>
-                <p>Frontend + backend builds</p>
+                <strong>Websites</strong>
+                <p>Business sites, landing pages, and redesigns.</p>
               </div>
             </article>
 
             <article class="stat-card">
-              <span class="stat-card__icon"><i class="fa-solid fa-object-group"></i></span>
+              <span class="stat-card__icon"><i class="fa-solid fa-server"></i></span>
               <div>
-                <strong>Premium UI</strong>
-                <p>Luxury feel, clean structure</p>
+                <strong>Systems</strong>
+                <p>Backends, APIs, dashboards, and integrations.</p>
               </div>
             </article>
 
             <article class="stat-card">
-              <span class="stat-card__icon"><i class="fa-solid fa-mobile-screen-button"></i></span>
+              <span class="stat-card__icon"><i class="fa-solid fa-robot"></i></span>
               <div>
-                <strong>Responsive</strong>
-                <p>Built for phones first</p>
+                <strong>AI & Automation</strong>
+                <p>Smart workflows and intelligent product features.</p>
               </div>
             </article>
           </div>
         </div>
 
-        <div class="hero__visual reveal reveal-delay-1">
+        <div class="hero__visual" data-reveal>
           <div class="visual-stack">
+            <div class="grid-glow"></div>
+            <span class="visual-orbit orbit--one"><i class="fa-solid fa-code"></i></span>
+            <span class="visual-orbit orbit--two"><i class="fa-solid fa-bolt"></i></span>
+            <span class="visual-orbit orbit--three"><i class="fa-solid fa-brain"></i></span>
 
-            <div class="visual-orbit orbit orbit--one">
-              <i class="fa-solid fa-code"></i>
-            </div>
-            <div class="visual-orbit orbit orbit--two">
-              <i class="fa-solid fa-database"></i>
-            </div>
-            <div class="visual-orbit orbit orbit--three">
-              <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <div class="floating-panel floating-panel--one">
+              <span class="floating-panel__icon"><i class="fa-solid fa-layer-group"></i></span>
+              <div>
+                <strong>Studio-level execution</strong>
+                <p>From design direction to full product build.</p>
+              </div>
             </div>
 
-            <div class="mockup mockup--main hero-profile-card">
+            <div class="mockup">
               <div class="mockup__topbar">
                 <span></span><span></span><span></span>
               </div>
+              <div class="mockup__content">
+                <span class="mockup__badge">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i>
+                  Premium Independent Studio
+                </span>
 
-              <div class="mockup__content hero-profile-content">
-                <div class="mockup__badge">
-                  <i class="fa-solid fa-star"></i>
-                  Available for projects
+                <div class="hero-profile-content">
+                  <div class="hero-profile-media">
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80" alt="Premium digital workspace representing JVO" />
+                  </div>
+
+                  <div class="hero-profile-copy">
+                    <h3>Built to feel modern, capable, and expensive.</h3>
+                    <p>
+                      JVO combines strong visual design with backend thinking, product structure, and technical depth so every build feels polished beyond the surface.
+                    </p>
+                  </div>
                 </div>
-
-                <div class="hero-profile-media">
-                  <img src="IMG_4212.jpeg" alt="Portrait of James" />
-                </div>
-
-                <div class="hero-profile-copy">
-                  <h3>James</h3>
-                  <p>Fullstack developer building polished web experiences, dashboards, product interfaces, and brand websites.</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="floating-panel floating-panel--one">
-              <div class="floating-panel__icon">
-                <i class="fa-solid fa-layer-group"></i>
-              </div>
-              <div>
-               <p>Frontend + Backend<br>Not just visuals</p>
               </div>
             </div>
 
             <div class="floating-panel floating-panel--two">
-              <div class="floating-panel__icon">
-                <i class="fa-solid fa-gauge-high"></i>
-              </div>
+              <span class="floating-panel__icon"><i class="fa-solid fa-chart-line"></i></span>
               <div>
-                <strong>Responsive Builds</strong>
-                <p>Clean on every screen</p>
+                <strong>Broad capability</strong>
+                <p>Web, apps, systems, and AI-powered solutions.</p>
               </div>
             </div>
-
-            <div class="grid-glow" aria-hidden="true"></div>
           </div>
         </div>
-
       </div>
 
-      <div class="scroll-indicator" aria-hidden="true">
+      <a href="#about" class="scroll-indicator">
         <span>Scroll</span>
-        <i class="fa-solid fa-arrow-down-long"></i>
+        <i class="fa-solid fa-arrow-down"></i>
+      </a>
+    </section>
+
+    <section class="trust-strip">
+      <div class="container trust-strip__inner" data-reveal>
+        <div class="trust-item"><i class="fa-solid fa-laptop-code"></i><span>Premium digital presentation</span></div>
+        <div class="trust-item"><i class="fa-solid fa-cubes"></i><span>Frontend + backend capability</span></div>
+        <div class="trust-item"><i class="fa-solid fa-gears"></i><span>Automation and custom systems</span></div>
+        <div class="trust-item"><i class="fa-solid fa-brain"></i><span>AI-ready product thinking</span></div>
       </div>
     </section>
 
-  <!-- Trust Strip -->
-<section class="trust-strip">
-  <div class="container trust-strip__inner">
-    <div class="trust-item reveal">
-      <i class="fa-solid fa-globe"></i>
-      <span>Business Websites</span>
-    </div>
-    <div class="trust-item reveal">
-      <i class="fa-solid fa-screwdriver-wrench"></i>
-      <span>Custom Web Apps</span>
-    </div>
-    <div class="trust-item reveal">
-      <i class="fa-solid fa-chart-line"></i>
-      <span>Dashboards &amp; Admin Panels</span>
-    </div>
-    <div class="trust-item reveal">
-      <i class="fa-solid fa-bolt"></i>
-      <span>Fast, Responsive Interfaces</span>
-    </div>
-  </div>
-</section>
-
-    <!-- About -->
-    <section class="section about" id="about">
+    <section class="section" id="about">
       <div class="container">
-        <div class="section-heading reveal">
-          <span class="section-tag">
-            <i class="fa-solid fa-user"></i>
-            About Me
-          </span>
-          <h2>I build websites that look premium, feel smooth, and hold up in real use.</h2>
+        <div class="section-heading" data-reveal>
+          <span class="section-tag"><i class="fa-solid fa-user-gear"></i> About JVO</span>
+          <h2>Not just a personal portfolio — a premium independent digital studio.</h2>
+          <p>
+            Your old portfolio already had a luxury feel, sharp project presentation, and strong frontend polish. This version keeps that premium character but positions JVO as a studio brand with broader technical capability.
+          </p>
         </div>
 
         <div class="about__grid">
-          <div class="about__content reveal">
+          <div class="about__content" data-reveal>
             <p>
-              I’m James, a fullstack developer with a strong design eye. I build websites and web apps that are visually sharp, responsive, and structured properly behind the scenes.
+              JVO builds websites, apps, systems, and AI-powered solutions. The goal is to present JVO as a high-capability studio that can take an idea from concept to polished launch.
             </p>
             <p>
-              My work covers restaurant brands, business websites, dashboards, e-commerce interfaces, health-tech concepts, and custom product pages. I enjoy turning rough ideas into polished digital experiences.
+              That means combining clean visual design, responsive frontend development, backend structure, integrations, automations, and intelligent features into one clear offering.
             </p>
             <p>
-              I’m big on clean layout, clear flow, mobile responsiveness, strong branding, and details that make a site feel expensive.
+              Instead of sounding scattered, JVO is positioned as offering end-to-end digital solutions for businesses, creators, and brands that want something modern, premium, and effective.
             </p>
 
             <div class="about__actions">
@@ -2256,35 +198,35 @@ textarea {
                 <i class="fa-solid fa-arrow-right"></i>
                 See Featured Work
               </a>
-              <a href="https://github.com/jvo-james" target="_blank" rel="noreferrer" class="btn btn--ghost">
-                <i class="fa-brands fa-github"></i>
-                GitHub Profile
+              <a href="#contact" class="btn btn--ghost">
+                <i class="fa-solid fa-comments"></i>
+                Let’s Talk
               </a>
             </div>
           </div>
 
-          <div class="about__cards reveal reveal-delay-1">
+          <div class="about__cards" data-reveal>
             <article class="info-card">
               <span class="info-card__icon"><i class="fa-solid fa-location-dot"></i></span>
               <div>
                 <h3>Based in Ghana</h3>
-                <p>Working with brands, founders, and businesses locally and beyond.</p>
+                <p>Working with businesses, founders, creators, and brands locally and beyond.</p>
               </div>
             </article>
 
             <article class="info-card">
               <span class="info-card__icon"><i class="fa-solid fa-code"></i></span>
               <div>
-                <h3>Fullstack Approach</h3>
-                <p>Frontend presentation backed by real structure, logic, and interactivity.</p>
+                <h3>Full-Stack Capability</h3>
+                <p>Frontend polish backed by real structure, backend logic, and integrations.</p>
               </div>
             </article>
 
             <article class="info-card">
-              <span class="info-card__icon"><i class="fa-solid fa-mobile-screen"></i></span>
+              <span class="info-card__icon"><i class="fa-solid fa-mobile-screen-button"></i></span>
               <div>
                 <h3>Responsive First</h3>
-                <p>I care a lot about how a site feels on phones, not just desktops.</p>
+                <p>Strong mobile experience matters just as much as desktop presentation.</p>
               </div>
             </article>
 
@@ -2292,7 +234,7 @@ textarea {
               <span class="info-card__icon"><i class="fa-solid fa-crown"></i></span>
               <div>
                 <h3>Luxury Presentation</h3>
-                <p>Strong hierarchy, premium spacing, and visuals that feel intentional.</p>
+                <p>Premium spacing, hierarchy, motion, and visuals that feel intentional.</p>
               </div>
             </article>
           </div>
@@ -2300,936 +242,304 @@ textarea {
       </div>
     </section>
 
-<!-- Featured Projects -->
-<section class="section projects" id="projects">
-  <div class="container">
-    <div class="section-heading reveal">
-      <span class="section-tag">
-        <i class="fa-solid fa-briefcase"></i>
-        Featured Projects
-      </span>
-      <h2>Work that shows design range, product thinking, and execution.</h2>
-      <p>These are some of the strongest projects in my portfolio, arranged from premium brand websites to product-style platforms and app interfaces.</p>
-    </div>
-
-    <div class="featured-projects">
-
-      <!-- 1. Oaklawn Southern Dining -->
-      <article class="project project--featured reveal">
-        <div class="project__media">
-          <div class="browser-shot project-image-shot">
-            <div class="browser-shot__top">
-              <span></span><span></span><span></span>
-            </div>
-            <div class="browser-shot__body project-image-body">
-              <img src="image.png" alt="Oaklawn Southern Dining website preview" />
-            </div>
-          </div>
-        </div>
-
-        <div class="project__content">
-          <div class="project__topline">
-            <span class="project__tag">Luxury Restaurant Website</span>
-            <span class="project__year">01</span>
-          </div>
-          <h3>Oaklawn Southern Dining</h3>
-          <p>
-            A polished restaurant website built to feel upscale from the first screen. It focuses on strong brand presence, menu presentation, reservations, and a refined multi-section user flow.
-          </p>
-
-          <ul class="project__highlights">
-            <li><i class="fa-solid fa-check"></i> Luxury visual direction and strong brand feel</li>
-            <li><i class="fa-solid fa-check"></i> Menu, reservations, and event-ready structure</li>
-            <li><i class="fa-solid fa-check"></i> Responsive layout built for both desktop and mobile</li>
-          </ul>
-
-          <div class="project__stack">
-            <span>HTML</span>
-            <span>CSS</span>
-            <span>JavaScript</span>
-            <span>Responsive Design</span>
-          </div>
-
-          <div class="project__actions">
-            <a href="https://jvo-james.github.io/osd/" class="btn btn--primary">
-              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-              Live Demo
-            </a>
-            <a href="https://github.com/jvo-james/osd" target="_blank" rel="noreferrer" class="btn btn--ghost">
-              <i class="fa-brands fa-github"></i>
-              GitHub
-            </a>
-          </div>
-        </div>
-      </article>
-
-      <!-- 2. VITRA AI -->
-      <article class="project project--featured project--reverse reveal">
-        <div class="project__media">
-          <div class="browser-shot project-image-shot">
-            <div class="browser-shot__top">
-              <span></span><span></span><span></span>
-            </div>
-            <div class="browser-shot__body project-image-body">
-              <img src="vitra-ai.jpg" alt="VITRA AI website preview" />
-            </div>
-          </div>
-        </div>
-
-        <div class="project__content">
-          <div class="project__topline">
-            <span class="project__tag">AI Product Experience</span>
-            <span class="project__year">02</span>
-          </div>
-          <h3>VITRA AI</h3>
-          <p>
-            A health-tech product concept with a broader system feel — service pages, dashboard sections, booking flows, and a product-style layout built around modern digital healthcare.
-          </p>
-
-          <ul class="project__highlights">
-            <li><i class="fa-solid fa-check"></i> Product-style structure with multiple service areas</li>
-            <li><i class="fa-solid fa-check"></i> Dashboard thinking and interactive UI direction</li>
-            <li><i class="fa-solid fa-check"></i> Clear branding for a modern AI health platform</li>
-          </ul>
-
-          <div class="project__stack">
-            <span>HTML</span>
-            <span>CSS</span>
-            <span>JavaScript</span>
-            <span>UI Systems</span>
-          </div>
-
-          <div class="project__actions">
-            <a href="https://vitra-ai.netlify.app/" class="btn btn--primary">
-              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-              Live Demo
-            </a>
-            <a href="https://github.com/jvo-james/vitra-ai" target="_blank" rel="noreferrer" class="btn btn--ghost">
-              <i class="fa-brands fa-github"></i>
-              GitHub
-            </a>
-          </div>
-        </div>
-      </article>
-
-      <!-- 3. MAISON ÉLITAIRE -->
-<article class="project project--featured reveal">
-  <div class="project__media">
-    <div class="browser-shot project-image-shot">
-      <div class="browser-shot__top">
-        <span></span><span></span><span></span>
-      </div>
-      <div class="browser-shot__body project-image-body">
-        <img src="maison.png" alt="MAISON ÉLITAIRE luxury fashion website preview" />
-      </div>
-    </div>
-  </div>
-
-  <div class="project__content">
-    <div class="project__topline">
-      <span class="project__tag">Luxury Fashion Website</span>
-      <span class="project__year">03</span>
-    </div>
-    <h3>MAISON ÉLITAIRE</h3>
-    <p>
-      A premium fashion e-commerce concept designed for a modern clothing house selling women’s, men’s, and children’s collections. The experience was built around editorial presentation, luxury product storytelling, asymmetrical layouts, and a refined mobile-first shopping flow.
-    </p>
-
-    <ul class="project__highlights">
-      <li><i class="fa-solid fa-check"></i> Luxury brand direction with editorial-style visual storytelling</li>
-      <li><i class="fa-solid fa-check"></i> Asymmetrical product and image layouts for a more premium feel</li>
-      <li><i class="fa-solid fa-check"></i> Mobile-focused refinement across navigation, modals, footer, and browsing flow</li>
-    </ul>
-
-    <div class="project__stack">
-      <span>HTML</span>
-      <span>CSS</span>
-      <span>JavaScript</span>
-      <span>E-Commerce UI</span>
-      <span>Luxury Fashion UX</span>
-    </div>
-
-    <div class="project__actions">
-      <a href="https://jvo-james.github.io/maison/" class="btn btn--primary">
-        <i class="fa-solid fa-arrow-up-right-from-square"></i>
-        Live Demo
-      </a>
-      <a href="https://github.com/jvo-james/maison" target="_blank" rel="noreferrer" class="btn btn--ghost">
-        <i class="fa-brands fa-github"></i>
-        GitHub
-      </a>
-    </div>
-  </div>
-</article>
-      <!-- 3. Basilissa -->
-      <article class="project project--featured reveal">
-        <div class="project__media">
-          <div class="browser-shot project-image-shot">
-            <div class="browser-shot__top">
-              <span></span><span></span><span></span>
-            </div>
-            <div class="browser-shot__body project-image-body">
-              <img src="bas.png" alt="Basilissa restaurant website preview" />
-            </div>
-          </div>
-        </div>
-
-        <div class="project__content">
-          <div class="project__topline">
-            <span class="project__tag">Premium Restaurant Brand</span>
-            <span class="project__year">04</span>
-          </div>
-          <h3>Basilissa</h3>
-          <p>
-            A bold restaurant website concept designed with stronger visual presence, better mobile structure, and a more premium fast-food brand experience. <b> (Work still in progress) </b>
-          </p>
-
-          <ul class="project__highlights">
-            <li><i class="fa-solid fa-check"></i> Premium food-brand presentation with cleaner hierarchy</li>
-            <li><i class="fa-solid fa-check"></i> Better layout rhythm for menus, offers, and featured items</li>
-            <li><i class="fa-solid fa-check"></i> Responsive build optimized for smaller screens</li>
-          </ul>
-
-          <div class="project__stack">
-            <span>HTML</span>
-            <span>CSS</span>
-            <span>JavaScript</span>
-            <span>Brand UI</span>
-          </div>
-
-          <div class="project__actions">
-            <a href="https://jvo-james.github.io/bas/b" class="btn btn--primary">
-              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-              Live Demo
-            </a>
-            <a href="https://github.com/jvo-james/bas" target="_blank" rel="noreferrer" class="btn btn--ghost">
-              <i class="fa-brands fa-github"></i>
-              GitHub
-            </a>
-          </div>
-        </div>
-      </article>
-
-      <!-- 4. Kidswear -->
-      <article class="project project--featured project--reverse reveal">
-        <div class="project__media">
-          <div class="browser-shot project-image-shot">
-            <div class="browser-shot__top">
-              <span></span><span></span><span></span>
-            </div>
-            <div class="browser-shot__body project-image-body">
-              <img src="kidswear.png" alt="Kidswear e-commerce interface preview" />
-            </div>
-          </div>
-        </div>
-
-        <div class="project__content">
-          <div class="project__topline">
-            <span class="project__tag">E-Commerce Interface</span>
-            <span class="project__year">05</span>
-          </div>
-          <h3>Kidswear Storefront</h3>
-          <p>
-            A product-led shopping interface focused on presentation, browsing, and layout rhythm. It was designed to feel clean, bright, and easy to explore without looking cheap or crowded.
-          </p>
-
-          <ul class="project__highlights">
-            <li><i class="fa-solid fa-check"></i> Product-first structure with shopping flow</li>
-            <li><i class="fa-solid fa-check"></i> Visual hierarchy built around item discovery</li>
-            <li><i class="fa-solid fa-check"></i> Responsive storefront design for smaller screens</li>
-          </ul>
-
-          <div class="project__stack">
-            <span>HTML</span>
-            <span>CSS</span>
-            <span>JavaScript</span>
-            <span>E-Commerce UI</span>
-          </div>
-
-          <div class="project__actions">
-            <a href="https://jvo-james.github.io/kidswear/" class="btn btn--primary">
-              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-              Live Demo
-            </a>
-            <a href="https://github.com/jvo-james/kidswear" target="_blank" rel="noreferrer" class="btn btn--ghost">
-              <i class="fa-brands fa-github"></i>
-              GitHub
-            </a>
-          </div>
-        </div>
-      </article>
-
-      <!-- 5. FitTrack -->
-      <article class="project project--featured reveal">
-        <div class="project__media">
-          <div class="browser-shot project-image-shot">
-            <div class="browser-shot__top">
-              <span></span><span></span><span></span>
-            </div>
-            <div class="browser-shot__body project-image-body">
-              <img src="fit.png" alt="Fitness tracking dashboard preview" />
-            </div>
-          </div>
-        </div>
-
-        <div class="project__content">
-          <div class="project__topline">
-            <span class="project__tag">Fitness Dashboard</span>
-            <span class="project__year">06</span>
-          </div>
-          <h3>FitTrack</h3>
-          <p>
-            A fitness-focused web app concept built around progress tracking, profile flow, workouts, and dashboard-style interaction. This project pushed me more toward app thinking than simple page design.
-          </p>
-
-          <ul class="project__highlights">
-            <li><i class="fa-solid fa-check"></i> App-like layout and dashboard sections</li>
-            <li><i class="fa-solid fa-check"></i> User flow for workouts and progress tracking</li>
-            <li><i class="fa-solid fa-check"></i> Clean UI built around repeated daily use</li>
-          </ul>
-
-          <div class="project__stack">
-            <span>HTML</span>
-            <span>CSS</span>
-            <span>JavaScript</span>
-            <span>App UI</span>
-          </div>
-
-          <div class="project__actions">
-            <a href="https://jvo-james.github.io/fit-track/home" class="btn btn--primary">
-              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-              Live Demo
-            </a>
-            <a href="https://github.com/jvo-james/fit-track" target="_blank" rel="noreferrer" class="btn btn--ghost">
-              <i class="fa-brands fa-github"></i>
-              GitHub
-            </a>
-          </div>
-        </div>
-      </article>
-
-      <!-- 6. Shuttle Tracker -->
-      <article class="project project--featured project--reverse reveal">
-        <div class="project__media">
-          <div class="browser-shot project-image-shot">
-            <div class="browser-shot__top">
-              <span></span><span></span><span></span>
-            </div>
-            <div class="browser-shot__body project-image-body">
-              <img src="shuttle.webp" alt="Shuttle Tracker platform preview" />
-            </div>
-          </div>
-        </div>
-
-        <div class="project__content">
-          <div class="project__topline">
-            <span class="project__tag">Transport Tracking Platform</span>
-            <span class="project__year">06</span>
-          </div>
-          <h3>Shuttle Tracker</h3>
-          <p>
-            A transport-focused tracking platform concept built around route visibility, movement status, and a cleaner dashboard-style interface for monitoring shuttle activity.
-          </p>
-
-          <ul class="project__highlights">
-            <li><i class="fa-solid fa-check"></i> Structured interface for tracking and monitoring</li>
-            <li><i class="fa-solid fa-check"></i> Dashboard-oriented layout with clearer information flow</li>
-            <li><i class="fa-solid fa-check"></i> Responsive design for quick use across devices</li>
-          </ul>
-
-          <div class="project__stack">
-            <span>HTML</span>
-            <span>CSS</span>
-            <span>JavaScript</span>
-            <span>Tracking UI</span>
-          </div>
-
-          <div class="project__actions">
-            <a href="https://jvo-james.github.io/knust/buses" class="btn btn--primary">
-              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-              Live Demo
-            </a>
-            <a href="https://github.com/jvo-james/knust" target="_blank" rel="noreferrer" class="btn btn--ghost">
-              <i class="fa-brands fa-github"></i>
-              GitHub
-            </a>
-          </div>
-        </div>
-      </article>
-
-    </div>
-  </div>
-</section>
-
-    <!-- In Progress -->
-    <section class="section archive" id="archive">
+    <section class="section projects" id="projects">
       <div class="container">
-        <div class="section-heading reveal">
-          <span class="section-tag">
-            <i class="fa-solid fa-folder-open"></i>
-            In Progress
-          </span>
-          <h2>Current builds and active development work.</h2>
-          <p>These are projects I’m still refining, expanding, or repositioning. The names below are more professional and better reflect product direction.</p>
+        <div class="section-heading" data-reveal>
+          <span class="section-tag"><i class="fa-solid fa-briefcase"></i> Featured Projects</span>
+          <h2>Work that shows design range, product thinking, and execution.</h2>
+          <p>
+            This follows the strongest part of your old portfolio: detailed, high-value project presentation. Replace these placeholders with your real projects, screenshots, and links.
+          </p>
         </div>
 
-        <div class="archive__grid">
-          <article class="archive-card reveal">
-            <div class="archive-card__icon"><i class="fa-solid fa-store"></i></div>
-            <h3>CommerceFlow</h3>
-            <p>A branded commerce experience focused on product visibility, layout clarity, and stronger storefront interactions.</p>
-            <a href="https://github.com/jvo-james/project" target="_blank" rel="noreferrer">View Repository <i class="fa-solid fa-arrow-right"></i></a>
-          </article>
-
-          <article class="archive-card reveal">
-            <div class="archive-card__icon"><i class="fa-solid fa-gem"></i></div>
-            <h3>Luxe Atelier</h3>
-            <p>A premium brand website direction centered on elegance, strong presentation, and cleaner visual storytelling.</p>
-            <a href="https://github.com/jvo-james/knust" target="_blank" rel="noreferrer">View Repository <i class="fa-solid fa-arrow-right"></i></a>
-          </article>
-
-          <article class="archive-card reveal">
-            <div class="archive-card__icon"><i class="fa-solid fa-utensils"></i></div>
-            <h3>Harvest Table</h3>
-            <p>A restaurant concept in progress with a more refined content flow, richer visuals, and better brand positioning.</p>
-            <a href="https://github.com/jvo-james/wrap-district" target="_blank" rel="noreferrer">View Repository <i class="fa-solid fa-arrow-right"></i></a>
-          </article>
-
-          <article class="archive-card reveal">
-            <div class="archive-card__icon"><i class="fa-solid fa-crown"></i></div>
-            <h3>CustomHaus</h3>
-            <p>A brand-led custom product website being developed with sharper messaging, cleaner sections, and stronger product display.</p>
-            <a href="https://github.com/jvo-james/primalcustoms" target="_blank" rel="noreferrer">View Repository <i class="fa-solid fa-arrow-right"></i></a>
-          </article>
-
-          <article class="archive-card reveal">
-            <div class="archive-card__icon"><i class="fa-solid fa-heart-pulse"></i></div>
-            <h3>WellSpring</h3>
-            <p>A wellness-oriented interface still being improved around clarity, user journey, and overall visual confidence.</p>
-            <a href="https://github.com/jvo-james/bliss" target="_blank" rel="noreferrer">View Repository <i class="fa-solid fa-arrow-right"></i></a>
-          </article>
-
-          <article class="archive-card reveal">
-            <div class="archive-card__icon"><i class="fa-solid fa-user-tie"></i></div>
-            <h3>Portfolio System</h3>
-            <p>An earlier portfolio direction I’m rebuilding into a more serious, premium personal brand experience.</p>
-            <a href="https://github.com/jvo-james/portfolio" target="_blank" rel="noreferrer">View Repository <i class="fa-solid fa-arrow-right"></i></a>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Skills -->
-    <section class="section skills" id="skills">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="section-tag">
-            <i class="fa-solid fa-code-branch"></i>
-            Skills & Tools
-          </span>
-          <h2>The stack behind the work.</h2>
-        </div>
-
-        <div class="skills__grid">
-          <article class="skill-panel reveal">
-            <div class="skill-panel__head">
-              <span class="skill-panel__icon"><i class="fa-solid fa-window-maximize"></i></span>
-              <h3>Frontend Development</h3>
+        <div class="featured-projects">
+          <article class="project" data-reveal>
+            <div class="project__media">
+              <div class="browser-shot">
+                <div class="browser-shot__top"><span></span><span></span><span></span></div>
+                <div class="browser-shot__body project-image-body">
+                  <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80" alt="Business platform website preview" />
+                </div>
+              </div>
             </div>
-            <div class="skill-tags">
-              <span>HTML5</span>
-              <span>CSS3</span>
-              <span>JavaScript</span>
-              <span>Responsive Design</span>
-              <span>UI Architecture</span>
-              <span>Animations</span>
-              <span>Accessibility</span>
-              <span>Component Thinking</span>
+
+            <div class="project__content">
+              <div class="project__topline">
+                <span class="project__tag">Premium Business Website</span>
+                <span class="project__year">01</span>
+              </div>
+              <h3>Nova Commerce Platform</h3>
+              <p>
+                A polished business platform designed to feel premium from the first screen, with clear brand presentation, strong conversion structure, and backend-ready product thinking.
+              </p>
+              <ul class="project__highlights">
+                <li><i class="fa-solid fa-check"></i> Premium visual direction with strong brand feel</li>
+                <li><i class="fa-solid fa-check"></i> Frontend structure ready for scale and integrations</li>
+                <li><i class="fa-solid fa-check"></i> Responsive experience built for desktop and mobile</li>
+              </ul>
+              <div class="project__stack">
+                <span>HTML</span>
+                <span>CSS</span>
+                <span>JavaScript</span>
+                <span>Responsive Design</span>
+              </div>
+              <div class="project__actions">
+                <a href="#contact" class="btn btn--primary"><i class="fa-solid fa-arrow-up-right-from-square"></i> Use Real Project Link</a>
+                <a href="#contact" class="btn btn--ghost"><i class="fa-brands fa-github"></i> Use GitHub Link</a>
+              </div>
             </div>
           </article>
 
-          <article class="skill-panel reveal reveal-delay-1">
-            <div class="skill-panel__head">
-              <span class="skill-panel__icon"><i class="fa-solid fa-server"></i></span>
-              <h3>Backend & Logic</h3>
+          <article class="project project--reverse" data-reveal>
+            <div class="project__media">
+              <div class="browser-shot">
+                <div class="browser-shot__top"><span></span><span></span><span></span></div>
+                <div class="browser-shot__body project-image-body">
+                  <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80" alt="Dashboard interface preview" />
+                </div>
+              </div>
             </div>
-            <div class="skill-tags">
-              <span>API Integration</span>
-              <span>Form Handling</span>
-              <span>Authentication Flows</span>
-              <span>Dynamic Content</span>
-              <span>Data Structure</span>
-              <span>App Logic</span>
-              <span>Workflow Design</span>
-              <span>Scalable Page Systems</span>
+
+            <div class="project__content">
+              <div class="project__topline">
+                <span class="project__tag">Operations Dashboard</span>
+                <span class="project__year">02</span>
+              </div>
+              <h3>Axis Admin System</h3>
+              <p>
+                A custom dashboard concept built to manage workflows, visibility, data, and internal operations with a clean interface and strong full-stack potential.
+              </p>
+              <ul class="project__highlights">
+                <li><i class="fa-solid fa-check"></i> Product-style dashboard interface</li>
+                <li><i class="fa-solid fa-check"></i> Structured for backend logic, auth, and data flow</li>
+                <li><i class="fa-solid fa-check"></i> Modern UI with scalable component thinking</li>
+              </ul>
+              <div class="project__stack">
+                <span>Dashboard UI</span>
+                <span>Backend</span>
+                <span>APIs</span>
+                <span>Systems</span>
+              </div>
+              <div class="project__actions">
+                <a href="#contact" class="btn btn--primary"><i class="fa-solid fa-arrow-up-right-from-square"></i> Use Real Project Link</a>
+                <a href="#contact" class="btn btn--ghost"><i class="fa-brands fa-github"></i> Use GitHub Link</a>
+              </div>
             </div>
           </article>
 
-          <article class="skill-panel reveal reveal-delay-2">
-            <div class="skill-panel__head">
-              <span class="skill-panel__icon"><i class="fa-solid fa-pen-ruler"></i></span>
-              <h3>Design & Presentation</h3>
+          <article class="project" data-reveal>
+            <div class="project__media">
+              <div class="browser-shot">
+                <div class="browser-shot__top"><span></span><span></span><span></span></div>
+                <div class="browser-shot__body project-image-body">
+                  <img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&w=1200&q=80" alt="AI product concept preview" />
+                </div>
+              </div>
             </div>
-            <div class="skill-tags">
-              <span>Visual Hierarchy</span>
-              <span>Luxury UI</span>
-              <span>Brand Presentation</span>
-              <span>Layout Composition</span>
-              <span>Spacing Systems</span>
-              <span>Color Direction</span>
-              <span>Section Design</span>
-              <span>High-End Styling</span>
+
+            <div class="project__content">
+              <div class="project__topline">
+                <span class="project__tag">AI-Powered Product</span>
+                <span class="project__year">03</span>
+              </div>
+              <h3>Pulse AI Workflow</h3>
+              <p>
+                An intelligent workflow concept for helping users move faster, automate repeated actions, and create a smarter experience inside a modern digital product.
+              </p>
+              <ul class="project__highlights">
+                <li><i class="fa-solid fa-check"></i> AI-assisted experience planning</li>
+                <li><i class="fa-solid fa-check"></i> Interface layer combined with workflow thinking</li>
+                <li><i class="fa-solid fa-check"></i> Great for automation, support, or assistant features</li>
+              </ul>
+              <div class="project__stack">
+                <span>AI Features</span>
+                <span>Automation</span>
+                <span>UX Flow</span>
+                <span>Integration Ready</span>
+              </div>
+              <div class="project__actions">
+                <a href="#contact" class="btn btn--primary"><i class="fa-solid fa-arrow-up-right-from-square"></i> Use Real Project Link</a>
+                <a href="#contact" class="btn btn--ghost"><i class="fa-brands fa-github"></i> Use GitHub Link</a>
+              </div>
             </div>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- Services -->
-    <section class="section services" id="services">
+    <section class="section" id="services">
       <div class="container">
-        <div class="section-heading reveal">
-          <span class="section-tag">
-            <i class="fa-solid fa-gear"></i>
-            Services
-          </span>
-          <h2>I’m not limited to one type of website.</h2>
+        <div class="section-heading" data-reveal>
+          <span class="section-tag"><i class="fa-solid fa-grid-2"></i> Services</span>
+          <h2>Broad services, grouped properly so the brand feels focused.</h2>
+          <p>
+            This follows your own direction: show range without sounding scattered. Group the work by how people think about what they need.
+          </p>
         </div>
 
-        <div class="services__grid">
-          <article class="service-card reveal">
-            <span class="service-card__icon"><i class="fa-solid fa-globe"></i></span>
-            <h3>Business Websites</h3>
-            <p>Professional websites for brands, agencies, startups, personal businesses, and service-based companies.</p>
+        <div class="about__cards" data-reveal>
+          <article class="info-card">
+            <span class="info-card__icon"><i class="fa-solid fa-globe"></i></span>
+            <div>
+              <h3>Web</h3>
+              <p>Business websites, landing pages, portfolio sites, and redesigns with strong brand presentation.</p>
+            </div>
           </article>
 
-          <article class="service-card reveal reveal-delay-1">
-            <span class="service-card__icon"><i class="fa-solid fa-cart-shopping"></i></span>
-            <h3>E-Commerce Interfaces</h3>
-            <p>Storefronts and product-driven pages built to make products look better and browse easier.</p>
+          <article class="info-card">
+            <span class="info-card__icon"><i class="fa-solid fa-code-branch"></i></span>
+            <div>
+              <h3>Development</h3>
+              <p>Frontend development, backend development, full-stack apps, and API integrations.</p>
+            </div>
           </article>
 
-          <article class="service-card reveal reveal-delay-2">
-            <span class="service-card__icon"><i class="fa-solid fa-layer-group"></i></span>
-            <h3>Landing Pages</h3>
-            <p>High-converting campaign pages, offer pages, waitlists, and launch pages with stronger visual focus.</p>
+          <article class="info-card">
+            <span class="info-card__icon"><i class="fa-solid fa-gears"></i></span>
+            <div>
+              <h3>Systems</h3>
+              <p>Dashboards, admin tools, internal systems, workflow automation, and operations support.</p>
+            </div>
           </article>
 
-          <article class="service-card reveal reveal-delay-3">
-            <span class="service-card__icon"><i class="fa-solid fa-rotate"></i></span>
-            <h3>Website Redesigns</h3>
-            <p>Modern rebuilds for websites that feel outdated, bloated, unclear, or weak on mobile.</p>
-          </article>
-
-          <article class="service-card reveal">
-            <span class="service-card__icon"><i class="fa-solid fa-table-columns"></i></span>
-            <h3>Dashboards & Admin Panels</h3>
-            <p>Structured interfaces for platforms, internal systems, analytics views, and user management areas.</p>
-          </article>
-
-          <article class="service-card reveal reveal-delay-1">
-            <span class="service-card__icon"><i class="fa-solid fa-mobile-screen-button"></i></span>
-            <h3>Mobile-Responsive Optimization</h3>
-            <p>I clean up oversized sections, improve flow on phones, and make sure the layout actually works on small screens.</p>
-          </article>
-
-          <article class="service-card reveal reveal-delay-2">
-            <span class="service-card__icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
-            <h3>Premium UI Styling</h3>
-            <p>Luxury visual direction, cleaner spacing, stronger hierarchy, and a more expensive overall feel.</p>
-          </article>
-
-          <article class="service-card reveal reveal-delay-3">
-            <span class="service-card__icon"><i class="fa-solid fa-code"></i></span>
-            <h3>Custom Frontend Development</h3>
-            <p>Interactive sections, polished page behavior, smoother flows, and custom-coded interfaces from scratch.</p>
+          <article class="info-card">
+            <span class="info-card__icon"><i class="fa-solid fa-brain"></i></span>
+            <div>
+              <h3>AI Solutions</h3>
+              <p>AI-powered features, assistants, smart workflows, and custom digital solutions.</p>
+            </div>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- Contact -->
-    <section class="section contact" id="contact">
+    <section class="section" id="process">
       <div class="container">
-        <div class="contact__wrap reveal">
-          <div class="contact__content">
-            <span class="section-tag">
-              <i class="fa-solid fa-envelope"></i>
-              Contact
-            </span>
-            <h2>Let’s build something serious.</h2>
+        <div class="section-heading" data-reveal>
+          <span class="section-tag"><i class="fa-solid fa-diagram-project"></i> Process</span>
+          <h2>Strategy to launch, with a clear flow that feels professional.</h2>
+          <p>
+            This section keeps the homepage doing the heavy lifting: what you do, how you work, why trust you, and how to contact you.
+          </p>
+        </div>
+
+        <div class="about__cards" data-reveal>
+          <article class="info-card">
+            <span class="info-card__icon"><i class="fa-solid fa-compass"></i></span>
+            <div>
+              <h3>Strategy</h3>
+              <p>Clarify the goal, audience, structure, and what success looks like.</p>
+            </div>
+          </article>
+
+          <article class="info-card">
+            <span class="info-card__icon"><i class="fa-solid fa-pen-ruler"></i></span>
+            <div>
+              <h3>Design</h3>
+              <p>Create a clean, premium visual direction with strong user flow.</p>
+            </div>
+          </article>
+
+          <article class="info-card">
+            <span class="info-card__icon"><i class="fa-solid fa-laptop-code"></i></span>
+            <div>
+              <h3>Build</h3>
+              <p>Develop the interface, logic, backend, integrations, or AI features required.</p>
+            </div>
+          </article>
+
+          <article class="info-card">
+            <span class="info-card__icon"><i class="fa-solid fa-rocket"></i></span>
+            <div>
+              <h3>Launch</h3>
+              <p>Refine, test, and deliver something ready for real-world use.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="section-heading" data-reveal>
+          <span class="section-tag"><i class="fa-solid fa-envelope"></i> Contact</span>
+          <h2>Tell JVO what you want to build.</h2>
+          <p>
+            People clicking “Powered by JVO” should be able to move from curiosity to trust to contact without friction.
+          </p>
+        </div>
+
+        <div class="about__grid">
+          <div class="about__content" data-reveal>
             <p>
-              If you need a website, product interface, redesign, dashboard, or a cleaner digital presence, reach out. I’m open to freelance work, collaborations, and ambitious builds.
+              Need a website, app, backend system, automation flow, dashboard, or AI-powered solution? JVO can help shape it, design it, and build it.
             </p>
-
-        <div class="contact__info">
-  <a href="mailto:senujames23@gmail.com" class="contact-link">
-    <i class="fa-solid fa-envelope-circle-check"></i>
-    <span>senujames23@gmail.com</span>
-  </a>
-
-  <a href="tel:+233594121246" class="contact-link">
-    <i class="fa-solid fa-phone-volume"></i>
-    <span>+233(0)594-121-246</span>
-  </a>
-
-  <a href="https://wa.me/233594121246" target="_blank" rel="noreferrer" class="contact-link">
-    <i class="fa-brands fa-whatsapp"></i>
-    <span>Chat on WhatsApp</span>
-  </a>
-
-  <a href="https://github.com/jvo-james" target="_blank" rel="noreferrer" class="contact-link">
-    <i class="fa-brands fa-github"></i>
-    <span>github.com/jvo-james</span>
-  </a>
-
-  <a href="https://www.linkedin.com/in/james-senu-6890973aa" target="_blank" rel="noreferrer" class="contact-link">
-    <i class="fa-brands fa-linkedin"></i>
-    <span>My LinkedIn</span>
-  </a>
-</div>
+            <p>
+              Replace the placeholders below with your real contact details. Your old portfolio already had a solid contact flow, so this keeps that same strength.
+            </p>
+            <div class="about__actions">
+              <a href="mailto:hello@jvo.dev" class="btn btn--ghost"><i class="fa-solid fa-envelope"></i> hello@jvo.dev</a>
+              <a href="https://wa.me/233000000000" class="btn btn--primary"><i class="fa-brands fa-whatsapp"></i> WhatsApp JVO</a>
+            </div>
           </div>
 
-         <form
-  class="contact-form"
-  id="contactForm"
-  action="https://formspree.io/f/xrbyrqry"
-  method="POST"
->
-            <div class="form-row">
-              <label for="name">Full Name</label>
-              <input type="text" id="name" name="name" placeholder="Your full name" required />
-            </div>
+          <div class="about__content" data-reveal>
+            <form class="contact-form">
+              <div class="form-row">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" placeholder="Your full name" required />
+              </div>
 
-            <div class="form-row">
-              <label for="email">Email Address</label>
-              <input type="email" id="email" name="email" placeholder="your@email.com" required />
-            </div>
+              <div class="form-row">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="your@email.com" required />
+              </div>
 
-            <div class="form-row">
-              <label for="message">Project Details</label>
-              <textarea id="message" name="message" rows="6" placeholder="Tell me what you want to build..." required></textarea>
-            </div>
+              <div class="form-row">
+                <label for="message">Project Details</label>
+                <textarea id="message" name="message" rows="6" placeholder="Tell JVO what you want to build." required></textarea>
+              </div>
 
-             <input type="hidden" name="_subject" value="New Portfolio Inquiry from James Website">
-  <input type="hidden" name="_captcha" value="false">
-           
-            <button type="submit" class="btn btn--primary btn--full">
-              <i class="fa-solid fa-paper-plane"></i>
-              Send Message
-            </button>
-          </form>
+              <button type="submit" class="btn btn--primary btn--full">
+                <i class="fa-solid fa-paper-plane"></i>
+                Send Message
+              </button>
+              <p class="form-feedback"></p>
+            </form>
+          </div>
         </div>
       </div>
     </section>
-
   </main>
 
-  <!-- Footer -->
   <footer class="site-footer">
     <div class="container footer__inner">
       <div class="footer__brand">
         <a href="#top" class="brand brand--footer">
-          <span class="brand__mark">
-            <i class="fa-solid fa-code"></i>
-          </span>
+          <span class="brand__mark"><i class="fa-solid fa-code"></i></span>
           <span class="brand__text">
-            <span class="brand__name">James</span>
-            <span class="brand__sub">Fullstack Developer • Web Designer</span>
+            <span class="brand__name">JVO</span>
+            <span class="brand__sub">Websites • Apps • Systems • AI</span>
           </span>
         </a>
-        <p>Built to reflect premium design, strong frontend quality, and real fullstack capability.</p>
+        <p>Built to reflect premium design, strong frontend quality, and real full-stack capability.</p>
       </div>
 
       <div class="footer__links">
         <a href="#about">About</a>
         <a href="#projects">Projects</a>
-        <a href="#skills">Skills</a>
+        <a href="#services">Services</a>
         <a href="#contact">Contact</a>
       </div>
 
-     <div class="footer__socials">
-  <a href="https://github.com/jvo-james" target="_blank" rel="noreferrer" aria-label="GitHub">
-    <i class="fa-brands fa-github"></i>
-  </a>
-
-  <a href="https://www.linkedin.com/in/james-senu-6890973aa" target="_blank" rel="noreferrer" aria-label="LinkedIn">
-    <i class="fa-brands fa-linkedin-in"></i>
-  </a>
-
-  <a href="mailto:senujames23@gmail.com" aria-label="Email">
-    <i class="fa-solid fa-envelope"></i>
-  </a>
-
-  <a href="tel:+233594121246" aria-label="Call James">
-    <i class="fa-solid fa-phone"></i>
-  </a>
-
-  <a href="https://wa.me/233594121246" target="_blank" rel="noreferrer" aria-label="WhatsApp James">
-    <i class="fa-brands fa-whatsapp"></i>
-  </a>
-</div>
+      <div class="footer__socials">
+        <a href="#contact" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="#contact" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+        <a href="mailto:hello@jvo.dev" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+      </div>
     </div>
   </footer>
 
-  <!-- Cursor Glow -->
-  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
-
-
+  <script src="script.js"></script>
 </body>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const body = document.body;
-  const header = document.querySelector('.site-header');
-  const nav = document.getElementById('mainNav');
-  const navToggle = document.getElementById('navToggle');
-  const navLinks = document.querySelectorAll('.nav a');
-  const sections = document.querySelectorAll('main section[id]');
-  const contactForm = document.querySelector('.contact-form');
-  const scrollIndicator = document.querySelector('.scroll-indicator');
-  const cursorGlow = document.getElementById('cursorGlow');
-
-  let navOpen = false;
-  let currentActiveId = '';
-
-  function isMobile() {
-    return window.innerWidth <= 980;
-  }
-
-  function isValidEmail(email) {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailPattern.test(email);
-  }
-
-  function setHeaderState() {
-    if (!header) return;
-    header.classList.toggle('is-scrolled', window.scrollY > 12);
-  }
-
-  function openNav() {
-    if (!nav || !navToggle) return;
-    navOpen = true;
-    nav.classList.add('is-open');
-    navToggle.classList.add('is-active');
-    navToggle.setAttribute('aria-expanded', 'true');
-    body.classList.add('menu-open');
-  }
-
-  function closeNav() {
-    if (!nav || !navToggle) return;
-    navOpen = false;
-    nav.classList.remove('is-open');
-    navToggle.classList.remove('is-active');
-    navToggle.setAttribute('aria-expanded', 'false');
-    body.classList.remove('menu-open');
-  }
-
-  function toggleNav() {
-    navOpen ? closeNav() : openNav();
-  }
-
-  function scrollToTarget(targetEl) {
-    if (!targetEl) return;
-    const headerHeight = header ? header.offsetHeight : 0;
-    const offsetTop = targetEl.getBoundingClientRect().top + window.pageYOffset - headerHeight - 8;
-
-    window.scrollTo({
-      top: offsetTop,
-      behavior: 'smooth'
-    });
-  }
-
-  function updateActiveNavLink() {
-    if (!sections.length || !navLinks.length) return;
-
-    const headerOffset = (header ? header.offsetHeight : 0) + 120;
-    let newActiveId = '';
-
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop;
-      const sectionBottom = sectionTop + section.offsetHeight;
-
-      if (window.scrollY + headerOffset >= sectionTop && window.scrollY + headerOffset < sectionBottom) {
-        newActiveId = section.id;
-      }
-    });
-
-    if (!newActiveId && sections[0]) {
-      newActiveId = sections[0].id;
-    }
-
-    if (newActiveId === currentActiveId) return;
-    currentActiveId = newActiveId;
-
-    navLinks.forEach(link => {
-      link.classList.toggle('is-active', link.getAttribute('href') === `#${currentActiveId}`);
-    });
-  }
-
-  function handleScrollIndicator() {
-    if (!scrollIndicator) return;
-    scrollIndicator.classList.toggle('is-hidden', window.scrollY > 50);
-  }
-
-  function showFormMessage(message, type) {
-    if (!contactForm) return;
-
-    let messageBox = contactForm.querySelector('.form-message');
-
-    if (!messageBox) {
-      messageBox = document.createElement('div');
-      messageBox.className = 'form-message';
-      contactForm.appendChild(messageBox);
-    }
-
-    messageBox.textContent = message;
-    messageBox.classList.remove('success', 'error');
-    messageBox.classList.add(type);
-    messageBox.style.display = 'block';
-
-    clearTimeout(messageBox.dismissTimer);
-    messageBox.dismissTimer = setTimeout(() => {
-      messageBox.style.display = 'none';
-    }, 5000);
-  }
-
-  if (navToggle && nav) {
-    navToggle.addEventListener('click', toggleNav);
-
-    navLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        if (isMobile()) closeNav();
-      });
-    });
-
-    document.addEventListener('click', (event) => {
-      if (!navOpen || !isMobile()) return;
-
-      const clickedInsideNav = nav.contains(event.target);
-      const clickedToggle = navToggle.contains(event.target);
-
-      if (!clickedInsideNav && !clickedToggle) {
-        closeNav();
-      }
-    });
-
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && navOpen) {
-        closeNav();
-      }
-    });
-
-    window.addEventListener('resize', () => {
-      if (!isMobile()) {
-        closeNav();
-      }
-    });
-  }
-
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (event) {
-      const targetId = this.getAttribute('href');
-      if (!targetId || targetId === '#') return;
-
-      const targetEl = document.querySelector(targetId);
-      if (!targetEl) return;
-
-      event.preventDefault();
-      scrollToTarget(targetEl);
-    });
-  });
-
-  if (contactForm) {
-    contactForm.addEventListener('submit', async (event) => {
-      event.preventDefault();
-
-      const name = contactForm.querySelector('#name');
-      const email = contactForm.querySelector('#email');
-      const message = contactForm.querySelector('#message');
-      const submitBtn = contactForm.querySelector('button[type="submit"]');
-
-      const nameValue = name ? name.value.trim() : '';
-      const emailValue = email ? email.value.trim() : '';
-      const messageValue = message ? message.value.trim() : '';
-
-      if (!nameValue || !emailValue || !messageValue) {
-        showFormMessage('Please fill in all fields before sending your message.', 'error');
-        return;
-      }
-
-      if (!isValidEmail(emailValue)) {
-        showFormMessage('Please enter a valid email address.', 'error');
-        return;
-      }
-
-      const originalBtnHTML = submitBtn.innerHTML;
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Sending...`;
-
-      try {
-        const response = await fetch(contactForm.action, {
-          method: 'POST',
-          body: new FormData(contactForm),
-          headers: {
-            'Accept': 'application/json'
-          }
-        });
-
-        if (response.ok) {
-          contactForm.reset();
-          showFormMessage('Message sent successfully. I’ll get back to you soon.', 'success');
-        } else {
-          const data = await response.json().catch(() => ({}));
-          showFormMessage(
-            data.errors?.map(error => error.message).join(', ') || 'Something went wrong. Please try again.',
-            'error'
-          );
-        }
-      } catch (error) {
-        showFormMessage('Network error. Please try again later.', 'error');
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalBtnHTML;
-      }
-    });
-  }
-
-  if (!document.querySelector('.scroll-progress')) {
-    const progressBar = document.createElement('div');
-    progressBar.className = 'scroll-progress';
-    body.appendChild(progressBar);
-  }
-
-  function updateScrollProgress() {
-    const progressBar = document.querySelector('.scroll-progress');
-    if (!progressBar) return;
-
-    const scrollTop = window.scrollY;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-    progressBar.style.width = `${progress}%`;
-  }
-
-  window.addEventListener('scroll', () => {
-    setHeaderState();
-    updateActiveNavLink();
-    updateScrollProgress();
-    handleScrollIndicator();
-  }, { passive: true });
-
-  if (cursorGlow) {
-    cursorGlow.style.display = 'none';
-  }
-
-  document.querySelectorAll('.reveal, .reveal-delay-1, .reveal-delay-2, .reveal-delay-3').forEach(el => {
-    el.classList.remove('reveal', 'reveal-delay-1', 'reveal-delay-2', 'reveal-delay-3');
-    el.classList.add('is-visible');
-  });
-
-  setHeaderState();
-  updateActiveNavLink();
-  updateScrollProgress();
-  handleScrollIndicator();
-});
-</script>
 </html>
