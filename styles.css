@@ -1739,3 +1739,47 @@ p {
   object-fit: cover;
   display: block;
 }
+
+.contact-list--icons li {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.contact-list--icons li::before {
+  display: none;
+}
+
+.contact-list--icons i {
+  width: 18px;
+  text-align: center;
+  color: #bba3ff;
+  flex-shrink: 0;
+}
+
+.contact-list--icons a {
+  color: #d7defc;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.contact-list--icons a:hover {
+  color: #ffffff;
+}
+
+.contact-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-top: 1.4rem;
+}
+
+@media (max-width: 768px) {
+  .contact-quick-actions {
+    flex-direction: column;
+  }
+
+  .contact-quick-actions .btn {
+    width: 100%;
+  }
+}
