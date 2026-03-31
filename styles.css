@@ -3051,3 +3051,15 @@ p {
     max-width: 84px;
   }
 }
+@media (max-width: 900px) {
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  body {
+    padding-top: var(--header-height);
+  }
+}
