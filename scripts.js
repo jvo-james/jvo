@@ -1,9 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  ).matches;
-
   const body = document.body;
+  const pageShell = document.querySelector(".page-shell");
+  const hero = document.querySelector(".hero");
+  const frameStack = document.querySelector(".frame-stack");
   const form = document.querySelector(".rsvp-form");
   const nameInput = document.querySelector("#name");
   const submitBtn = document.querySelector(".submit-btn");
@@ -12,63 +11,36 @@ document.addEventListener("DOMContentLoaded", () => {
   );
   const choiceCards = document.querySelectorAll(".choice-card");
 
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  body.classList.add("js-ready");
+
+  // ---------- Reveal ----------
   const revealTargets = document.querySelectorAll(
-    ".hero__content, .hero__visual, .ticker, .mood, .details, .location, .gallery, .rsvp, .footer"
+    ".hero__badge, .hero__copy, .hero__visual, .ticker, .section-card, .footer"
   );
 
-  const hoverCards = document.querySelectorAll(
-    ".section-card, .gallery__card, .portrait, .choice-card, .mood__image, .location__link, .hero__cta, .hero__ghost"
-  );
+  revealTargets.forEach((el) => el.classList.add("reveal-item"));
 
-  const decorativeMotionEls = document.querySelectorAll(
-    ".ambient, .ornament, .floating-mark, .mini-spark, .hero-orbit, .map-wave"
-  );
-
-  const parallaxEls = document.querySelectorAll(
-    ".hero__visual .portrait--one, .hero__visual .portrait--two, .glow-card, .mood__image"
-  );
-
-  body.classList.add("is-ready");
-
-  const setRevealState = () => {
-    revealTargets.forEach((el, index) => {
-      if (!el) return;
-      el.style.opacity = "0";
-      el.style.transform = "translateY(28px)";
-      el.style.transition =
-        "opacity 900ms ease, transform 900ms ease, filter 900ms ease";
-      el.style.transitionDelay = `${index * 70}ms`;
-    });
-  };
-
-  const runReveal = () => {
-    if (prefersReducedMotion) {
-      revealTargets.forEach((el) => {
-        el.style.opacity = "1";
-        el.style.transform = "none";
+  const revealObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
       });
-      return;
+    },
+    {
+      threshold: 0.14,
+      rootMargin: "0px 0px -8% 0px",
     }
+  );
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const el = entry.target;
-          el.style.opacity = "1";
-          el.style.transform = "translateY(0)";
-          observer.unobserve(el);
-        });
-      },
-      {
-        threshold: 0.12,
-        rootMargin: "0px 0px -60px 0px",
-      }
-    );
+  revealTargets.forEach((el) => revealObserver.observe(el));
 
-    revealTargets.forEach((el) => observer.observe(el));
-  };
-
+  // ---------- Attendance ----------
   const updateAttendanceState = () => {
     choiceCards.forEach((card) => {
       const input = card.querySelector('input[type="radio"]');
@@ -76,78 +48,135 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  const setupAttendance = () => {
-    attendanceInputs.forEach((input) => {
-      input.addEventListener("change", updateAttendanceState);
-    });
+  attendanceInputs.forEach((input) => {
+    input.addEventListener("change", updateAttendanceState);
+  });
 
-    updateAttendanceState();
-  };
+  updateAttendanceState();
 
-  const setupButtonRipples = () => {
-    document.querySelectorAll(".hero__cta, .hero__ghost, .submit-btn").forEach((button) => {
-      button.addEventListener("pointerdown", (event) => {
-        const rect = button.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
+  // ---------- Keyboard focus mode ----------
+  let keyboardMode = false;
 
-        const ripple = document.createElement("span");
-        ripple.className = "ripple";
-        ripple.style.left = `${x}px`;
-        ripple.style.top = `${y}px`;
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Tab" && !keyboardMode) {
+      keyboardMode = true;
+      body.classList.add("using-keyboard");
+    }
+  });
 
-        button.appendChild(ripple);
+  document.addEventListener("mousedown", () => {
+    if (!keyboardMode) return;
+    keyboardMode = false;
+    body.classList.remove("using-keyboard");
+  });
 
-        ripple.animate(
-          [
-            { transform: "translate(-50%, -50%) scale(0)", opacity: 0.45 },
-            { transform: "translate(-50%, -50%) scale(1.9)", opacity: 0 },
-          ],
-          {
-            duration: 680,
-            easing: "ease-out",
-          }
-        );
+  // ---------- Button / link ripples ----------
+  const rippleTargets = document.querySelectorAll(
+    ".button, .submit-btn, .location__map-link, .location__card"
+  );
 
-        window.setTimeout(() => ripple.remove(), 720);
-      });
-    });
-  };
+  rippleTargets.forEach((target) => {
+    target.addEventListener("pointerdown", (event) => {
+      if (prefersReducedMotion) return;
 
-  const setupSubtleHoverLift = () => {
-    hoverCards.forEach((el) => {
-      el.addEventListener("pointerenter", () => {
-        if (el.classList.contains("choice-card")) return;
-        el.style.transform = "translateY(-4px)";
-      });
+      const rect = target.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
 
-      el.addEventListener("pointerleave", () => {
-        if (el.classList.contains("choice-card")) return;
-        if (el.classList.contains("gallery__card") || el.classList.contains("portrait")) {
-          el.style.transform = "translateY(0)";
-        } else {
-          el.style.transform = "";
+      const ripple = document.createElement("span");
+      ripple.className = "ripple";
+      ripple.style.left = `${x}px`;
+      ripple.style.top = `${y}px`;
+
+      target.appendChild(ripple);
+
+      ripple.animate(
+        [
+          { transform: "translate(-50%, -50%) scale(0)", opacity: 0.35 },
+          { transform: "translate(-50%, -50%) scale(2)", opacity: 0 },
+        ],
+        {
+          duration: 650,
+          easing: "ease-out",
         }
-      });
-    });
-  };
+      );
 
-  const setupKeyboardFocusMode = () => {
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Tab") {
-        body.classList.add("using-keyboard");
+      window.setTimeout(() => ripple.remove(), 700);
+    });
+  });
+
+  // ---------- Subtle pointer parallax ----------
+  if (!prefersReducedMotion && hero && frameStack && pageShell) {
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let rafId = null;
+
+    const animate = () => {
+      currentX += (targetX - currentX) * 0.08;
+      currentY += (targetY - currentY) * 0.08;
+
+      const heroX = `${currentX * 10}px`;
+      const heroY = `${currentY * 10}px`;
+      const shellX = `${currentX * 22}px`;
+      const shellY = `${currentY * 18}px`;
+
+      hero.style.setProperty("--mx", heroX);
+      hero.style.setProperty("--my", heroY);
+      frameStack.style.setProperty("--mx", `${currentX * 12}px`);
+      frameStack.style.setProperty("--my", `${currentY * 12}px`);
+
+      pageShell.style.setProperty("--parallax-x", shellX);
+      pageShell.style.setProperty("--parallax-y", shellY);
+
+      const stillMoving =
+        Math.abs(targetX - currentX) > 0.001 ||
+        Math.abs(targetY - currentY) > 0.001;
+
+      if (stillMoving) {
+        rafId = requestAnimationFrame(animate);
+      } else {
+        rafId = null;
       }
-    });
+    };
 
-    document.addEventListener("mousedown", () => {
-      body.classList.remove("using-keyboard");
-    });
-  };
+    const startAnimation = () => {
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(animate);
+    };
 
+    window.addEventListener(
+      "pointermove",
+      (event) => {
+        const x = event.clientX / window.innerWidth;
+        const y = event.clientY / window.innerHeight;
+
+        targetX = (x - 0.5) * 2;
+        targetY = (y - 0.5) * 2;
+
+        startAnimation();
+      },
+      { passive: true }
+    );
+
+    window.addEventListener(
+      "pointerleave",
+      () => {
+        targetX = 0;
+        targetY = 0;
+        startAnimation();
+      },
+      { passive: true }
+    );
+  }
+
+  // ---------- Floating sparkles ----------
   const createSparkles = () => {
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion || !pageShell) return;
 
-    const sparkleCount = 14;
+    const sparkleCount = 10;
+
     for (let i = 0; i < sparkleCount; i += 1) {
       const sparkle = document.createElement("span");
       sparkle.className = "sparkle";
@@ -156,181 +185,51 @@ document.addEventListener("DOMContentLoaded", () => {
       const size = 2 + Math.random() * 4;
       const left = Math.random() * 100;
       const top = Math.random() * 100;
-      const delay = Math.random() * 5000;
-      const duration = 5000 + Math.random() * 4000;
+      const duration = 7000 + Math.random() * 5000;
+      const delay = Math.random() * 4500;
 
-      sparkle.style.position = "fixed";
-      sparkle.style.left = `${left}vw`;
-      sparkle.style.top = `${top}vh`;
-      sparkle.style.width = `${size}px`;
-      sparkle.style.height = `${size}px`;
-      sparkle.style.borderRadius = "999px";
-      sparkle.style.pointerEvents = "none";
-      sparkle.style.opacity = "0";
-      sparkle.style.zIndex = "0";
-      sparkle.style.mixBlendMode = "screen";
+      sparkle.style.setProperty("--spark-left", `${left}vw`);
+      sparkle.style.setProperty("--spark-top", `${top}vh`);
+      sparkle.style.setProperty("--spark-size", `${size}px`);
+      sparkle.style.setProperty("--spark-duration", `${duration}ms`);
+      sparkle.style.setProperty("--spark-delay", `${delay}ms`);
 
-      document.body.appendChild(sparkle);
-
-      sparkle.animate(
-        [
-          { transform: "translateY(0px) scale(0.85)", opacity: 0 },
-          { transform: "translateY(-16px) scale(1)", opacity: 0.8, offset: 0.35 },
-          { transform: "translateY(-34px) scale(0.7)", opacity: 0 },
-        ],
-        {
-          duration,
-          delay,
-          iterations: Infinity,
-          easing: "ease-in-out",
-        }
-      );
+      pageShell.appendChild(sparkle);
     }
   };
 
-  const setupParallax = () => {
-    if (prefersReducedMotion) return;
+  createSparkles();
 
-    let mouseX = 0;
-    let mouseY = 0;
-    let currentX = 0;
-    let currentY = 0;
-    let running = false;
+  // ---------- Form feedback ----------
+  const buildFeedback = () => {
+    if (!form) return null;
 
-    const step = () => {
-      currentX += (mouseX - currentX) * 0.065;
-      currentY += (mouseY - currentY) * 0.065;
+    let feedback = form.querySelector(".form-feedback");
+    if (feedback) return feedback;
 
-      const translateX = currentX * 10;
-      const translateY = currentY * 10;
-
-      parallaxEls.forEach((el, index) => {
-        const depth = 1 + index * 0.14;
-        el.style.transform = `translate3d(${translateX * depth}px, ${translateY * depth}px, 0)`;
-      });
-
-      decorativeMotionEls.forEach((el, index) => {
-        const strength = 1 + index * 0.08;
-        const rotate = currentX * 3.2 * strength;
-        const moveX = currentX * 12 * strength;
-        const moveY = currentY * 10 * strength;
-
-        if (
-          el.classList.contains("hero-orbit") ||
-          el.classList.contains("map-wave") ||
-          el.classList.contains("ornament")
-        ) {
-          el.style.transform = `translate3d(${moveX}px, ${moveY}px, 0) rotate(${rotate}deg)`;
-        } else {
-          el.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
-        }
-      });
-
-      const stillMoving =
-        Math.abs(mouseX - currentX) > 0.001 || Math.abs(mouseY - currentY) > 0.001;
-
-      if (stillMoving) {
-        requestAnimationFrame(step);
-      } else {
-        running = false;
-      }
-    };
-
-    window.addEventListener(
-      "mousemove",
-      (event) => {
-        mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
-        mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
-
-        if (!running) {
-          running = true;
-          requestAnimationFrame(step);
-        }
-      },
-      { passive: true }
-    );
-
-    window.addEventListener(
-      "mouseleave",
-      () => {
-        mouseX = 0;
-        mouseY = 0;
-        if (!running) {
-          running = true;
-          requestAnimationFrame(step);
-        }
-      },
-      { passive: true }
-    );
-  };
-
-  const setupFloatingMotion = () => {
-    if (prefersReducedMotion) return;
-
-    const floatingEls = document.querySelectorAll(
-      ".ambient, .ornament, .mini-spark, .glow-card, .hero-orbit"
-    );
-
-    floatingEls.forEach((el, index) => {
-      const duration = 6500 + index * 1100;
-      const y = 10 + index * 2;
-      const x = 6 + index;
-
-      el.animate(
-        [
-          { transform: "translate3d(0, 0, 0) rotate(0deg)" },
-          {
-            transform: `translate3d(${x}px, -${y}px, 0) rotate(${index % 2 === 0 ? 2 : -2}deg)`,
-          },
-          { transform: "translate3d(0, 0, 0) rotate(0deg)" },
-        ],
-        {
-          duration,
-          iterations: Infinity,
-          easing: "ease-in-out",
-          delay: index * 140,
-        }
-      );
-    });
-  };
-
-  const setupSectionObserver = () => {
-    if (prefersReducedMotion) {
-      revealTargets.forEach((el) => el.classList.add("is-visible"));
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        });
-      },
-      {
-        threshold: 0.14,
-      }
-    );
-
-    revealTargets.forEach((el) => observer.observe(el));
-  };
-
-  const enhanceForm = () => {
-    if (!form) return;
-
-    const feedback = document.createElement("div");
+    feedback = document.createElement("div");
     feedback.className = "form-feedback";
     feedback.setAttribute("role", "status");
     feedback.setAttribute("aria-live", "polite");
     form.appendChild(feedback);
+    return feedback;
+  };
 
-    const setFeedback = (message, type = "info") => {
-      feedback.textContent = message;
-      feedback.dataset.type = type;
-      feedback.style.opacity = "1";
-    };
+  const feedback = buildFeedback();
 
+  const setFeedback = (message, type = "info") => {
+    if (!feedback) return;
+    feedback.textContent = message;
+    feedback.dataset.type = type;
+    feedback.classList.add("is-visible");
+
+    window.clearTimeout(setFeedback._timer);
+    setFeedback._timer = window.setTimeout(() => {
+      feedback.classList.remove("is-visible");
+    }, 4200);
+  };
+
+  if (form) {
     form.addEventListener("submit", (event) => {
       event.preventDefault();
 
@@ -340,8 +239,8 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       if (!name) {
-        setFeedback("Please add your name first.", "error");
-        if (nameInput) nameInput.focus();
+        setFeedback("Please enter your name first.", "error");
+        nameInput?.focus();
         return;
       }
 
@@ -350,10 +249,11 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      const attending = selected.value === "yes";
       const firstName = name.split(" ")[0] || name;
+      const attending = selected.value === "yes";
 
       form.classList.add("is-submitted");
+
       form.querySelectorAll("input, button").forEach((el) => {
         el.disabled = true;
       });
@@ -371,42 +271,15 @@ document.addEventListener("DOMContentLoaded", () => {
         "success"
       );
     });
-  };
+  }
 
-  const setupScrollGlow = () => {
-    if (prefersReducedMotion) return;
-
-    const sections = document.querySelectorAll(".section-card");
-    window.addEventListener(
-      "scroll",
-      () => {
-        const y = window.scrollY || window.pageYOffset;
-        sections.forEach((section, index) => {
-          const rect = section.getBoundingClientRect();
-          const distance = Math.max(0, Math.min(1, 1 - rect.top / window.innerHeight));
-          section.style.boxShadow = `0 ${24 + index * 2}px ${72 + index * 6}px rgba(0, 0, 0, ${0.42 + distance * 0.18})`;
-        });
-      },
-      { passive: true }
-    );
-  };
-
-  setRevealState();
-  runReveal();
-  setupAttendance();
-  setupButtonRipples();
-  setupSubtleHoverLift();
-  setupKeyboardFocusMode();
-  createSparkles();
-  setupParallax();
-  setupFloatingMotion();
-  setupSectionObserver();
-  enhanceForm();
-  setupScrollGlow();
-
+  // ---------- Tiny polish on resize ----------
   window.addEventListener("resize", () => {
-    document.querySelectorAll(".sparkle").forEach((sparkle) => {
-      if (Math.random() > 0.85) sparkle.remove();
-    });
+    const sparkles = document.querySelectorAll(".sparkle");
+    if (sparkles.length > 10) {
+      sparkles.forEach((sparkle, index) => {
+        if (index % 3 === 0) sparkle.remove();
+      });
+    }
   });
 });
