@@ -1,27 +1,341 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const page = document.querySelector(".page-shell") || document.body;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  const body = document.body;
   const hero = document.querySelector(".hero");
   const heroVisual = document.querySelector(".hero__visual");
-  const heroContent = document.querySelector(".hero__content");
-  const revealElements = [...document.querySelectorAll(".reveal")];
-  const buttons = [...document.querySelectorAll(".btn")];
+  const title = document.querySelector(".title");
+  const subtitle = document.querySelector(".subtitle");
+  const ctas = document.querySelectorAll(".hero__cta, .submit-btn");
+  const cards = document.querySelectorAll(".section-card, .gallery__card, .portrait, .choice-card");
+  const ornaments = document.querySelectorAll(".ornament, .floating-mark, .ambient");
+  const radioInputs = document.querySelectorAll('input[type="radio"][name="attendance"]');
+  const choiceCards = document.querySelectorAll(".choice-card");
   const form = document.querySelector(".rsvp-form");
-  const nameInput = document.querySelector("#guest-name");
-  const radioInputs = [...document.querySelectorAll('input[name="attendance"]')];
-  const radioCards = [...document.querySelectorAll(".radio-card")];
-  const floatingSvgs = [...document.querySelectorAll(".floating-svg")];
+  const nameInput = document.querySelector("#name");
+  const submitBtn = document.querySelector(".submit-btn");
 
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  body.classList.add("is-ready");
 
-  // --- Reveal animations ---
-  revealElements.forEach((el, index) => {
-    el.style.transitionDelay = `${index * 120}ms`;
-  });
+  const setInitialState = () => {
+    if (hero) {
+      hero.style.opacity = "1";
+      hero.style.transform = "none";
+    }
 
-  if ("IntersectionObserver" in window) {
-    const revealObserver = new IntersectionObserver(
-      (entries, observer) => {
+    [title, subtitle, heroVisual].forEach((el, index) => {
+      if (!el) return;
+      el.style.opacity = "0";
+      el.style.transform = "translateY(24px)";
+      el.style.transition = "opacity 900ms ease, transform 900ms ease";
+      setTimeout(() => {
+        el.style.opacity = "1";
+        el.style.transform = "translateY(0)";
+      }, 120 + index * 140);
+    });
+
+    ctas.forEach((el, index) => {
+      el.style.opacity = "0";
+      el.style.transform = "translateY(18px)";
+      el.style.transition = "opacity 800ms ease, transform 800ms ease";
+      setTimeout(() => {
+        el.style.opacity = "1";
+        el.style.transform = "translateY(0)";
+      }, 500 + index * 120);
+    });
+
+    cards.forEach((el) => {
+      el.style.opacity = "0";
+      el.style.transform = "translateY(28px) scale(0.985)";
+      el.style.transition =
+        "opacity 800ms ease, transform 800ms ease, box-shadow 800ms ease";
+    });
+  };
+
+  const revealOnScroll = () => {
+    if (prefersReducedMotion) {
+      cards.forEach((card) => {
+        card.style.opacity = "1";
+        card.style.transform = "none";
+      });
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+
+          const el = entry.target;
+          el.style.opacity = "1";
+          el.style.transform = "translateY(0) scale(1)";
+          observer.unobserve(el);
+        });
+      },
+      {
+        threshold: 0.15,
+        rootMargin: "0px 0px -80px 0px",
+      }
+    );
+
+    cards.forEach((card) => observer.observe(card));
+  };
+
+  const updateSelectedAttendance = () => {
+    choiceCards.forEach((card) => {
+      const input = card.querySelector('input[type="radio"]');
+      const active = input && input.checked;
+      card.classList.toggle("is-selected", active);
+    });
+  };
+
+  const setupAttendanceCards = () => {
+    radioInputs.forEach((input) => {
+      input.addEventListener("change", updateSelectedAttendance);
+    });
+    updateSelectedAttendance();
+  };
+
+  const setupButtonRipple = () => {
+    document.querySelectorAll(".hero__cta, .submit-btn").forEach((button) => {
+      button.addEventListener("pointerdown", (event) => {
+        const rect = button.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        const ripple = document.createElement("span");
+        ripple.className = "ripple";
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+
+        button.appendChild(ripple);
+
+        ripple.animate(
+          [
+            { transform: "translate(-50%, -50%) scale(0)", opacity: 0.5 },
+            { transform: "translate(-50%, -50%) scale(1.8)", opacity: 0 },
+          ],
+          {
+            duration: 650,
+            easing: "ease-out",
+          }
+        );
+
+        setTimeout(() => ripple.remove(), 700);
+      });
+    });
+  };
+
+  const setupParallax = () => {
+    if (prefersReducedMotion) return;
+
+    let mouseX = 0;
+    let mouseY = 0;
+    let targetX = 0;
+    let targetY = 0;
+    let ticking = false;
+
+    const animate = () => {
+      targetX += (mouseX - targetX) * 0.06;
+      targetY += (mouseY - targetY) * 0.06;
+
+      ornaments.forEach((el, index) => {
+        const strength = 6 + index * 2;
+        const direction = index % 2 === 0 ? 1 : -1;
+        el.style.transform = `translate3d(${targetX * strength * direction}px, ${targetY * strength}px, 0)`;
+      });
+
+      if (heroVisual) {
+        heroVisual.style.transform = `translate3d(${targetX * 10}px, ${targetY * 10}px, 0)`;
+      }
+
+      ticking = Math.abs(mouseX - targetX) > 0.001 || Math.abs(mouseY - targetY) > 0.001;
+      if (ticking) requestAnimationFrame(animate);
+    };
+
+    window.addEventListener(
+      "mousemove",
+      (event) => {
+        const x = (event.clientX / window.innerWidth - 0.5) * 2;
+        const y = (event.clientY / window.innerHeight - 0.5) * 2;
+        mouseX = x;
+        mouseY = y;
+
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(animate);
+        }
+      },
+      { passive: true }
+    );
+
+    window.addEventListener(
+      "mouseleave",
+      () => {
+        mouseX = 0;
+        mouseY = 0;
+      },
+      { passive: true }
+    );
+  };
+
+  const setupFloatingMotion = () => {
+    if (prefersReducedMotion) return;
+
+    const floatingEls = document.querySelectorAll(
+      ".ambient, .ornament, .floating-mark, .glow-card"
+    );
+
+    floatingEls.forEach((el, index) => {
+      const duration = 7000 + index * 900;
+      const distance = 12 + index * 2;
+
+      el.animate(
+        [
+          { transform: "translateY(0px) translateX(0px)" },
+          { transform: `translateY(-${distance}px) translateX(${distance / 2}px)` },
+          { transform: "translateY(0px) translateX(0px)" },
+        ],
+        {
+          duration,
+          iterations: Infinity,
+          easing: "ease-in-out",
+          delay: index * 180,
+        }
+      );
+    });
+  };
+
+  const setupStaggerHover = () => {
+    document.querySelectorAll(".section-card, .gallery__card, .portrait").forEach((el) => {
+      el.addEventListener("pointerenter", () => {
+        el.style.transform = "translateY(-6px)";
+      });
+
+      el.addEventListener("pointerleave", () => {
+        if (!el.classList.contains("is-visible")) {
+          el.style.transform = "translateY(28px) scale(0.985)";
+        } else {
+          el.style.transform = "translateY(0) scale(1)";
+        }
+      });
+    });
+  };
+
+  const createSubtleSparkles = () => {
+    if (prefersReducedMotion) return;
+
+    const sparkleCount = 10;
+    for (let i = 0; i < sparkleCount; i += 1) {
+      const sparkle = document.createElement("span");
+      sparkle.setAttribute("aria-hidden", "true");
+      sparkle.className = "sparkle";
+
+      const size = 2 + Math.random() * 4;
+      const left = Math.random() * 100;
+      const top = Math.random() * 100;
+      const delay = Math.random() * 5000;
+      const duration = 4500 + Math.random() * 3500;
+
+      sparkle.style.position = "fixed";
+      sparkle.style.left = `${left}vw`;
+      sparkle.style.top = `${top}vh`;
+      sparkle.style.width = `${size}px`;
+      sparkle.style.height = `${size}px`;
+      sparkle.style.borderRadius = "999px";
+      sparkle.style.pointerEvents = "none";
+      sparkle.style.opacity = "0";
+      sparkle.style.zIndex = "0";
+      sparkle.style.mixBlendMode = "screen";
+
+      document.body.appendChild(sparkle);
+
+      sparkle.animate(
+        [
+          { transform: "translateY(0px) scale(0.8)", opacity: 0 },
+          { transform: "translateY(-18px) scale(1)", opacity: 0.8, offset: 0.35 },
+          { transform: "translateY(-36px) scale(0.7)", opacity: 0 },
+        ],
+        {
+          duration,
+          delay,
+          iterations: Infinity,
+          easing: "ease-in-out",
+        }
+      );
+    }
+  };
+
+  const enhanceForm = () => {
+    if (!form) return;
+
+    const feedback = document.createElement("div");
+    feedback.className = "form-feedback";
+    feedback.setAttribute("role", "status");
+    feedback.setAttribute("aria-live", "polite");
+    form.appendChild(feedback);
+
+    const setFeedback = (message, type = "info") => {
+      feedback.textContent = message;
+      feedback.dataset.type = type;
+      feedback.style.opacity = "1";
+    };
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const name = nameInput ? nameInput.value.trim() : "";
+      const selected = document.querySelector(
+        'input[name="attendance"]:checked'
+      );
+
+      if (!name) {
+        setFeedback("Please add your name first.", "error");
+        if (nameInput) nameInput.focus();
+        return;
+      }
+
+      if (!selected) {
+        setFeedback("Please choose whether you will attend.", "error");
+        return;
+      }
+
+      const attending = selected.value === "yes";
+      const firstName = name.split(" ")[0];
+
+      form.classList.add("is-submitted");
+      form.querySelectorAll("input, button").forEach((el) => {
+        el.disabled = true;
+      });
+
+      if (submitBtn) {
+        submitBtn.innerHTML = attending
+          ? `Confirmed for Joe <i class="fa-solid fa-check"></i>`
+          : `Response sent <i class="fa-solid fa-paper-plane"></i>`;
+      }
+
+      setFeedback(
+        attending
+          ? `Thank you, ${firstName}. Your attendance has been noted.`
+          : `Thank you, ${firstName}. Your response has been received.`,
+        "success"
+      );
+    });
+  };
+
+  const setupSectionRevealClasses = () => {
+    const targets = document.querySelectorAll(".details, .gallery, .rsvp, .footer");
+    if (!targets.length) return;
+
+    if (prefersReducedMotion) {
+      targets.forEach((el) => el.classList.add("is-visible"));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("is-visible");
@@ -29,389 +343,39 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         });
       },
-      {
-        threshold: 0.14,
-        rootMargin: "0px 0px -80px 0px",
-      }
+      { threshold: 0.12 }
     );
 
-    revealElements.forEach((el) => revealObserver.observe(el));
-  } else {
-    revealElements.forEach((el) => el.classList.add("is-visible"));
-  }
+    targets.forEach((el) => observer.observe(el));
+  };
 
-  // --- Make the headline and hero feel alive on load ---
-  if (!reduceMotion && heroContent) {
-    heroContent.animate(
-      [
-        { transform: "translateY(18px)", opacity: 0, filter: "blur(2px)" },
-        { transform: "translateY(0)", opacity: 1, filter: "blur(0)" },
-      ],
-      {
-        duration: 900,
-        easing: "cubic-bezier(.2,.8,.2,1)",
-        fill: "both",
-        delay: 80,
+  const setupKeyboardGlow = () => {
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Tab") {
+        body.classList.add("using-keyboard");
       }
-    );
-  }
+    });
 
-  // --- Button ripple effect ---
-  buttons.forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      const rect = btn.getBoundingClientRect();
-      const ripple = document.createElement("span");
-      const size = Math.max(rect.width, rect.height);
+    document.addEventListener("mousedown", () => {
+      body.classList.remove("using-keyboard");
+    });
+  };
 
-      ripple.className = "btn-ripple";
-      ripple.style.width = ripple.style.height = `${size}px`;
-      ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
-      ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
+  setInitialState();
+  revealOnScroll();
+  setupAttendanceCards();
+  setupButtonRipple();
+  setupParallax();
+  setupFloatingMotion();
+  setupStaggerHover();
+  createSubtleSparkles();
+  enhanceForm();
+  setupSectionRevealClasses();
+  setupKeyboardGlow();
 
-      btn.appendChild(ripple);
-
-      window.setTimeout(() => ripple.remove(), 700);
+  window.addEventListener("resize", () => {
+    document.querySelectorAll(".sparkle").forEach((sparkle) => {
+      if (Math.random() > 0.85) sparkle.remove();
     });
   });
-
-  // --- Smooth scroll for internal links ---
-  document.querySelectorAll('a[href^="#"]').forEach((link) => {
-    link.addEventListener("click", (e) => {
-      const id = link.getAttribute("href");
-      const target = document.querySelector(id);
-      if (!target) return;
-
-      e.preventDefault();
-      target.scrollIntoView({
-        behavior: reduceMotion ? "auto" : "smooth",
-        block: "start",
-      });
-    });
-  });
-
-  // --- Radio cards: one choice only, styled like premium checkboxes ---
-  function syncRadioState() {
-    radioCards.forEach((card) => card.classList.remove("is-selected"));
-
-    radioInputs.forEach((input) => {
-      const card = input.closest(".radio-card");
-      if (!card) return;
-
-      if (input.checked) {
-        card.classList.add("is-selected");
-      }
-    });
-  }
-
-  radioInputs.forEach((input) => {
-    input.addEventListener("change", syncRadioState);
-  });
-
-  radioCards.forEach((card) => {
-    card.addEventListener("click", () => {
-      const input = card.querySelector('input[type="radio"]');
-      if (!input) return;
-      input.checked = true;
-      input.dispatchEvent(new Event("change", { bubbles: true }));
-      syncRadioState();
-
-      if (!reduceMotion) {
-        card.animate(
-          [
-            { transform: "translateY(0) scale(1)" },
-            { transform: "translateY(-3px) scale(1.01)" },
-            { transform: "translateY(0) scale(1)" },
-          ],
-          {
-            duration: 420,
-            easing: "cubic-bezier(.2,.8,.2,1)",
-          }
-        );
-      }
-    });
-  });
-
-  syncRadioState();
-
-  // --- Decorative floating stars / stickers created in JS ---
-  createAmbientDecor();
-  createTinyStickerTrail();
-
-  // --- Gentle motion for hero / floating ornaments ---
-  if (!reduceMotion && finePointer) {
-    let pointerX = 0.5;
-    let pointerY = 0.5;
-    let rafId = null;
-
-    const onPointerMove = (e) => {
-      const rect = page.getBoundingClientRect();
-      pointerX = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
-      pointerY = Math.min(1, Math.max(0, (e.clientY - rect.top) / rect.height));
-
-      if (rafId) return;
-      rafId = requestAnimationFrame(() => {
-        rafId = null;
-
-        const dx = (pointerX - 0.5) * 18;
-        const dy = (pointerY - 0.5) * 14;
-
-        if (heroVisual) {
-          heroVisual.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
-        }
-
-        floatingSvgs.forEach((svg, index) => {
-          const factor = 1 + index * 0.18;
-          const x = dx * factor;
-          const y = dy * factor;
-          const rotate = (pointerX - 0.5) * (6 + index * 1.2);
-
-          svg.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${rotate}deg)`;
-        });
-      });
-    };
-
-    const resetMotion = () => {
-      if (heroVisual) {
-        heroVisual.style.transform = "";
-      }
-      floatingSvgs.forEach((svg) => {
-        svg.style.transform = "";
-      });
-    };
-
-    page.addEventListener("pointermove", onPointerMove, { passive: true });
-    page.addEventListener("pointerleave", resetMotion);
-  }
-
-  // --- Soft bob animation on the hero photos (safe on mobile too) ---
-  if (!reduceMotion) {
-    const heroPhotos = [...document.querySelectorAll(".hero__photo")];
-    heroPhotos.forEach((photo, index) => {
-      photo.animate(
-        [
-          { transform: photo.style.transform || "translateY(0) rotate(0deg)" },
-          { transform: `translateY(${index % 2 === 0 ? -8 : 8}px) rotate(${index % 2 === 0 ? -0.6 : 0.6}deg)` },
-          { transform: photo.style.transform || "translateY(0) rotate(0deg)" },
-        ],
-        {
-          duration: 5200 + index * 700,
-          iterations: Infinity,
-          easing: "ease-in-out",
-          delay: index * 180,
-        }
-      );
-    });
-  }
-
-  // --- Form behavior ---
-  function showToast(message, type = "success") {
-    let toast = document.querySelector(".toast-message");
-
-    if (!toast) {
-      toast = document.createElement("div");
-      toast.className = "toast-message";
-      document.body.appendChild(toast);
-    }
-
-    toast.textContent = message;
-    toast.dataset.type = type;
-    toast.classList.add("show");
-
-    window.clearTimeout(showToast._timer);
-    showToast._timer = window.setTimeout(() => {
-      toast.classList.remove("show");
-    }, 2800);
-  }
-
-  function burstConfetti(originEl) {
-    if (reduceMotion) return;
-
-    const rect = originEl.getBoundingClientRect();
-    const colors = ["#d4af37", "#f0d98a", "#ffffff", "#9c7b1f"];
-
-    for (let i = 0; i < 18; i++) {
-      const piece = document.createElement("span");
-      piece.setAttribute("aria-hidden", "true");
-
-      const size = 6 + Math.random() * 8;
-      const angle = Math.random() * Math.PI * 2;
-      const distance = 60 + Math.random() * 90;
-      const x = Math.cos(angle) * distance;
-      const y = Math.sin(angle) * distance - 20;
-
-      piece.style.position = "fixed";
-      piece.style.left = `${rect.left + rect.width / 2}px`;
-      piece.style.top = `${rect.top + rect.height / 2}px`;
-      piece.style.width = `${size}px`;
-      piece.style.height = `${size}px`;
-      piece.style.borderRadius = Math.random() > 0.5 ? "999px" : "2px";
-      piece.style.background = colors[i % colors.length];
-      piece.style.pointerEvents = "none";
-      piece.style.zIndex = "9999";
-      piece.style.boxShadow = "0 0 14px rgba(212,175,55,.35)";
-
-      document.body.appendChild(piece);
-
-      piece.animate(
-        [
-          { transform: "translate3d(0, 0, 0) scale(1)", opacity: 1 },
-          { transform: `translate3d(${x}px, ${y}px, 0) scale(0.4)`, opacity: 0 },
-        ],
-        {
-          duration: 1200 + Math.random() * 500,
-          easing: "cubic-bezier(.2,.8,.2,1)",
-          fill: "forwards",
-        }
-      );
-
-      window.setTimeout(() => piece.remove(), 1800);
-    }
-  }
-
-  if (form) {
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-
-      const name = nameInput ? nameInput.value.trim() : "";
-      const selected = document.querySelector('input[name="attendance"]:checked');
-
-      if (!name) {
-        showToast("Please enter your name.", "error");
-        nameInput?.focus();
-        return;
-      }
-
-      if (!selected) {
-        showToast("Please choose whether you’re attending.", "error");
-        return;
-      }
-
-      const message =
-        selected.value === "yes"
-          ? `Thank you, ${name}. Your RSVP has been received.`
-          : `Thank you, ${name}. Your response has been received.`;
-
-      showToast(message, "success");
-      burstConfetti(form.querySelector(".btn--primary") || form);
-
-      form.reset();
-      syncRadioState();
-
-      const panel = document.querySelector(".rsvp__panel");
-      if (panel && !reduceMotion) {
-        panel.classList.remove("submit-pulse");
-        void panel.offsetWidth;
-        panel.classList.add("submit-pulse");
-      }
-    });
-  }
-
-  // --- Decorative creator helpers ---
-  function createAmbientDecor() {
-    const count = 10;
-
-    for (let i = 0; i < count; i++) {
-      const star = document.createElement("div");
-      const size = 6 + Math.random() * 14;
-      const left = Math.random() * 100;
-      const top = Math.random() * 100;
-      const symbol = Math.random() > 0.5 ? "✦" : "✧";
-
-      star.textContent = symbol;
-      star.setAttribute("aria-hidden", "true");
-      star.style.position = "fixed";
-      star.style.left = `${left}vw`;
-      star.style.top = `${top}vh`;
-      star.style.fontSize = `${size}px`;
-      star.style.lineHeight = "1";
-      star.style.color = "rgba(212,175,55,.82)";
-      star.style.textShadow = "0 0 18px rgba(212,175,55,.22)";
-      star.style.pointerEvents = "none";
-      star.style.zIndex = "0";
-      star.style.opacity = "0.12";
-      star.style.transform = "translate3d(0,0,0)";
-      star.style.willChange = "transform, opacity";
-
-      document.body.appendChild(star);
-
-      if (!reduceMotion) {
-        star.animate(
-          [
-            { transform: "translate3d(0, 0, 0) scale(1)", opacity: 0.08 },
-            { transform: "translate3d(0, -12px, 0) scale(1.2)", opacity: 0.22 },
-            { transform: "translate3d(0, 0, 0) scale(1)", opacity: 0.08 },
-          ],
-          {
-            duration: 3400 + Math.random() * 2600,
-            delay: Math.random() * 1500,
-            iterations: Infinity,
-            easing: "ease-in-out",
-          }
-        );
-      }
-    }
-  }
-
-  function createTinyStickerTrail() {
-    const labels = ["★", "✦", "◆", "✧"];
-    const positions = [
-      { x: 8, y: 18, s: 34 },
-      { x: 88, y: 14, s: 28 },
-      { x: 12, y: 84, s: 32 },
-      { x: 84, y: 78, s: 26 },
-    ];
-
-    positions.forEach((pos, index) => {
-      const chip = document.createElement("div");
-      chip.textContent = labels[index % labels.length];
-      chip.setAttribute("aria-hidden", "true");
-      chip.style.position = "absolute";
-      chip.style.left = `${pos.x}%`;
-      chip.style.top = `${pos.y}%`;
-      chip.style.width = `${pos.s}px`;
-      chip.style.height = `${pos.s}px`;
-      chip.style.display = "grid";
-      chip.style.placeItems = "center";
-      chip.style.borderRadius = "999px";
-      chip.style.border = "1px solid rgba(212,175,55,.24)";
-      chip.style.background = "rgba(255,255,255,.03)";
-      chip.style.color = "#f0d98a";
-      chip.style.boxShadow = "0 12px 26px rgba(0,0,0,.18)";
-      chip.style.backdropFilter = "blur(12px)";
-      chip.style.pointerEvents = "none";
-      chip.style.zIndex = "1";
-
-      if (heroVisual) {
-        heroVisual.appendChild(chip);
-      }
-
-      if (!reduceMotion) {
-        chip.animate(
-          [
-            { transform: "translateY(0px) rotate(0deg)" },
-            { transform: "translateY(-6px) rotate(8deg)" },
-            { transform: "translateY(0px) rotate(0deg)" },
-          ],
-          {
-            duration: 2800 + index * 300,
-            delay: index * 180,
-            iterations: Infinity,
-            easing: "ease-in-out",
-          }
-        );
-      }
-    });
-  }
-
-  // --- Small accessibility polish ---
-  if (nameInput) {
-    nameInput.addEventListener("input", () => {
-      if (nameInput.value.trim()) {
-        nameInput.removeAttribute("aria-invalid");
-      }
-    });
-  }
-
-  // Keep radio state correct if browser restores form data
-  window.addEventListener("pageshow", syncRadioState);
 });
