@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000" />
+  <title>Joe’s Surprise Birthday Dinner</title>
+  <meta
+    name="description"
+    content="A private surprise birthday dinner invitation for Joe."
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <!-- HERO / INTRO -->
+    <header class="hero">
+      <div class="hero__overlay"></div>
+
+      <nav class="topbar" aria-label="Primary">
+        <div class="brand">
+          <span class="brand__mark">J</span>
+          <span class="brand__text">Joe’s Evening</span>
+        </div>
+      </nav>
+
+      <div class="hero__content">
+        <p class="eyebrow">A surprise birthday dinner</p>
+        <h1 class="hero__title">An elegant evening awaits.</h1>
+        <p class="hero__subtitle">
+          You are cordially invited to a private celebration in honor of Joe.
+        </p>
+
+        <div class="hero__details">
+          <div class="detail-pill">
+            <span class="detail-pill__label">Date</span>
+            <span class="detail-pill__value">Saturday, 30 May</span>
+          </div>
+          <div class="detail-pill">
+            <span class="detail-pill__label">Time</span>
+            <span class="detail-pill__value">7:00 PM</span>
+          </div>
+        </div>
+
+        <div class="hero__actions">
+          <a class="btn btn--gold" href="#rsvp">RSVP Now</a>
+          <a class="btn btn--ghost" href="#details">View Details</a>
+        </div>
+      </div>
+
+      <div class="hero__scroll">
+        <span>Scroll to explore</span>
+      </div>
+    </header>
+
+    <!-- PHOTO SECTION -->
+    <section class="section section--gallery" aria-labelledby="gallery-title">
+      <div class="section__heading">
+        <p class="eyebrow">A little glimpse</p>
+        <h2 id="gallery-title" class="section__title">Celebrating Joe</h2>
+        <p class="section__text">
+          Replace these placeholder images with the two photos you were sent.
+        </p>
+      </div>
+
+      <div class="gallery">
+        <figure class="gallery__item">
+          <img
+            src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=900&q=80"
+            alt="Placeholder portrait for Joe"
+          />
+        </figure>
+
+        <figure class="gallery__item">
+          <img
+            src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=900&q=80"
+            alt="Placeholder portrait for Joe"
+          />
+        </figure>
+      </div>
+    </section>
+
+    <!-- DETAILS -->
+    <section class="section" id="details" aria-labelledby="details-title">
+      <div class="section__heading">
+        <p class="eyebrow">Event details</p>
+        <h2 id="details-title" class="section__title">Everything you need to know</h2>
+      </div>
+
+      <div class="details-grid">
+        <article class="info-card">
+          <h3>Date</h3>
+          <p>Saturday, 30 May</p>
+        </article>
+
+        <article class="info-card">
+          <h3>Time</h3>
+          <p>7:00 PM</p>
+        </article>
+
+        <article class="info-card">
+          <h3>Dress code</h3>
+          <p>Elegant / Dressy</p>
+        </article>
+
+        <article class="info-card">
+          <h3>Note</h3>
+          <p>This is a surprise dinner. Please keep it private.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- RSVP -->
+    <section class="section section--rsvp" id="rsvp" aria-labelledby="rsvp-title">
+      <div class="section__heading">
+        <p class="eyebrow">RSVP</p>
+        <h2 id="rsvp-title" class="section__title">Let us know you’re coming</h2>
+        <p class="section__text">
+          Guests cannot be brought to this event. Please RSVP only for yourself.
+        </p>
+      </div>
+
+      <form class="rsvp-form" id="rsvpForm">
+        <div class="field-group">
+          <label for="fullName">Full name</label>
+          <input type="text" id="fullName" name="fullName" placeholder="Your name" required />
+        </div>
+
+        <div class="field-group">
+          <label for="attendance">Will you attend?</label>
+          <select id="attendance" name="attendance" required>
+            <option value="" selected disabled>Select one</option>
+            <option value="yes">Yes, I’ll be there</option>
+            <option value="no">Sorry, I can’t make it</option>
+            <option value="maybe">Maybe</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label for="contact">Contact</label>
+          <input type="text" id="contact" name="contact" placeholder="Email or phone number" />
+        </div>
+
+        <div class="field-group">
+          <label for="message">Message for the host</label>
+          <textarea
+            id="message"
+            name="message"
+            rows="4"
+            placeholder="Leave a short note..."
+          ></textarea>
+        </div>
+
+        <p class="rsvp-form__note">
+          Please note: this is a no-guest invitation.
+        </p>
+
+        <button type="submit" class="btn btn--gold btn--full">Submit RSVP</button>
+      </form>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p>Made with love for Joe’s surprise birthday dinner.</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
