@@ -9,87 +9,119 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Font Awesome -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    integrity="sha512-Avb2H9r4S2Q4jDgY6v9x2c7Z5f7m2c0P6Z6m3xR5x8z6vJw2xK7cY6Q4Q8X8Q7f9y3Qv7Q3GJvQj5yq3r5Q=="
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   />
 
-  <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="page-shell">
-    <!-- Floating decorative SVGs -->
-    <svg class="floating-svg floating-svg-1" viewBox="0 0 200 200" aria-hidden="true">
-      <path d="M100 20 C120 60, 160 80, 180 100 C160 120, 120 140, 100 180 C80 140, 40 120, 20 100 C40 80, 80 60, 100 20 Z" />
+    <!-- Decorative floating SVGs -->
+    <svg class="floating-svg floating-svg-1" viewBox="0 0 180 180" aria-hidden="true">
+      <path d="M90 18 C118 18 150 48 150 90 C150 132 118 162 90 162 C62 162 30 132 30 90 C30 48 62 18 90 18 Z" />
+      <path d="M90 44 C105 44 126 63 126 90 C126 117 105 136 90 136 C75 136 54 117 54 90 C54 63 75 44 90 44 Z" />
     </svg>
 
     <svg class="floating-svg floating-svg-2" viewBox="0 0 160 160" aria-hidden="true">
-      <path d="M80 15 L95 60 L145 60 L105 88 L120 135 L80 108 L40 135 L55 88 L15 60 L65 60 Z" />
+      <path d="M80 16 L94 61 L142 61 L103 88 L118 134 L80 107 L42 134 L57 88 L18 61 L66 61 Z" />
     </svg>
 
-    <svg class="floating-svg floating-svg-3" viewBox="0 0 180 180" aria-hidden="true">
-      <circle cx="90" cy="90" r="68" />
-      <circle cx="90" cy="90" r="38" />
+    <svg class="floating-svg floating-svg-3" viewBox="0 0 200 200" aria-hidden="true">
+      <path d="M100 20 L116 84 L180 100 L116 116 L100 180 L84 116 L20 100 L84 84 Z" />
+    </svg>
+
+    <svg class="floating-svg floating-svg-4" viewBox="0 0 200 200" aria-hidden="true">
+      <circle cx="100" cy="100" r="68" />
+      <circle cx="100" cy="100" r="34" />
     </svg>
 
     <main class="invitation-page">
-      <!-- Hero -->
+      <!-- HERO -->
       <section class="hero reveal">
-        <div class="hero__topline">
-          <span class="hero__line"></span>
-          <span class="hero__badge">
-            <i class="fa-solid fa-crown"></i>
-            Birthday Dinner
-          </span>
-          <span class="hero__line"></span>
-        </div>
-
         <div class="hero__content">
-          <p class="hero__eyebrow">You are warmly invited</p>
+          <div class="hero__sticker-row">
+            <span class="sticker sticker--top-left">
+              <i class="fa-solid fa-crown"></i>
+              Special Evening
+            </span>
+            <span class="sticker sticker--top-right">
+              <i class="fa-regular fa-star"></i>
+              One Night Only
+            </span>
+          </div>
+
+          <p class="hero__eyebrow">A birthday dinner invitation</p>
           <h1 class="hero__title">Please join us for a birthday dinner to celebrate Joe.</h1>
           <p class="hero__subtitle">
-            An intimate evening of great food, warm company, and a beautiful surprise.
+            An intimate gathering with great food, warm company, and a beautiful surprise.
           </p>
 
+          <div class="hero__meta">
+            <div class="meta-pill">
+              <i class="fa-solid fa-calendar-day"></i>
+              Saturday, 30 May
+            </div>
+            <div class="meta-pill">
+              <i class="fa-solid fa-clock"></i>
+              7:00 PM
+            </div>
+          </div>
+
           <div class="hero__actions">
-            <a href="#rsvp" class="btn btn--primary">
-              <i class="fa-regular fa-calendar-check"></i>
-              RSVP Now
-            </a>
             <a href="#details" class="btn btn--secondary">
               <i class="fa-solid fa-arrow-down"></i>
               View Details
             </a>
+            <a href="#rsvp" class="btn btn--primary">
+              <i class="fa-regular fa-calendar-check"></i>
+              RSVP
+            </a>
           </div>
         </div>
 
-        <div class="hero__visual">
-          <div class="hero__photo hero__photo--large">
-            <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1200&q=80" alt="Elegant dinner table placeholder" />
-          </div>
+        <div class="hero__visual" aria-label="Photos of Joe">
+          <div class="hero__orb hero__orb--one"></div>
+          <div class="hero__orb hero__orb--two"></div>
 
-          <div class="hero__photo hero__photo--small hero__photo--one">
-            <img src="images/joe-1.jpg" alt="Photo of Joe 1" />
-          </div>
+          <article class="photo-stack photo-stack--large">
+            <div class="photo-stack__frame">
+              <img src="images/joe-1.jpg" alt="Joe photo 1" />
+            </div>
+            <span class="photo-stack__label">
+              <i class="fa-solid fa-sparkles"></i>
+              Guest of Honor
+            </span>
+          </article>
 
-          <div class="hero__photo hero__photo--small hero__photo--two">
-            <img src="images/joe-2.jpg" alt="Photo of Joe 2" />
-          </div>
+          <article class="photo-stack photo-stack--small">
+            <div class="photo-stack__frame">
+              <img src="images/joe-2.jpg" alt="Joe photo 2" />
+            </div>
+          </article>
+
+          <svg class="hero__line-art hero__line-art--one" viewBox="0 0 220 220" aria-hidden="true">
+            <path d="M110 20 C145 20 180 55 180 110 C180 165 145 200 110 200 C55 200 20 165 20 110 C20 55 55 20 110 20 Z" />
+            <path d="M110 55 C129 55 155 81 155 110 C155 139 129 165 110 165 C81 165 55 139 55 110 C55 81 81 55 110 55 Z" />
+          </svg>
+
+          <svg class="hero__line-art hero__line-art--two" viewBox="0 0 160 160" aria-hidden="true">
+            <path d="M80 14 L96 64 L146 80 L96 96 L80 146 L64 96 L14 80 L64 64 Z" />
+          </svg>
         </div>
       </section>
 
-      <!-- Details -->
+      <!-- DETAILS -->
       <section id="details" class="details reveal">
         <div class="section-heading">
           <span class="section-heading__accent">Event Details</span>
-          <h2 class="section-heading__title">A refined evening awaits</h2>
+          <h2 class="section-heading__title">An elegant dinner awaits</h2>
         </div>
 
         <div class="details__grid">
@@ -113,7 +145,7 @@
             <div class="detail-card__icon">
               <i class="fa-solid fa-location-dot"></i>
             </div>
-            <h3>Venue</h3>
+            <h3>Location</h3>
             <p>
               Acqua Bistecca, DC<br>
               10 Ridge Square NW<br>
@@ -129,35 +161,17 @@
             </a>
           </article>
         </div>
-      </section>
 
-      <!-- Gallery / mood -->
-      <section class="mood reveal">
-        <div class="section-heading">
-          <span class="section-heading__accent">A Glimpse</span>
-          <h2 class="section-heading__title">Set the tone for the evening</h2>
-        </div>
-
-        <div class="mood__grid">
-          <figure class="mood__image mood__image--tall">
-            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80" alt="Elegant restaurant interior placeholder" />
-          </figure>
-
-          <figure class="mood__image">
-            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80" alt="Fine dining dish placeholder" />
-          </figure>
-
-          <figure class="mood__image">
-            <img src="https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=900&q=80" alt="Candlelit dinner placeholder" />
-          </figure>
-        </div>
+        <svg class="section-divider" viewBox="0 0 600 40" aria-hidden="true">
+          <path d="M20 20 C120 5 180 5 300 20 C420 35 480 35 580 20" />
+        </svg>
       </section>
 
       <!-- RSVP -->
       <section id="rsvp" class="rsvp reveal">
         <div class="section-heading">
           <span class="section-heading__accent">RSVP</span>
-          <h2 class="section-heading__title">Please confirm your attendance</h2>
+          <h2 class="section-heading__title">Please confirm attendance</h2>
         </div>
 
         <div class="rsvp__panel">
@@ -174,35 +188,47 @@
               />
             </div>
 
-            <fieldset class="form-row form-row--radio">
+            <fieldset class="form-row form-row--attendance">
               <legend>Will you attend?</legend>
 
-              <label class="radio-card">
-                <input type="radio" name="attendance" value="yes" required />
-                <span class="radio-card__inner">
-                  <span class="radio-card__icon"><i class="fa-solid fa-circle-check"></i></span>
-                  <span class="radio-card__text">
-                    <strong>Yes</strong>
-                    <small>I will be there</small>
+              <div class="attendance-grid">
+                <label class="attendance-card">
+                  <input type="radio" name="attendance" value="yes" required />
+                  <span class="attendance-card__inner">
+                    <span class="attendance-card__icon">
+                      <i class="fa-solid fa-circle-check"></i>
+                    </span>
+                    <span class="attendance-card__text">
+                      <strong>Yes, I will attend</strong>
+                      <small>Count me in</small>
+                    </span>
+                    <span class="attendance-card__check">
+                      <i class="fa-solid fa-check"></i>
+                    </span>
                   </span>
-                </span>
-              </label>
+                </label>
 
-              <label class="radio-card">
-                <input type="radio" name="attendance" value="no" />
-                <span class="radio-card__inner">
-                  <span class="radio-card__icon"><i class="fa-solid fa-circle-xmark"></i></span>
-                  <span class="radio-card__text">
-                    <strong>No</strong>
-                    <small>Sorry, I cannot make it</small>
+                <label class="attendance-card">
+                  <input type="radio" name="attendance" value="no" />
+                  <span class="attendance-card__inner">
+                    <span class="attendance-card__icon">
+                      <i class="fa-solid fa-circle-xmark"></i>
+                    </span>
+                    <span class="attendance-card__text">
+                      <strong>No, I cannot attend</strong>
+                      <small>Sorry, not this time</small>
+                    </span>
+                    <span class="attendance-card__check">
+                      <i class="fa-solid fa-check"></i>
+                    </span>
                   </span>
-                </span>
-              </label>
+                </label>
+              </div>
             </fieldset>
 
             <p class="rsvp-note">
               <i class="fa-solid fa-user-group"></i>
-              Kindly note: this invitation is for one guest only.
+              One guest only.
             </p>
 
             <button type="submit" class="btn btn--primary btn--full">
@@ -213,17 +239,19 @@
         </div>
       </section>
 
-      <!-- Closing -->
+      <!-- CLOSING -->
       <section class="closing reveal">
         <div class="closing__card">
-          <h2>We cannot wait to celebrate with you.</h2>
-          <p>A beautiful night, reserved just for Joe.</p>
+          <span class="closing__sticker">
+            <i class="fa-regular fa-heart"></i>
+            Celebrate Joe
+          </span>
+          <h2>We cannot wait to share this evening with you.</h2>
         </div>
       </section>
     </main>
   </div>
 
-  <!-- Scripts -->
   <script src="scripts.js"></script>
 </body>
 </html>
