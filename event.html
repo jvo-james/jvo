@@ -1,174 +1,270 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#000000" />
-  <title>Joe’s Surprise Birthday Dinner</title>
-  <meta
-    name="description"
-    content="A private surprise birthday dinner invitation for Joe."
-  />
+  <meta name="theme-color" content="#050505" />
+  <title>Joe’s Birthday Dinner</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-8q0aX0F3oD4lO4yqQ2Z0r2xwSxqfQK7m2D9o3f7mVbGJ7Ue1v4nQ0x0nQz0hY8fQm7b8x3k1pY0m6rF0mQwQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
 
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="page-shell">
-    <!-- HERO / INTRO -->
-    <header class="hero">
-      <div class="hero__overlay"></div>
+  <!-- Ambient svg shapes -->
+  <svg class="ambient ambient--left" viewBox="0 0 300 300" aria-hidden="true">
+    <path d="M60 220C120 150 150 80 240 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="2 10"/>
+    <circle cx="88" cy="190" r="2.2" />
+    <circle cx="124" cy="155" r="1.8" />
+    <circle cx="172" cy="110" r="2.4" />
+    <circle cx="220" cy="68" r="1.6" />
+  </svg>
 
-      <nav class="topbar" aria-label="Primary">
-        <div class="brand">
-          <span class="brand__mark">J</span>
-          <span class="brand__text">Joe’s Evening</span>
-        </div>
-      </nav>
+  <svg class="ambient ambient--right" viewBox="0 0 320 320" aria-hidden="true">
+    <path d="M260 80C220 130 190 190 120 240" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="2 10"/>
+    <circle cx="238" cy="88" r="2.2" />
+    <circle cx="200" cy="126" r="1.8" />
+    <circle cx="150" cy="175" r="2.4" />
+    <circle cx="106" cy="220" r="1.6" />
+  </svg>
 
-      <div class="hero__content">
-        <p class="eyebrow">A surprise birthday dinner</p>
-        <h1 class="hero__title">An elegant evening awaits.</h1>
-        <p class="hero__subtitle">
-          You are cordially invited to a private celebration in honor of Joe.
+  <main class="page">
+    <section class="hero" id="top">
+      <div class="hero__copy">
+        <p class="eyebrow">
+          <i class="fa-solid fa-star"></i>
+          An intimate birthday dinner
         </p>
 
-        <div class="hero__details">
-          <div class="detail-pill">
-            <span class="detail-pill__label">Date</span>
-            <span class="detail-pill__value">Saturday, 30 May</span>
-          </div>
-          <div class="detail-pill">
-            <span class="detail-pill__label">Time</span>
-            <span class="detail-pill__value">7:00 PM</span>
-          </div>
-        </div>
+        <h1 class="title">
+          Celebrating <span>Joe</span>
+        </h1>
 
-        <div class="hero__actions">
-          <a class="btn btn--gold" href="#rsvp">RSVP Now</a>
-          <a class="btn btn--ghost" href="#details">View Details</a>
-        </div>
-      </div>
-
-      <div class="hero__scroll">
-        <span>Scroll to explore</span>
-      </div>
-    </header>
-
-    <!-- PHOTO SECTION -->
-    <section class="section section--gallery" aria-labelledby="gallery-title">
-      <div class="section__heading">
-        <p class="eyebrow">A little glimpse</p>
-        <h2 id="gallery-title" class="section__title">Celebrating Joe</h2>
-        <p class="section__text">
-          Replace these placeholder images with the two photos you were sent.
+        <p class="lead">
+          A refined evening of good company, glowing candlelight, and a birthday worth remembering.
         </p>
+
+        <div class="hero__meta" aria-label="Event details">
+          <div class="meta-item">
+            <i class="fa-regular fa-calendar"></i>
+            <div>
+              <span class="meta-label">Date</span>
+              <strong>Saturday, 30 May</strong>
+            </div>
+          </div>
+
+          <div class="meta-item">
+            <i class="fa-regular fa-clock"></i>
+            <div>
+              <span class="meta-label">Time</span>
+              <strong>7:00 PM</strong>
+            </div>
+          </div>
+
+          <div class="meta-item">
+            <i class="fa-solid fa-location-dot"></i>
+            <div>
+              <span class="meta-label">Venue</span>
+              <strong>Shared after RSVP</strong>
+            </div>
+          </div>
+        </div>
+
+        <a class="cta" href="#rsvp">
+          RSVP Now
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
       </div>
 
-      <div class="gallery">
-        <figure class="gallery__item">
+      <div class="hero__visual" aria-label="Joe birthday photos">
+        <div class="photo-stack photo-stack--one">
           <img
-            src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=900&q=80"
+            src="https://source.unsplash.com/900x1200/?portrait,man,elegant"
             alt="Placeholder portrait for Joe"
           />
-        </figure>
+        </div>
 
-        <figure class="gallery__item">
+        <div class="photo-stack photo-stack--two">
           <img
-            src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=900&q=80"
-            alt="Placeholder portrait for Joe"
+            src="https://source.unsplash.com/1000x700/?birthday,dinner,candlelight"
+            alt="Placeholder dinner scene"
           />
-        </figure>
+        </div>
+
+        <div class="floating-note floating-note--top" data-parallax="10">
+          <i class="fa-solid fa-heart"></i>
+          Tonight is for Joe
+        </div>
+
+        <div class="floating-note floating-note--bottom" data-parallax="18">
+          <i class="fa-solid fa-wine-glass"></i>
+          A private table awaits
+        </div>
       </div>
     </section>
 
-    <!-- DETAILS -->
-    <section class="section" id="details" aria-labelledby="details-title">
-      <div class="section__heading">
-        <p class="eyebrow">Event details</p>
-        <h2 id="details-title" class="section__title">Everything you need to know</h2>
+    <section class="details" aria-label="Event highlights">
+      <div class="details__line"></div>
+
+      <div class="details__grid">
+        <div class="detail-item">
+          <i class="fa-solid fa-champagne-glasses"></i>
+          <h2>Birthday Dinner</h2>
+          <p>Warm, refined, and set for a memorable evening.</p>
+        </div>
+
+        <div class="detail-item">
+          <i class="fa-solid fa-gem"></i>
+          <h2>Dress Code</h2>
+          <p>Elegant evening attire.</p>
+        </div>
+
+        <div class="detail-item">
+          <i class="fa-solid fa-user-lock"></i>
+          <h2>Plus Ones</h2>
+          <p>This invitation is for one guest only.</p>
+        </div>
       </div>
 
-      <div class="details-grid">
-        <article class="info-card">
-          <h3>Date</h3>
-          <p>Saturday, 30 May</p>
-        </article>
-
-        <article class="info-card">
-          <h3>Time</h3>
-          <p>7:00 PM</p>
-        </article>
-
-        <article class="info-card">
-          <h3>Dress code</h3>
-          <p>Elegant / Dressy</p>
-        </article>
-
-        <article class="info-card">
-          <h3>Note</h3>
-          <p>This is a surprise dinner. Please keep it private.</p>
-        </article>
-      </div>
+      <svg class="signature-mark" viewBox="0 0 220 80" aria-hidden="true">
+        <path d="M10 40C35 18 60 18 82 40S129 62 148 40 189 18 210 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        <circle cx="110" cy="40" r="2.5" />
+        <circle cx="58" cy="40" r="1.7" />
+        <circle cx="164" cy="40" r="1.7" />
+      </svg>
     </section>
 
-    <!-- RSVP -->
-    <section class="section section--rsvp" id="rsvp" aria-labelledby="rsvp-title">
-      <div class="section__heading">
-        <p class="eyebrow">RSVP</p>
-        <h2 id="rsvp-title" class="section__title">Let us know you’re coming</h2>
-        <p class="section__text">
-          Guests cannot be brought to this event. Please RSVP only for yourself.
+    <section class="story">
+      <div class="story__text">
+        <p class="eyebrow">
+          <i class="fa-solid fa-feather-pointed"></i>
+          A quiet note
+        </p>
+
+        <h2>One evening. One name. One beautiful memory.</h2>
+
+        <p>
+          This page is designed to feel clean, polished, and a little dramatic in the best way.
+          The mood is dark, the accents are gold, and the focus stays exactly where it should:
+          on Joe and the people celebrating him.
         </p>
       </div>
 
-      <form class="rsvp-form" id="rsvpForm">
-        <div class="field-group">
-          <label for="fullName">Full name</label>
-          <input type="text" id="fullName" name="fullName" placeholder="Your name" required />
+      <svg class="line-art line-art--one" viewBox="0 0 260 160" aria-hidden="true" data-parallax="8">
+        <path d="M20 110C55 40 110 20 190 30C220 34 238 50 248 82" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M58 104L96 74L134 92L176 54L214 76" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-dasharray="1 8"/>
+        <circle cx="58" cy="104" r="3" />
+        <circle cx="96" cy="74" r="2.2" />
+        <circle cx="134" cy="92" r="2.2" />
+        <circle cx="176" cy="54" r="3" />
+        <circle cx="214" cy="76" r="2.2" />
+      </svg>
+    </section>
+
+    <section class="rsvp" id="rsvp">
+      <div class="rsvp__intro">
+        <p class="eyebrow">
+          <i class="fa-regular fa-envelope-open"></i>
+          RSVP
+        </p>
+
+        <h2>Let us know you are coming.</h2>
+        <p>
+          Please respond using the form below. The evening is reserved for one guest only.
+        </p>
+      </div>
+
+      <form class="rsvp-form" id="rsvpForm" novalidate>
+        <div class="field-row">
+          <label class="field">
+            <span>Full name</span>
+            <input type="text" name="name" id="name" placeholder="Your full name" required />
+          </label>
+
+          <label class="field">
+            <span>Email address</span>
+            <input type="email" name="email" id="email" placeholder="your@email.com" required />
+          </label>
         </div>
 
-        <div class="field-group">
-          <label for="attendance">Will you attend?</label>
-          <select id="attendance" name="attendance" required>
-            <option value="" selected disabled>Select one</option>
-            <option value="yes">Yes, I’ll be there</option>
-            <option value="no">Sorry, I can’t make it</option>
-            <option value="maybe">Maybe</option>
-          </select>
+        <div class="field-row">
+          <label class="field">
+            <span>Will you attend?</span>
+            <select name="attendance" id="attendance" required>
+              <option value="" selected disabled>Select one</option>
+              <option value="yes">Yes, I’ll be there</option>
+              <option value="no">No, I can’t make it</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Message for Joe</span>
+            <input type="text" name="message" id="message" placeholder="A short birthday note" />
+          </label>
         </div>
 
-        <div class="field-group">
-          <label for="contact">Contact</label>
-          <input type="text" id="contact" name="contact" placeholder="Email or phone number" />
-        </div>
-
-        <div class="field-group">
-          <label for="message">Message for the host</label>
+        <div class="field field--full">
+          <span>Notes</span>
           <textarea
-            id="message"
-            name="message"
+            name="notes"
+            id="notes"
             rows="4"
-            placeholder="Leave a short note..."
+            placeholder="Any dietary needs or helpful details..."
           ></textarea>
         </div>
 
-        <p class="rsvp-form__note">
-          Please note: this is a no-guest invitation.
+        <p class="rsvp__note">
+          <i class="fa-solid fa-circle-info"></i>
+          Kindly note: no additional guests are included for this dinner.
         </p>
 
-        <button type="submit" class="btn btn--gold btn--full">Submit RSVP</button>
+        <button class="submit-btn" type="submit">
+          Send RSVP
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+
+        <p class="form-status" id="formStatus" aria-live="polite"></p>
       </form>
     </section>
 
-    <!-- FOOTER -->
+    <section class="gallery-strip" aria-label="Additional decorative images">
+      <div class="gallery-strip__image gallery-strip__image--left">
+        <img
+          src="https://source.unsplash.com/900x900/?golden,luxury,details"
+          alt="Placeholder decorative image"
+        />
+      </div>
+
+      <div class="gallery-strip__image gallery-strip__image--right">
+        <img
+          src="https://source.unsplash.com/900x900/?black,gold,table-setting"
+          alt="Placeholder decorative image"
+        />
+      </div>
+
+      <svg class="drift-ornament drift-ornament--one" viewBox="0 0 180 180" aria-hidden="true" data-parallax="14">
+        <path d="M90 14C114 36 126 61 126 90S114 144 90 166C66 144 54 119 54 90S66 36 90 14Z" fill="none" stroke="currentColor" stroke-width="1.2"/>
+        <path d="M90 32V148" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="1 8"/>
+        <path d="M32 90H148" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="1 8"/>
+      </svg>
+    </section>
+
     <footer class="footer">
-      <p>Made with love for Joe’s surprise birthday dinner.</p>
+      <p>With love, for Joe.</p>
     </footer>
-  </div>
+  </main>
 
   <script src="scripts.js"></script>
 </body>
