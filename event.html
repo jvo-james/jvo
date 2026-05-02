@@ -6,13 +6,13 @@
     <title>Birthday Dinner for Joe</title>
     <meta
       name="description"
-      content="A private birthday dinner invitation and RSVP page for Joe."
+      content="A private birthday dinner invitation and RSVP page."
     />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
 
@@ -31,144 +31,114 @@
       <div class="ambient ambient-b" aria-hidden="true"></div>
       <div class="ambient ambient-c" aria-hidden="true"></div>
 
-      <svg class="hero-orbit hero-orbit--one" viewBox="0 0 420 420" aria-hidden="true">
-        <circle cx="210" cy="210" r="164" />
-        <circle cx="210" cy="210" r="122" />
-        <path d="M68 236C114 206 154 196 210 196C266 196 308 208 352 238" />
-        <path d="M92 146C138 176 172 184 210 184C248 184 282 175 328 145" />
+      <svg class="mesh mesh--top" viewBox="0 0 1200 260" aria-hidden="true">
+        <path d="M0 40C120 10 240 10 360 40C480 70 600 70 720 40C840 10 960 10 1200 40" />
+        <path d="M0 120C120 90 240 90 360 120C480 150 600 150 720 120C840 90 960 90 1200 120" />
+        <path d="M0 200C120 170 240 170 360 200C480 230 600 230 720 200C840 170 960 170 1200 200" />
       </svg>
 
-      <svg class="hero-orbit hero-orbit--two" viewBox="0 0 280 280" aria-hidden="true">
-        <circle cx="140" cy="140" r="102" />
-        <path d="M42 140C76 118 100 112 140 112C180 112 204 118 238 140" />
-      </svg>
-
-      <svg class="ornament ornament-top-left" viewBox="0 0 220 220" fill="none" aria-hidden="true">
-        <path
-          d="M24 158C70 158 86 35 129 35C168 35 174 90 197 90"
-          stroke="currentColor"
-          stroke-width="2.2"
-          stroke-linecap="round"
-          stroke-dasharray="1 8"
-        />
-        <path
-          d="M46 184C66 120 88 101 121 101C156 101 180 131 191 170"
-          stroke="currentColor"
-          stroke-width="1.6"
-          stroke-linecap="round"
-          opacity="0.55"
-        />
-        <circle cx="170" cy="48" r="4" fill="currentColor" />
-        <circle cx="36" cy="168" r="3" fill="currentColor" opacity="0.75" />
-      </svg>
-
-      <svg class="ornament ornament-bottom-right" viewBox="0 0 240 240" fill="none" aria-hidden="true">
-        <path
-          d="M27 44C70 44 82 172 126 172C170 172 178 112 209 112"
-          stroke="currentColor"
-          stroke-width="2.2"
-          stroke-linecap="round"
-          stroke-dasharray="1 8"
-        />
-        <path
-          d="M31 82C60 75 84 84 108 108C133 132 153 160 191 174"
-          stroke="currentColor"
-          stroke-width="1.6"
-          stroke-linecap="round"
-          opacity="0.55"
-        />
-        <circle cx="181" cy="97" r="4" fill="currentColor" />
-        <circle cx="50" cy="53" r="3" fill="currentColor" opacity="0.75" />
+      <svg class="mesh mesh--bottom" viewBox="0 0 1200 260" aria-hidden="true">
+        <path d="M0 70C120 40 240 40 360 70C480 100 600 100 720 70C840 40 960 40 1200 70" />
+        <path d="M0 150C120 120 240 120 360 150C480 180 600 180 720 150C840 120 960 120 1200 150" />
       </svg>
 
       <header class="hero">
         <div class="hero__badge">
-          <i class="fa-solid fa-circle-notch"></i>
+          <i class="fa-solid fa-sparkles"></i>
           Private celebration
         </div>
 
-        <div class="hero__content">
-          <p class="eyebrow">Birthday Dinner Invitation</p>
+        <div class="hero__grid">
+          <div class="hero__copy">
+            <p class="eyebrow">Birthday Dinner Invitation</p>
 
-          <h1 class="title">Please join us for a birthday dinner to celebrate Joe.</h1>
+            <h1 class="hero__title">An elegant surprise dinner for Joe.</h1>
 
-          <p class="subtitle">
-            An intimate evening, softly lit and set apart for the people closest to him.
-          </p>
+            <p class="hero__lead">
+              A warm evening of good food, soft light, and the people closest to him.
+            </p>
 
-          <div class="hero__meta">
-            <div class="meta-pill">
-              <i class="fa-regular fa-calendar-days"></i>
-              Saturday, 30 May
-            </div>
-            <div class="meta-pill">
-              <i class="fa-regular fa-clock"></i>
-              7:00 PM
-            </div>
-            <div class="meta-pill">
-              <i class="fa-solid fa-location-dot"></i>
-              Acqua Bistecca, DC
-            </div>
-          </div>
-
-          <div class="hero__actions">
-            <a href="#rsvp" class="hero__cta">
-              RSVP now
-              <i class="fa-solid fa-arrow-down-long"></i>
-            </a>
-
-            <a
-              href="https://www.google.com/maps/search/?api=1&query=10+Ridge+Square+NW,+Washington,+DC+20016"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="hero__ghost"
-            >
-              <i class="fa-solid fa-map-location-dot"></i>
-              Open map
-            </a>
-          </div>
-        </div>
-
-        <div class="hero__visual">
-          <div class="portrait-stack" aria-label="Invitation preview images">
-            <figure class="portrait portrait--one">
-              <img
-                src="https://images.unsplash.com/photo-1529634893797-3f9b6c0c0ab8?auto=format&fit=crop&w=1200&q=80"
-                alt="Placeholder portrait"
-              />
-            </figure>
-
-            <figure class="portrait portrait--two">
-              <img
-                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80"
-                alt="Placeholder portrait"
-              />
-            </figure>
-
-            <div class="glow-card">
-              <div class="glow-card__icon">
-                <i class="fa-solid fa-champagne-glasses"></i>
+            <div class="hero__meta" aria-label="Event summary">
+              <div class="meta-item">
+                <i class="fa-regular fa-calendar-days"></i>
+                <span>Saturday, 30 May</span>
               </div>
-              <p>One special evening</p>
+
+              <div class="meta-item">
+                <i class="fa-regular fa-clock"></i>
+                <span>7:00 PM</span>
+              </div>
+
+              <div class="meta-item">
+                <i class="fa-solid fa-location-dot"></i>
+                <span>Acqua Bistecca, DC</span>
+              </div>
             </div>
 
-            <svg class="mini-spark mini-spark--one" viewBox="0 0 120 120" aria-hidden="true">
-              <path
-                d="M60 10L67 48L105 55L67 62L60 100L53 62L15 55L53 48L60 10Z"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linejoin="round"
-              />
-            </svg>
+            <div class="hero__actions">
+              <a class="button button--gold" href="#rsvp">
+                RSVP now
+                <i class="fa-solid fa-arrow-down-long"></i>
+              </a>
 
-            <svg class="mini-spark mini-spark--two" viewBox="0 0 120 120" aria-hidden="true">
-              <path
-                d="M60 18C72 36 92 45 104 47C92 49 72 58 60 76C48 58 28 49 16 47C28 45 48 36 60 18Z"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linejoin="round"
-              />
-            </svg>
+              <a
+                class="button button--ghost"
+                href="https://www.google.com/maps/search/?api=1&query=10+Ridge+Square+NW,+Washington,+DC+20016"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <i class="fa-solid fa-map-location-dot"></i>
+                View map
+              </a>
+            </div>
+          </div>
+
+          <div class="hero__visual">
+            <div class="frame-stack" aria-label="Invitation visual">
+              <svg class="orbit orbit--one" viewBox="0 0 500 500" aria-hidden="true">
+                <circle cx="250" cy="250" r="190" />
+                <circle cx="250" cy="250" r="140" />
+                <path d="M62 250C120 205 174 184 250 184C326 184 380 205 438 250" />
+              </svg>
+
+              <svg class="orbit orbit--two" viewBox="0 0 260 260" aria-hidden="true">
+                <circle cx="130" cy="130" r="92" />
+                <path d="M38 130C74 105 98 96 130 96C162 96 186 105 222 130" />
+              </svg>
+
+              <figure class="photo photo--large">
+                <img
+                  src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1400&q=80"
+                  alt="A refined candlelit dinner table"
+                />
+              </figure>
+
+              <figure class="photo photo--small">
+                <img
+                  src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80"
+                  alt="Elegant plated dinner with warm lighting"
+                />
+              </figure>
+
+              <div class="floating-note">
+                <span class="floating-note__icon">
+                  <i class="fa-solid fa-champagne-glasses"></i>
+                </span>
+                <span>One special evening</span>
+              </div>
+
+              <svg class="spark spark--one" viewBox="0 0 120 120" aria-hidden="true">
+                <path
+                  d="M60 10L67 48L105 55L67 62L60 100L53 62L15 55L53 48L60 10Z"
+                />
+              </svg>
+
+              <svg class="spark spark--two" viewBox="0 0 120 120" aria-hidden="true">
+                <path
+                  d="M60 18C72 36 92 45 104 47C92 49 72 58 60 76C48 58 28 49 16 47C28 45 48 36 60 18Z"
+                />
+              </svg>
+            </div>
           </div>
         </div>
       </header>
@@ -179,53 +149,55 @@
           <span>Saturday 30 May</span>
           <span>Acqua Bistecca, DC</span>
           <span>7:00 PM</span>
+          <span>Private guest list</span>
           <span>Joe’s birthday dinner</span>
           <span>Saturday 30 May</span>
           <span>Acqua Bistecca, DC</span>
-          <span>7:00 PM</span>
         </div>
       </div>
 
-      <main>
-        <section class="mood section-card" aria-label="Invitation mood">
-          <div class="mood__grid">
-            <div class="mood__copy">
-              <p class="section-kicker">A quiet surprise</p>
-              <h2>An intimate dinner wrapped in candlelight and a little mystery.</h2>
-              <p class="mood__text">
-                The night is meant to feel warm, beautiful, and just a little unforgettable.
-              </p>
+      <main class="content">
+        <section class="scene section-card" aria-label="Mood section">
+          <div class="scene__grid">
+            <div class="scene__copy">
+              <p class="section-kicker">The tone</p>
+              <h2>Soft light, good food, and a night made to feel unforgettable.</h2>
 
-              <div class="mood__chips">
-                <div class="mood-chip">
+              <div class="scene__chips">
+                <div class="chip">
                   <i class="fa-solid fa-martini-glass-citrus"></i>
-                  Cocktails, conversation, dinner
+                  Cocktails & conversation
                 </div>
-                <div class="mood-chip">
-                  <i class="fa-solid fa-heart"></i>
-                  A surprise worth keeping
-                </div>
-                <div class="mood-chip">
+                <div class="chip">
                   <i class="fa-solid fa-utensils"></i>
-                  Elegant table setting
+                  Dinner with style
+                </div>
+                <div class="chip">
+                  <i class="fa-solid fa-star"></i>
+                  A surprise worth keeping
                 </div>
               </div>
             </div>
 
-            <figure class="mood__image">
+            <figure class="scene__image">
               <img
-                src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1400&q=80"
-                alt="Candlelit dinner table"
+                src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1400&q=80"
+                alt="Luxury dinner ambience"
               />
-              <div class="mood__image-overlay">
-                <span><i class="fa-regular fa-star"></i> Saturday evening</span>
-              </div>
+
+              <svg class="scene__wave scene__wave--one" viewBox="0 0 380 110" aria-hidden="true">
+                <path d="M0 60C40 24 80 24 120 60C160 96 200 96 240 60C280 24 320 24 380 60" />
+              </svg>
+
+              <svg class="scene__wave scene__wave--two" viewBox="0 0 320 110" aria-hidden="true">
+                <path d="M0 42C38 78 78 78 118 42C158 6 198 6 238 42C278 78 312 78 320 42" />
+              </svg>
             </figure>
           </div>
         </section>
 
         <section class="details section-card" aria-label="Event details">
-          <div class="details__item">
+          <div class="detail">
             <i class="fa-regular fa-calendar-check"></i>
             <div>
               <span>Date</span>
@@ -233,7 +205,7 @@
             </div>
           </div>
 
-          <div class="details__item">
+          <div class="detail">
             <i class="fa-regular fa-clock"></i>
             <div>
               <span>Time</span>
@@ -241,15 +213,15 @@
             </div>
           </div>
 
-          <div class="details__item">
+          <div class="detail">
             <i class="fa-solid fa-location-dot"></i>
             <div>
-              <span>Place</span>
+              <span>Venue</span>
               <strong>Acqua Bistecca, DC</strong>
             </div>
           </div>
 
-          <div class="details__item">
+          <div class="detail">
             <i class="fa-solid fa-map-pin"></i>
             <div>
               <span>Address</span>
@@ -258,56 +230,71 @@
           </div>
         </section>
 
-        <section class="location section-card" aria-label="Map link">
-          <div class="location__copy">
-            <p class="section-kicker">Location</p>
-            <h2>Find the place</h2>
-            <p class="section-copy">Tap the map to open the venue in Google Maps.</p>
+        <section class="location section-card" aria-label="Location section">
+          <div class="location__top">
+            <div>
+              <p class="section-kicker">Location</p>
+              <h2>Find the venue</h2>
+            </div>
+
+            <a
+              class="location__map-link"
+              href="https://www.google.com/maps/search/?api=1&query=10+Ridge+Square+NW,+Washington,+DC+20016"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <i class="fa-solid fa-location-arrow"></i>
+              Open Google Maps
+            </a>
           </div>
 
           <a
-            class="location__link"
+            class="location__card"
             href="https://www.google.com/maps/search/?api=1&query=10+Ridge+Square+NW,+Washington,+DC+20016"
             target="_blank"
             rel="noopener noreferrer"
           >
             <span class="location__icon">
-              <i class="fa-solid fa-location-arrow"></i>
+              <i class="fa-solid fa-map-location-dot"></i>
             </span>
+
             <span class="location__text">
-              Open Google Maps
-              <small>10 Ridge Square NW, Washington, DC 20016</small>
+              <strong>10 Ridge Square NW</strong>
+              <small>Washington, DC 20016</small>
             </span>
-            <i class="fa-solid fa-arrow-up-right-from-square location__arrow"></i>
+
+            <span class="location__arrow">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </span>
           </a>
 
-          <svg class="map-wave map-wave--one" viewBox="0 0 360 100" aria-hidden="true">
-            <path d="M0 60C40 26 82 26 120 60C158 94 202 94 240 60C278 26 320 26 360 60" />
+          <svg class="location__curve location__curve--one" viewBox="0 0 420 140" aria-hidden="true">
+            <path d="M0 92C52 38 102 38 154 92C206 146 258 146 310 92C362 38 386 38 420 64" />
           </svg>
 
-          <svg class="map-wave map-wave--two" viewBox="0 0 320 100" aria-hidden="true">
-            <path d="M0 38C42 72 80 72 118 38C156 4 202 4 240 38C278 72 316 72 320 38" />
+          <svg class="location__curve location__curve--two" viewBox="0 0 360 120" aria-hidden="true">
+            <path d="M0 38C46 82 88 82 132 38C176 -6 220 -6 264 38C308 82 342 82 360 56" />
           </svg>
         </section>
 
-        <section class="gallery section-card" aria-label="Photo preview">
+        <section class="gallery section-card" aria-label="Gallery preview">
           <div class="section-heading">
-            <p class="section-kicker">A glimpse</p>
-            <h2>Two portraits, one elegant frame.</h2>
+            <p class="section-kicker">Preview</p>
+            <h2>Two frames, one mood.</h2>
           </div>
 
           <div class="gallery__grid">
-            <figure class="gallery__card gallery__card--wide">
+            <figure class="gallery__item gallery__item--wide">
               <img
-                src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1400&q=80"
-                alt="Placeholder image for Joe"
+                src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1400&q=80"
+                alt="Elegant dining room details"
               />
             </figure>
 
-            <figure class="gallery__card gallery__card--tall gallery__card--offset">
+            <figure class="gallery__item gallery__item--tall gallery__item--shift">
               <img
-                src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=80"
-                alt="Placeholder image for Joe"
+                src="https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=1200&q=80"
+                alt="Luxury plated food presentation"
               />
             </figure>
           </div>
@@ -316,8 +303,8 @@
         <section id="rsvp" class="rsvp section-card" aria-label="RSVP form">
           <div class="section-heading">
             <p class="section-kicker">RSVP</p>
-            <h2>Confirm your attendance</h2>
-            <p class="section-copy">This dinner is for invited guests only.</p>
+            <h2>Confirm attendance</h2>
+            <p class="section-copy">Invited guests only.</p>
           </div>
 
           <form class="rsvp-form" action="#" method="post">
@@ -340,7 +327,7 @@
               <legend>Will you attend?</legend>
 
               <div class="attendance__choices">
-                <label class="choice-card choice-card--yes" for="attend-yes">
+                <label class="choice-card" for="attend-yes">
                   <input
                     type="radio"
                     id="attend-yes"
@@ -357,7 +344,7 @@
                   </span>
                 </label>
 
-                <label class="choice-card choice-card--no" for="attend-no">
+                <label class="choice-card" for="attend-no">
                   <input
                     type="radio"
                     id="attend-no"
