@@ -1,267 +1,222 @@
+// script.js
 document.addEventListener("DOMContentLoaded", () => {
-  const body = document.body;
-  const form = document.getElementById("rsvpForm");
-  const formStatus = document.getElementById("formStatus");
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // ---------- Smooth entrance ----------
-  body.classList.add("is-ready");
-
-  // ---------- Scroll reveal ----------
-  const revealTargets = document.querySelectorAll(
-    ".hero__copy, .hero__visual, .detail-item, .story__text, .rsvp__intro, .rsvp-form, .gallery-strip__image, .footer"
-  );
-
-  revealTargets.forEach((el) => el.classList.add("reveal"));
-
-  const revealObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("reveal--visible");
-          revealObserver.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.15 }
-  );
-
-  revealTargets.forEach((el) => revealObserver.observe(el));
-
-  // ---------- Subtle parallax ----------
-  const parallaxItems = Array.from(document.querySelectorAll("[data-parallax]"));
-
-  let mouseX = 0;
-  let mouseY = 0;
-  let ticking = false;
-
-  const setMotion = () => {
-    const winW = window.innerWidth || 1;
-    const winH = window.innerHeight || 1;
-
-    const nx = (mouseX / winW - 0.5) * 2;
-    const ny = (mouseY / winH - 0.5) * 2;
-
-    parallaxItems.forEach((el) => {
-      const depth = Number(el.dataset.parallax || 10);
-      const x = nx * depth * 0.8;
-      const y = ny * depth * 0.8;
-      el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-    });
-
-    ticking = false;
-  };
-
-  window.addEventListener("mousemove", (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-
-    if (!ticking) {
-      requestAnimationFrame(setMotion);
-      ticking = true;
-    }
-  });
-
-  window.addEventListener("touchmove", (e) => {
-    if (!e.touches || !e.touches[0]) return;
-    mouseX = e.touches[0].clientX;
-    mouseY = e.touches[0].clientY;
-
-    if (!ticking) {
-      requestAnimationFrame(setMotion);
-      ticking = true;
-    }
-  }, { passive: true });
-
-  // ---------- Gentle floating movement ----------
-  const floaters = document.querySelectorAll(
-    ".floating-note, .ambient, .line-art, .drift-ornament"
-  );
-
-  const initialOffsets = new Map();
-  floaters.forEach((el) => {
-    initialOffsets.set(el, {
-      x: (Math.random() - 0.5) * 10,
-      y: (Math.random() - 0.5) * 10,
-      speed: 0.35 + Math.random() * 0.65,
-      amp: 2 + Math.random() * 4,
-    });
-  });
-
-  function animateFloaters(time) {
-    floaters.forEach((el) => {
-      const meta = initialOffsets.get(el);
-      if (!meta) return;
-
-      const dx = Math.sin(time * 0.001 * meta.speed) * meta.amp + meta.x;
-      const dy = Math.cos(time * 0.0011 * meta.speed) * meta.amp + meta.y;
-
-      // Preserve any parallax transform by layering translate values in CSS variables if present.
-      // Since inline transform may be used by parallax, we append a small drift.
-      const base = el.style.transform && el.style.transform !== "none"
-        ? el.style.transform
-        : "translate3d(0, 0, 0)";
-
-      el.style.setProperty("--float-x", `${dx}px`);
-      el.style.setProperty("--float-y", `${dy}px`);
-
-      // Only directly set transform for elements without live parallax updates on the same frame.
-      if (!el.hasAttribute("data-parallax")) {
-        el.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
-      } else {
-        // Add CSS variables for your stylesheet to optionally use:
-        // transform: translate3d(var(--parallax-x, 0), var(--parallax-y, 0), 0) translate3d(var(--float-x, 0), var(--float-y, 0), 0);
-        el.style.setProperty("--float-base", base);
-      }
-    });
-
-    requestAnimationFrame(animateFloaters);
-  }
-
-  requestAnimationFrame(animateFloaters);
-
-  // ---------- Hero text polish ----------
-  const title = document.querySelector(".title");
-  if (title) {
-    const letters = title.textContent.split("");
-    title.textContent = "";
-
-    letters.forEach((char, index) => {
-      const span = document.createElement("span");
-      span.textContent = char;
-      span.style.display = "inline-block";
-      span.style.transitionDelay = `${index * 18}ms`;
-      span.classList.add("title-letter");
-      title.appendChild(span);
-    });
-
-    requestAnimationFrame(() => {
-      title.classList.add("title--visible");
-    });
-  }
-
-  // ---------- RSVP form ----------
-  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
-  const showStatus = (message, type = "success") => {
-    if (!formStatus) return;
-    formStatus.textContent = message;
-    formStatus.dataset.state = type;
-    formStatus.classList.add("form-status--visible");
-  };
-
-  const clearErrors = () => {
-    form?.querySelectorAll(".input-error").forEach((el) => {
-      el.classList.remove("input-error");
-    });
-  };
-
-  const markError = (field) => {
-    if (field) field.classList.add("input-error");
-  };
-
-  if (form) {
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      clearErrors();
-
-      const name = document.getElementById("name");
-      const email = document.getElementById("email");
-      const attendance = document.getElementById("attendance");
-      const message = document.getElementById("message");
-      const notes = document.getElementById("notes");
-
-      const nameValue = name.value.trim();
-      const emailValue = email.value.trim();
-      const attendanceValue = attendance.value;
-      const messageValue = message.value.trim();
-      const notesValue = notes.value.trim();
-
-      let valid = true;
-
-      if (!nameValue) {
-        valid = false;
-        markError(name);
-      }
-
-      if (!emailValue || !validateEmail(emailValue)) {
-        valid = false;
-        markError(email);
-      }
-
-      if (!attendanceValue) {
-        valid = false;
-        markError(attendance);
-      }
-
-      if (!valid) {
-        showStatus("Please complete the required fields before sending.", "error");
-        return;
-      }
-
-      const rsvpData = {
-        name: nameValue,
-        email: emailValue,
-        attendance: attendanceValue,
-        message: messageValue,
-        notes: notesValue,
-        submittedAt: new Date().toISOString(),
-      };
-
-      // Save locally as a simple fallback until backend is wired in.
-      try {
-        localStorage.setItem("joe-birthday-rsvp", JSON.stringify(rsvpData));
-      } catch (err) {
-        // Storage may be unavailable; ignore silently.
-      }
-
-      const attendingText =
-        attendanceValue === "yes"
-          ? "Wonderful — your RSVP has been sent."
-          : "Thanks for letting us know.";
-
-      showStatus(`${attendingText} We have noted your response for Joe’s dinner.`, "success");
-
-      form.reset();
-
-      // Gentle success pulse
-      form.classList.add("form--submitted");
-      setTimeout(() => form.classList.remove("form--submitted"), 900);
-    });
-  }
-
-  // ---------- Load saved RSVP draft ----------
-  try {
-    const saved = localStorage.getItem("joe-birthday-rsvp");
-    if (saved && form) {
-      const data = JSON.parse(saved);
-      const name = document.getElementById("name");
-      const email = document.getElementById("email");
-      const attendance = document.getElementById("attendance");
-      const message = document.getElementById("message");
-      const notes = document.getElementById("notes");
-
-      if (data?.name) name.value = data.name;
-      if (data?.email) email.value = data.email;
-      if (data?.attendance) attendance.value = data.attendance;
-      if (data?.message) message.value = data.message;
-      if (data?.notes) notes.value = data.notes;
-    }
-  } catch (err) {
-    // Ignore storage parse failures.
-  }
-
-  // ---------- Active section hint ----------
-  const navLinks = document.querySelectorAll('a[href^="#"]');
-  navLinks.forEach((link) => {
+  // Smooth scroll for in-page links
+  document.querySelectorAll('a[href^="#"]').forEach((link) => {
     link.addEventListener("click", (e) => {
       const targetId = link.getAttribute("href");
-      if (!targetId || targetId === "#") return;
-
-      const target = document.querySelector(targetId);
+      const target = targetId ? document.querySelector(targetId) : null;
       if (!target) return;
 
       e.preventDefault();
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      target.scrollIntoView({
+        behavior: prefersReducedMotion ? "auto" : "smooth",
+        block: "start",
+      });
     });
+  });
+
+  // Reveal on scroll
+  const revealElements = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window) {
+    const revealObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.15,
+        rootMargin: "0px 0px -10% 0px",
+      }
+    );
+
+    revealElements.forEach((el) => revealObserver.observe(el));
+  } else {
+    revealElements.forEach((el) => el.classList.add("is-visible"));
+  }
+
+  // Subtle floating motion for ornaments
+  const ornaments = document.querySelectorAll(".floating-ornament");
+  let startTime = performance.now();
+
+  function animateOrnaments(now) {
+    const elapsed = (now - startTime) / 1000;
+
+    ornaments.forEach((ornament, index) => {
+      if (ornament.dataset.dragging === "true") return;
+
+      const ampX = 6 + index * 1.5;
+      const ampY = 8 + index * 2;
+      const speed = 0.6 + index * 0.12;
+
+      const x = Math.sin(elapsed * speed + index) * ampX;
+      const y = Math.cos(elapsed * speed * 1.15 + index) * ampY;
+
+      ornament.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    });
+
+    if (!prefersReducedMotion) {
+      requestAnimationFrame(animateOrnaments);
+    }
+  }
+
+  if (!prefersReducedMotion && ornaments.length) {
+    requestAnimationFrame(animateOrnaments);
+  }
+
+  // Pointer parallax for hero area
+  const hero = document.querySelector(".hero");
+  const visual = document.querySelector(".hero__visual");
+  const sigil = document.querySelector(".hero__sigil");
+
+  function setParallax(x, y) {
+    if (!hero || prefersReducedMotion) return;
+
+    const rect = hero.getBoundingClientRect();
+    const px = (x - rect.left) / rect.width - 0.5;
+    const py = (y - rect.top) / rect.height - 0.5;
+
+    if (visual) {
+      visual.style.transform = `translate3d(${px * 14}px, ${py * 10}px, 0)`;
+    }
+
+    if (sigil) {
+      sigil.style.transform = `translate3d(${px * -10}px, ${py * -12}px, 0) rotate(${px * 6}deg)`;
+    }
+  }
+
+  if (hero && !prefersReducedMotion) {
+    hero.addEventListener("pointermove", (e) => setParallax(e.clientX, e.clientY));
+    hero.addEventListener("pointerleave", () => {
+      if (visual) visual.style.transform = "";
+      if (sigil) sigil.style.transform = "";
+    });
+  }
+
+  // Draggable floating ornaments
+  const draggableItems = document.querySelectorAll("[data-draggable='true']");
+  let activeDrag = null;
+
+  draggableItems.forEach((item) => {
+    item.style.touchAction = "none";
+    item.style.cursor = "grab";
+
+    item.addEventListener("pointerdown", (e) => {
+      activeDrag = {
+        el: item,
+        startX: e.clientX,
+        startY: e.clientY,
+        originX: 0,
+        originY: 0,
+      };
+
+      item.dataset.dragging = "true";
+      item.style.cursor = "grabbing";
+      item.setPointerCapture(e.pointerId);
+    });
+
+    item.addEventListener("pointermove", (e) => {
+      if (!activeDrag || activeDrag.el !== item) return;
+
+      const dx = e.clientX - activeDrag.startX;
+      const dy = e.clientY - activeDrag.startY;
+
+      item.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
+    });
+
+    item.addEventListener("pointerup", () => {
+      if (!activeDrag || activeDrag.el !== item) return;
+
+      item.dataset.dragging = "false";
+      item.style.cursor = "grab";
+      activeDrag = null;
+    });
+
+    item.addEventListener("pointercancel", () => {
+      item.dataset.dragging = "false";
+      item.style.cursor = "grab";
+      activeDrag = null;
+    });
+  });
+
+  // RSVP form handling
+  const form = document.getElementById("rsvpForm");
+  if (form) {
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    const status = document.createElement("p");
+    status.className = "rsvp-status";
+    status.setAttribute("aria-live", "polite");
+    status.style.marginTop = "16px";
+    status.style.opacity = "0";
+    status.style.transform = "translateY(8px)";
+    status.style.transition = "opacity 0.35s ease, transform 0.35s ease";
+
+    if (submitBtn) {
+      submitBtn.insertAdjacentElement("afterend", status);
+    } else {
+      form.appendChild(status);
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById("name")?.value.trim() || "";
+      const email = document.getElementById("email")?.value.trim() || "";
+      const attendance = document.getElementById("attendance")?.value || "";
+      const message = document.getElementById("message")?.value.trim() || "";
+
+      if (!name || !email || !attendance) {
+        showStatus("Please complete the RSVP fields before sending.", "error");
+        return;
+      }
+
+      const payload = {
+        name,
+        email,
+        attendance,
+        message,
+        submittedAt: new Date().toISOString(),
+      };
+
+      // Temporary local save for now. Replace with your backend later.
+      const saved = JSON.parse(localStorage.getItem("joe_rsvp_submissions") || "[]");
+      saved.push(payload);
+      localStorage.setItem("joe_rsvp_submissions", JSON.stringify(saved));
+
+      form.reset();
+
+      if (attendance === "yes") {
+        showStatus("Your RSVP has been received. We look forward to seeing you there.", "success");
+      } else {
+        showStatus("Your response has been received. Thank you for letting us know.", "success");
+      }
+    });
+
+    function showStatus(text, type) {
+      if (!status) return;
+
+      status.textContent = text;
+      status.dataset.state = type;
+      status.style.opacity = "1";
+      status.style.transform = "translateY(0)";
+
+      clearTimeout(showStatus._timer);
+      showStatus._timer = setTimeout(() => {
+        status.style.opacity = "0";
+        status.style.transform = "translateY(8px)";
+      }, 4500);
+    }
+  }
+
+  // Tiny focus polish for inputs
+  document.querySelectorAll("input, select, textarea").forEach((field) => {
+    field.addEventListener("focus", () => field.closest(".input-wrap")?.classList.add("is-focused"));
+    field.addEventListener("blur", () => field.closest(".input-wrap")?.classList.remove("is-focused"));
   });
 });
