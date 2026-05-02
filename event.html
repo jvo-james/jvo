@@ -1,319 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Birthday Dinner for Joe</title>
-    <meta
-      name="description"
-      content="A private birthday dinner invitation and RSVP page for Joe."
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Birthday Dinner for Joe</title>
+  <meta
+    name="description"
+    content="A birthday dinner invitation for Joe with RSVP."
+  />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&display=swap"
-      rel="stylesheet"
-    />
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    integrity="sha512-1ycn6IcaQQ40jIh1z1sCkP2J7Z8f2U2x7lN7E3z2J2Y0fM0v+9JQ4Q+8YQ6X8w+9b1K2p1Q2K5A2H6P7A3b0w=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
 
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-      referrerpolicy="no-referrer"
-    />
+  <!-- Your stylesheet later -->
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main class="invite-page">
+    <section class="hero" aria-labelledby="invite-title">
+      <div class="hero__ornaments" aria-hidden="true">
+        <svg class="doodle doodle--one" viewBox="0 0 260 260" fill="none">
+          <path
+            d="M40 150C75 60 170 35 220 92C248 125 243 182 205 212C167 242 107 239 71 205"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-dasharray="8 10"
+          />
+          <circle cx="58" cy="56" r="4" fill="currentColor" />
+          <circle cx="202" cy="88" r="5" fill="currentColor" />
+          <circle cx="212" cy="204" r="4" fill="currentColor" />
+        </svg>
 
-    <link rel="stylesheet" href="style.css" />
-    <script defer src="scripts.js"></script>
-  </head>
-  <body>
-    <div class="page-shell">
-      <div class="ambient ambient-a" aria-hidden="true"></div>
-      <div class="ambient ambient-b" aria-hidden="true"></div>
-      <div class="ambient ambient-c" aria-hidden="true"></div>
+        <svg class="doodle doodle--two" viewBox="0 0 220 220" fill="none">
+          <path
+            d="M110 18L126 84L192 100L126 116L110 182L94 116L28 100L94 84L110 18Z"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linejoin="round"
+          />
+        </svg>
 
-      <svg
-        class="ornament ornament-top-left"
-        viewBox="0 0 220 220"
-        fill="none"
-        aria-hidden="true"
-      >
-        <path
-          d="M25 160C70 160 85 35 128 35C167 35 173 90 195 90"
-          stroke="currentColor"
-          stroke-width="2.2"
-          stroke-linecap="round"
-          stroke-dasharray="1 8"
-        />
-        <path
-          d="M45 185C65 120 88 102 120 102C155 102 179 132 191 170"
-          stroke="currentColor"
-          stroke-width="1.6"
-          stroke-linecap="round"
-          opacity="0.55"
-        />
-        <circle cx="170" cy="48" r="4" fill="currentColor" />
-        <circle cx="36" cy="168" r="3" fill="currentColor" opacity="0.75" />
-      </svg>
+        <svg class="doodle doodle--three" viewBox="0 0 180 180" fill="none">
+          <path
+            d="M26 108C48 80 74 66 94 66C118 66 138 80 154 108"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+          <path
+            d="M46 116C62 102 78 95 94 95C110 95 126 102 142 116"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </div>
 
-      <svg
-        class="ornament ornament-bottom-right"
-        viewBox="0 0 220 220"
-        fill="none"
-        aria-hidden="true"
-      >
-        <path
-          d="M25 42C70 42 82 167 126 167C168 167 176 112 198 112"
-          stroke="currentColor"
-          stroke-width="2.2"
-          stroke-linecap="round"
-          stroke-dasharray="1 8"
-        />
-        <path
-          d="M31 82C60 74 84 84 108 108C133 132 153 159 191 173"
-          stroke="currentColor"
-          stroke-width="1.6"
-          stroke-linecap="round"
-          opacity="0.55"
-        />
-        <circle cx="181" cy="97" r="4" fill="currentColor" />
-        <circle cx="50" cy="53" r="3" fill="currentColor" opacity="0.75" />
-      </svg>
+      <div class="hero__media" aria-hidden="true">
+        <figure class="photo-frame photo-frame--main">
+          <img
+            src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?auto=format&fit=crop&w=1200&q=80"
+            alt="Joe photo placeholder 1"
+          />
+        </figure>
 
-      <header class="hero">
-        <div class="hero__badge">
-          <i class="fa-solid fa-circle-notch"></i>
-          Private celebration
-        </div>
+        <figure class="photo-frame photo-frame--accent">
+          <img
+            src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80"
+            alt="Joe photo placeholder 2"
+          />
+        </figure>
 
-        <div class="hero__content">
-          <p class="eyebrow">Birthday Dinner Invitation</p>
+        <svg class="hero__halo" viewBox="0 0 600 600" fill="none" aria-hidden="true">
+          <circle cx="300" cy="300" r="245" stroke="currentColor" stroke-width="2" stroke-dasharray="12 14" />
+          <circle cx="300" cy="300" r="205" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 12" />
+        </svg>
+      </div>
 
-          <h1 class="title">
-            Please join us for a birthday dinner to celebrate Joe.
-          </h1>
-
-          <p class="subtitle">
-            An intimate evening of warmth, good company, and a beautiful table
-            set just for the occasion.
-          </p>
-
-          <div class="hero__meta">
-            <div class="meta-pill">
-              <i class="fa-regular fa-calendar-days"></i>
-              Saturday, 30 May
-            </div>
-            <div class="meta-pill">
-              <i class="fa-regular fa-clock"></i>
-              7:00 PM
-            </div>
-            <div class="meta-pill">
-              <i class="fa-solid fa-location-dot"></i>
-              Acqua Bistecca, DC
-            </div>
-          </div>
-
-          <a href="#rsvp" class="hero__cta">
-            RSVP now
-            <i class="fa-solid fa-arrow-down-long"></i>
-          </a>
-        </div>
-
-        <div class="hero__visual">
-          <div class="portrait-stack">
-            <figure class="portrait portrait--one">
-              <img
-                src="https://images.unsplash.com/photo-1529634893797-3f9b6c0c0ab8?auto=format&fit=crop&w=900&q=80"
-                alt="Placeholder portrait for Joe"
-              />
-            </figure>
-
-            <figure class="portrait portrait--two">
-              <img
-                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=900&q=80"
-                alt="Placeholder portrait for Joe"
-              />
-            </figure>
-
-            <div class="glow-card">
-              <div class="glow-card__icon">
-                <i class="fa-solid fa-champagne-glasses"></i>
-              </div>
-              <p>One special evening</p>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <main>
-        <section class="details section-card" aria-label="Event details">
-          <div class="details__item">
-            <i class="fa-regular fa-calendar-check"></i>
-            <div>
-              <span>Date</span>
-              <strong>Saturday, 30 May</strong>
-            </div>
-          </div>
-
-          <div class="details__item">
-            <i class="fa-regular fa-clock"></i>
-            <div>
-              <span>Time</span>
-              <strong>7:00 PM</strong>
-            </div>
-          </div>
-
-          <div class="details__item">
-            <i class="fa-solid fa-location-dot"></i>
-            <div>
-              <span>Place</span>
-              <strong>Acqua Bistecca, DC</strong>
-            </div>
-          </div>
-
-          <div class="details__item">
-            <i class="fa-solid fa-map-pin"></i>
-            <div>
-              <span>Address</span>
-              <strong>10 Ridge Square NW, Washington, DC 20016</strong>
-            </div>
-          </div>
-        </section>
-
-        <section class="gallery section-card" aria-label="Photo preview">
-          <div class="section-heading">
-            <p class="section-kicker">A glimpse of Joe</p>
-            <h2>Two portraits to set the tone.</h2>
-          </div>
-
-          <div class="gallery__grid">
-            <figure class="gallery__card gallery__card--wide">
-              <img
-                src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=80"
-                alt="Placeholder image for Joe"
-              />
-            </figure>
-
-            <figure class="gallery__card gallery__card--tall">
-              <img
-                src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80"
-                alt="Placeholder image for Joe"
-              />
-            </figure>
-          </div>
-
-          <svg
-            class="floating-mark floating-mark--one"
-            viewBox="0 0 120 120"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M60 10L67 48L105 55L67 62L60 100L53 62L15 55L53 48L60 10Z"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linejoin="round"
-            />
-          </svg>
-
-          <svg
-            class="floating-mark floating-mark--two"
-            viewBox="0 0 120 120"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M60 18C72 36 92 45 104 47C92 49 72 58 60 76C48 58 28 49 16 47C28 45 48 36 60 18Z"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </section>
-
-        <section id="rsvp" class="rsvp section-card" aria-label="RSVP form">
-          <div class="section-heading">
-            <p class="section-kicker">RSVP</p>
-            <h2>Confirm your attendance</h2>
-            <p class="section-copy">
-              This dinner is for invited guests only. No additional guests.
-            </p>
-          </div>
-
-          <form class="rsvp-form" action="#" method="post">
-            <div class="field">
-              <label for="name">Your name</label>
-              <div class="input-wrap">
-                <i class="fa-regular fa-user"></i>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  placeholder="Enter your name"
-                  autocomplete="name"
-                  required
-                />
-              </div>
-            </div>
-
-            <fieldset class="field attendance">
-              <legend>Will you attend?</legend>
-
-              <div class="attendance__choices">
-                <label class="choice-card choice-card--yes" for="attend-yes">
-                  <input
-                    type="radio"
-                    id="attend-yes"
-                    name="attendance"
-                    value="yes"
-                    required
-                  />
-                  <span class="choice-card__icon">
-                    <i class="fa-solid fa-heart"></i>
-                  </span>
-                  <span class="choice-card__text">
-                    <strong>Yes, I will be there</strong>
-                    <small>Count me in</small>
-                  </span>
-                </label>
-
-                <label class="choice-card choice-card--no" for="attend-no">
-                  <input
-                    type="radio"
-                    id="attend-no"
-                    name="attendance"
-                    value="no"
-                    required
-                  />
-                  <span class="choice-card__icon">
-                    <i class="fa-regular fa-circle-xmark"></i>
-                  </span>
-                  <span class="choice-card__text">
-                    <strong>Sorry, I cannot attend</strong>
-                    <small>Send my best wishes</small>
-                  </span>
-                </label>
-              </div>
-            </fieldset>
-
-            <div class="form-note">
-              <i class="fa-solid fa-circle-info"></i>
-              <span>No additional guests are included.</span>
-            </div>
-
-            <button type="submit" class="submit-btn">
-              Confirm attendance
-              <i class="fa-solid fa-arrow-right"></i>
-            </button>
-          </form>
-        </section>
-      </main>
-
-      <footer class="footer">
-        <p>
-          <i class="fa-solid fa-wand-magic-sparkles"></i>
-          Joe's birthday dinner
+      <div class="hero__copy">
+        <p class="eyebrow">
+          <i class="fa-solid fa-gem"></i>
+          Birthday dinner invitation
         </p>
-      </footer>
-    </div>
-  </body>
+
+        <h1 id="invite-title">Joe</h1>
+
+        <p class="hero__lead">
+          Please join us for a birthday dinner to celebrate Joe.
+        </p>
+
+        <div class="event-card">
+          <div class="event-card__row">
+            <span class="event-card__icon">
+              <i class="fa-regular fa-calendar"></i>
+            </span>
+            <span class="event-card__text">Saturday, 30 May</span>
+          </div>
+
+          <div class="event-card__row">
+            <span class="event-card__icon">
+              <i class="fa-regular fa-clock"></i>
+            </span>
+            <span class="event-card__text">7:00 PM</span>
+          </div>
+
+          <div class="event-card__row">
+            <span class="event-card__icon">
+              <i class="fa-solid fa-location-dot"></i>
+            </span>
+            <span class="event-card__text">
+              Acqua Bistecca, DC<br />
+              10 Ridge Square NW<br />
+              Washington, DC 20016
+            </span>
+          </div>
+        </div>
+
+        <a class="hero__cta" href="#rsvp">
+          <i class="fa-solid fa-circle-check"></i>
+          RSVP
+        </a>
+      </div>
+    </section>
+
+    <section class="rsvp-section" id="rsvp" aria-labelledby="rsvp-title">
+      <div class="rsvp-card">
+        <div class="rsvp-card__head">
+          <p class="rsvp-card__eyebrow">
+            <i class="fa-solid fa-pen-nib"></i>
+            RSVP
+          </p>
+          <h2 id="rsvp-title">Please confirm attendance</h2>
+        </div>
+
+        <form class="rsvp-form" action="#" method="post">
+          <div class="field">
+            <label for="name">Name</label>
+            <div class="input-wrap">
+              <i class="fa-regular fa-user"></i>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Your name"
+                autocomplete="name"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="field field--checkbox">
+            <label class="check-card" for="attending">
+              <input
+                type="checkbox"
+                id="attending"
+                name="attending"
+                value="yes"
+              />
+              <span class="check-card__box" aria-hidden="true"></span>
+              <span class="check-card__content">
+                <span class="check-card__title">I will attend</span>
+                <span class="check-card__sub">
+                  Tap to confirm you will be there
+                </span>
+              </span>
+            </label>
+          </div>
+
+          <button type="submit" class="submit-btn">
+            <i class="fa-solid fa-paper-plane"></i>
+            Send RSVP
+          </button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Your script later -->
+  <script src="./scripts.js"></script>
+</body>
 </html>
