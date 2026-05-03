@@ -33,7 +33,8 @@
     body{
       margin:0;
       min-height:100svh;
-      overflow:hidden;
+      overflow-x:hidden;
+  overflow-y:auto;
       background:
         radial-gradient(circle at 18% 20%, rgba(242,211,123,.12), transparent 18%),
         radial-gradient(circle at 82% 18%, rgba(214,177,90,.09), transparent 20%),
@@ -102,7 +103,7 @@
 
     .wrap{
       width:min(1180px, calc(100% - 28px));
-      height:100svh;
+      min-height:100svh;
       margin:0 auto;
       display:grid;
       place-items:center;
@@ -111,7 +112,8 @@
 
     .panel{
       width:100%;
-      height:min(100svh - 16px, 760px);
+      min-height:100svh;
+  height:auto;
       display:grid;
       grid-template-columns:1.02fr .98fr;
       gap:18px;
@@ -808,10 +810,10 @@
       <div class="left">
         <p class="eyebrow"><i class="fa-solid fa-circle-check"></i> RSVP received</p>
 
-        <h1>The gold seal is set.</h1>
+        <h1>Your place is reserved.</h1>
 
         <p class="lead">
-          Your place is reserved for Joe’s surprise dinner on Saturday, 30 May at 7:00 PM.
+          Your place is reserved for Joe’s surprise birthday dinner.
         </p>
 
         <div class="meta" aria-label="Event summary">
