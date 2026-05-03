@@ -1,30 +1,33 @@
 // scripts.js
+
 document.addEventListener("DOMContentLoaded", () => {
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
   const body = document.body;
-  const root = document.documentElement;
 
-  const countdownEls = {
-    days: document.querySelector("[data-days]"),
-    hours: document.querySelector("[data-hours]"),
-    minutes: document.querySelector("[data-minutes]"),
-    seconds: document.querySelector("[data-seconds]"),
-  };
+  // -----------------------------
+  // Reveal on scroll
+  // -----------------------------
+  const revealItems = document.querySelectorAll(".reveal");
 
-  const rsvpForm = document.querySelector(".rsvp-form");
-  const attendanceInput = document.querySelector('input[name="attending"]');
-  const attendanceTile = document.querySelector(".attendance-tile");
-  const nameInput = document.querySelector('input[name="fullName"]');
-  const hero = document.querySelector(".hero");
-  const ornaments = document.querySelectorAll(".ornament, .motion-float, .motion-float-slow");
-  const revealTargets = document.querySelectorAll(
-    ".section, .detail-card, .gallery-card, .story-card, .countdown-card, .location-card, .rsvp-wrap, .hero-copy, .hero-visual"
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.15,
+      rootMargin: "0px 0px -80px 0px",
+    }
   );
 
-  // ----------------------------
-  // Smooth anchor scrolling
-  // ----------------------------
+  revealItems.forEach((item) => revealObserver.observe(item));
+
+  // -----------------------------
+  // Smooth scrolling for anchor links
+  // -----------------------------
   document.querySelectorAll('a[href^="#"]').forEach((link) => {
     link.addEventListener("click", (e) => {
       const targetId = link.getAttribute("href");
@@ -34,321 +37,269 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!target) return;
 
       e.preventDefault();
-      target.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "start" });
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   });
 
-  // ----------------------------
-  // Countdown
-  // Saturday, 30 May at 7:00 PM local time
-  // If that date has passed this year, it rolls to next year.
-  // ----------------------------
-  function buildEventDate() {
-    const now = new Date();
-    let year = now.getFullYear();
+  // -----------------------------
+  // Hero parallax / float effect
+  // -----------------------------
+  const hero = document.querySelector(".hero");
+  const heroMedia = document.querySelector(".hero__media");
+  const heroTitle = document.querySelector(".hero__title");
 
-    let eventDate = new Date(year, 4, 30, 19, 0, 0, 0); // May = 4
-    if (eventDate.getTime() < now.getTime()) {
-      eventDate = new Date(year + 1, 4, 30, 19, 0, 0, 0);
-    }
+  let mouseX = 0;
+  let mouseY = 0;
+  let rafId = null;
 
-    return eventDate;
-  }
+  function animateHero() {
+    rafId = null;
 
-  const EVENT_DATE = buildEventDate();
+    if (!heroMedia || !hero) return;
 
-  function pad(num) {
-    return String(num).padStart(2, "0");
-  }
+    const rect = hero.getBoundingClientRect();
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
 
-  function animateCountChange(el) {
-    if (!el) return;
-    el.classList.remove("count-pop");
-    void el.offsetWidth;
-    el.classList.add("count-pop");
-  }
+    const deltaX = (mouseX - centerX) / rect.width;
+    const deltaY = (mouseY - centerY) / rect.height;
 
-  function updateCountdown() {
-    const now = new Date();
-    const diff = Math.max(0, EVENT_DATE.getTime() - now.getTime());
+    const mediaX = deltaX * 18;
+    const mediaY = deltaY * 14;
 
-    const totalSeconds = Math.floor(diff / 1000);
-    const days = Math.floor(totalSeconds / (60 * 60 * 24));
-    const hours = Math.floor((totalSeconds % (60 * 60 * 24)) / (60 * 60));
-    const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
-    const seconds = totalSeconds % 60;
+    const titleX = deltaX * -8;
+    const titleY = deltaY * -6;
 
-    if (countdownEls.days && countdownEls.days.textContent !== pad(days)) {
-      countdownEls.days.textContent = pad(days);
-      animateCountChange(countdownEls.days);
-    }
-    if (countdownEls.hours && countdownEls.hours.textContent !== pad(hours)) {
-      countdownEls.hours.textContent = pad(hours);
-      animateCountChange(countdownEls.hours);
-    }
-    if (countdownEls.minutes && countdownEls.minutes.textContent !== pad(minutes)) {
-      countdownEls.minutes.textContent = pad(minutes);
-      animateCountChange(countdownEls.minutes);
-    }
-    if (countdownEls.seconds && countdownEls.seconds.textContent !== pad(seconds)) {
-      countdownEls.seconds.textContent = pad(seconds);
-      animateCountChange(countdownEls.seconds);
+    heroMedia.style.transform = `translate3d(${mediaX}px, ${mediaY}px, 0)`;
+    if (heroTitle) {
+      heroTitle.style.transform = `translate3d(${titleX}px, ${titleY}px, 0)`;
     }
   }
 
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
+  if (hero) {
+    hero.addEventListener("mousemove", (e) => {
+      const rect = hero.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
 
-  // ----------------------------
-  // Scroll reveal
-  // ----------------------------
-  if (!prefersReducedMotion && "IntersectionObserver" in window) {
-    const revealObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            revealObserver.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.14 }
-    );
-
-    revealTargets.forEach((el) => {
-      el.classList.add("reveal-ready");
-      revealObserver.observe(el);
-    });
-  } else {
-    revealTargets.forEach((el) => el.classList.add("is-visible"));
-  }
-
-  // ----------------------------
-  // Attendance checkbox polish
-  // ----------------------------
-  function syncAttendanceState() {
-    if (!attendanceInput || !attendanceTile) return;
-    attendanceTile.classList.toggle("is-checked", attendanceInput.checked);
-  }
-
-  if (attendanceInput) {
-    attendanceInput.addEventListener("change", syncAttendanceState);
-    syncAttendanceState();
-  }
-
-  // Make the whole tile feel clickable
-  if (attendanceTile && attendanceInput) {
-    attendanceTile.addEventListener("click", (e) => {
-      if (e.target !== attendanceInput) {
-        attendanceInput.checked = !attendanceInput.checked;
-        attendanceInput.dispatchEvent(new Event("change", { bubbles: true }));
+      if (!rafId) {
+        rafId = requestAnimationFrame(animateHero);
       }
     });
-  }
 
-  // ----------------------------
-  // RSVP handling
-  // ----------------------------
-  function showToast(message, type = "success") {
-    const existing = document.querySelector(".toast-message");
-    if (existing) existing.remove();
-
-    const toast = document.createElement("div");
-    toast.className = `toast-message toast-${type}`;
-    toast.setAttribute("role", "status");
-    toast.setAttribute("aria-live", "polite");
-    toast.textContent = message;
-
-    // Minimal inline styles so it works even before CSS is added.
-    toast.style.position = "fixed";
-    toast.style.left = "50%";
-    toast.style.bottom = "24px";
-    toast.style.transform = "translateX(-50%) translateY(12px)";
-    toast.style.padding = "14px 18px";
-    toast.style.borderRadius = "999px";
-    toast.style.zIndex = "9999";
-    toast.style.maxWidth = "90vw";
-    toast.style.textAlign = "center";
-    toast.style.pointerEvents = "none";
-    toast.style.opacity = "0";
-    toast.style.transition = "opacity 300ms ease, transform 300ms ease";
-    toast.style.letterSpacing = "0.02em";
-    toast.style.backdropFilter = "blur(10px)";
-    toast.style.border = "1px solid rgba(212, 175, 55, 0.35)";
-    toast.style.background = "rgba(10, 10, 10, 0.92)";
-    toast.style.color = "#f4d9a3";
-    toast.style.fontFamily = "Inter, sans-serif";
-    toast.style.boxShadow = "0 16px 40px rgba(0,0,0,0.35)";
-
-    body.appendChild(toast);
-
-    requestAnimationFrame(() => {
-      toast.style.opacity = "1";
-      toast.style.transform = "translateX(-50%) translateY(0)";
+    hero.addEventListener("mouseleave", () => {
+      if (heroMedia) heroMedia.style.transform = "translate3d(0, 0, 0)";
+      if (heroTitle) heroTitle.style.transform = "translate3d(0, 0, 0)";
     });
-
-    setTimeout(() => {
-      toast.style.opacity = "0";
-      toast.style.transform = "translateX(-50%) translateY(12px)";
-      setTimeout(() => toast.remove(), 350);
-    }, 3200);
   }
 
-  function burstConfetti(fromEl) {
-    if (!fromEl) return;
+  // -----------------------------
+  // Subtle floating particles
+  // -----------------------------
+  const particleHost = document.querySelector(".bg-layer--glow");
+  if (particleHost) {
+    const particleCount = 18;
 
-    const rect = fromEl.getBoundingClientRect();
-    const colors = ["#d4af37", "#f5e6a9", "#b8860b", "#ffffff"];
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement("span");
+      particle.className = "floating-particle";
 
-    for (let i = 0; i < 18; i++) {
-      const piece = document.createElement("span");
-      piece.className = "confetti-piece";
+      const size = 2 + Math.random() * 5;
+      const left = Math.random() * 100;
+      const delay = Math.random() * 10;
+      const duration = 10 + Math.random() * 16;
+      const top = 10 + Math.random() * 80;
 
-      const size = 6 + Math.random() * 8;
-      const x = rect.left + rect.width / 2 + (Math.random() - 0.5) * 120;
-      const y = rect.top + rect.height / 2 + (Math.random() - 0.5) * 30;
-      const tx = (Math.random() - 0.5) * 220;
-      const ty = -80 - Math.random() * 180;
-      const rot = Math.random() * 360;
+      particle.style.cssText = `
+        position: absolute;
+        left: ${left}%;
+        top: ${top}%;
+        width: ${size}px;
+        height: ${size}px;
+        border-radius: 999px;
+        opacity: ${0.2 + Math.random() * 0.6};
+        pointer-events: none;
+        animation: floatParticle ${duration}s ease-in-out ${delay}s infinite alternate;
+      `;
 
-      piece.style.position = "fixed";
-      piece.style.left = `${x}px`;
-      piece.style.top = `${y}px`;
-      piece.style.width = `${size}px`;
-      piece.style.height = `${size}px`;
-      piece.style.borderRadius = "50%";
-      piece.style.pointerEvents = "none";
-      piece.style.zIndex = "9998";
-      piece.style.background = colors[i % colors.length];
-      piece.style.boxShadow = "0 0 12px rgba(212,175,55,0.5)";
-      piece.style.opacity = "1";
-      piece.style.transition = "transform 900ms cubic-bezier(.2,.8,.2,1), opacity 900ms ease";
+      particleHost.appendChild(particle);
+    }
 
-      body.appendChild(piece);
-
-      requestAnimationFrame(() => {
-        piece.style.transform = `translate(${tx}px, ${ty}px) rotate(${rot}deg) scale(0.7)`;
-        piece.style.opacity = "0";
-      });
-
-      setTimeout(() => piece.remove(), 1000);
+    if (!document.getElementById("particle-keyframes")) {
+      const style = document.createElement("style");
+      style.id = "particle-keyframes";
+      style.textContent = `
+        @keyframes floatParticle {
+          0%   { transform: translate3d(0, 0, 0) scale(1); }
+          100% { transform: translate3d(${20 + Math.random() * 40}px, ${-20 + Math.random() * 40}px, 0) scale(1.15); }
+        }
+      `;
+      document.head.appendChild(style);
     }
   }
 
-  if (rsvpForm) {
-    rsvpForm.addEventListener("submit", (e) => {
+  // -----------------------------
+  // Hero image swap pulse
+  // (light enhancement if two images exist)
+  // -----------------------------
+  const largeHeroImg = document.querySelector(".hero__img--large");
+  const smallHeroImg = document.querySelector(".hero__img--small");
+
+  if (largeHeroImg && smallHeroImg) {
+    const images = [largeHeroImg, smallHeroImg];
+    let activeIndex = 0;
+
+    setInterval(() => {
+      activeIndex = (activeIndex + 1) % images.length;
+
+      images.forEach((img, index) => {
+        img.classList.toggle("is-active", index === activeIndex);
+      });
+    }, 6500);
+  }
+
+  // -----------------------------
+  // RSVP form handling
+  // -----------------------------
+  const form = document.querySelector(".rsvp__form");
+
+  function showToast(message) {
+    const toast = document.createElement("div");
+    toast.className = "toast-message";
+    toast.setAttribute("role", "status");
+    toast.setAttribute("aria-live", "polite");
+    toast.innerHTML = `
+      <span class="toast-message__icon">✓</span>
+      <span class="toast-message__text">${message}</span>
+    `;
+
+    document.body.appendChild(toast);
+
+    requestAnimationFrame(() => toast.classList.add("show"));
+
+    setTimeout(() => {
+      toast.classList.remove("show");
+      toast.classList.add("hide");
+
+      setTimeout(() => toast.remove(), 350);
+    }, 2800);
+  }
+
+  if (form) {
+    const attendance = document.querySelector("#attendance");
+
+    if (attendance) {
+      attendance.addEventListener("change", () => {
+        const card = attendance.closest(".check-card");
+        if (card) card.classList.toggle("is-checked", attendance.checked);
+      });
+    }
+
+    form.addEventListener("submit", (e) => {
       e.preventDefault();
 
-      const fullName = nameInput ? nameInput.value.trim() : "";
-      const attending = attendanceInput ? attendanceInput.checked : false;
+      const nameInput = document.querySelector("#guestName");
+      const name = nameInput ? nameInput.value.trim() : "";
+      const attending = attendance ? attendance.checked : false;
 
-      if (!fullName) {
-        showToast("Please enter your name.", "error");
+      if (!name) {
+        showToast("Please enter your name.");
         nameInput?.focus();
         return;
       }
 
       if (!attending) {
-        showToast("Please confirm attendance to continue.", "error");
-        attendanceInput?.focus();
+        showToast("Please confirm attendance.");
+        attendance?.focus();
         return;
       }
 
-      // Replace this with your backend later.
-      burstConfetti(rsvpForm.querySelector(".submit-btn"));
-      showToast(`RSVP received. Thank you, ${fullName}.`, "success");
+      // Replace this with your backend / form service later
+      const btn = form.querySelector('button[type="submit"]');
+      const originalText = btn ? btn.innerHTML : "";
 
-      rsvpForm.reset();
-      syncAttendanceState();
-
-      const submitBtn = rsvpForm.querySelector(".submit-btn");
-      if (submitBtn) {
-        const originalHTML = submitBtn.innerHTML;
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> RSVP Sent';
-
-        setTimeout(() => {
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = originalHTML;
-        }, 2200);
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `Confirmed <i class="fa-solid fa-check"></i>`;
       }
+
+      showToast(`Thank you, ${name}. Your response is saved.`);
+
+      form.reset();
+
+      const checkCard = document.querySelector(".check-card");
+      if (checkCard) checkCard.classList.remove("is-checked");
+
+      setTimeout(() => {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+        }
+      }, 1800);
     });
   }
 
-  // ----------------------------
-  // Parallax motion for the background ornaments
-  // ----------------------------
-  function handlePointerMove(e) {
-    const x = e.clientX / window.innerWidth;
-    const y = e.clientY / window.innerHeight;
+  // -----------------------------
+  // Dynamic backdrop shimmer
+  // -----------------------------
+  const glowLayer = document.querySelector(".bg-layer--glow");
+  if (glowLayer) {
+    let glowX = 50;
+    let glowY = 35;
+    let targetGlowX = glowX;
+    let targetGlowY = glowY;
 
-    root.style.setProperty("--mouse-x", x.toFixed(3));
-    root.style.setProperty("--mouse-y", y.toFixed(3));
+    window.addEventListener("mousemove", (e) => {
+      targetGlowX = (e.clientX / window.innerWidth) * 100;
+      targetGlowY = (e.clientY / window.innerHeight) * 100;
+    });
 
-    if (!prefersReducedMotion) {
-      ornaments.forEach((el, index) => {
-        const depth = (index + 1) * 6;
-        const offsetX = (x - 0.5) * depth;
-        const offsetY = (y - 0.5) * depth;
-        el.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0)`;
-      });
-    }
+    const glowTick = () => {
+      glowX += (targetGlowX - glowX) * 0.03;
+      glowY += (targetGlowY - glowY) * 0.03;
+
+      glowLayer.style.background = `
+        radial-gradient(circle at ${glowX}% ${glowY}%,
+          rgba(242, 211, 123, 0.14),
+          rgba(214, 177, 90, 0.07) 20%,
+          rgba(0, 0, 0, 0) 45%)
+      `;
+
+      requestAnimationFrame(glowTick);
+    };
+
+    glowTick();
   }
 
-  if (!prefersReducedMotion) {
-    window.addEventListener("pointermove", handlePointerMove, { passive: true });
-  }
-
-  // ----------------------------
-  // Scroll progress variables
-  // ----------------------------
-  function handleScroll() {
-    const scrolled = window.scrollY || document.documentElement.scrollTop || 0;
-    root.style.setProperty("--scroll-y", String(scrolled));
-  }
-
-  window.addEventListener("scroll", handleScroll, { passive: true });
-  handleScroll();
-
-  // ----------------------------
-  // Tiny dynamic stars / sparkles
-  // ----------------------------
-  if (!prefersReducedMotion) {
-    const sparkleCount = 22;
-
-    for (let i = 0; i < sparkleCount; i++) {
-      const sparkle = document.createElement("span");
-      sparkle.className = "sparkle-dot";
-      sparkle.setAttribute("aria-hidden", "true");
-
-      const size = 2 + Math.random() * 3;
-      const left = Math.random() * 100;
-      const top = Math.random() * 100;
-      const duration = 7 + Math.random() * 10;
-      const delay = Math.random() * 6;
-
-      sparkle.style.position = "fixed";
-      sparkle.style.left = `${left}vw`;
-      sparkle.style.top = `${top}vh`;
-      sparkle.style.width = `${size}px`;
-      sparkle.style.height = `${size}px`;
-      sparkle.style.borderRadius = "50%";
-      sparkle.style.pointerEvents = "none";
-      sparkle.style.zIndex = "0";
-      sparkle.style.background = "rgba(245, 230, 169, 0.7)";
-      sparkle.style.boxShadow = "0 0 12px rgba(212,175,55,0.55)";
-      sparkle.style.opacity = "0.2";
-      sparkle.style.animation = `sparklePulse ${duration}s ease-in-out ${delay}s infinite`;
-
-      body.appendChild(sparkle);
-    }
-  }
-
-  // ----------------------------
-  // Extra nice touch: focus styles on navigation / buttons
-  // ----------------------------
-  document.querySelectorAll("a, button, input").forEach((el) => {
-    el.addEventListener("focus", () => el.classList.add("is-focused"));
-    el.addEventListener("blur", () => el.classList.remove("is-focused"));
+  // -----------------------------
+  // Tiny helper to make SVG ornaments feel alive
+  // -----------------------------
+  const ornaments = document.querySelectorAll(".ornament, .venue__svg, .hero__rays");
+  ornaments.forEach((el, index) => {
+    el.style.willChange = "transform";
+    el.animate(
+      [
+        { transform: "translate3d(0, 0, 0) rotate(0deg)" },
+        { transform: `translate3d(${index % 2 === 0 ? 6 : -6}px, ${index % 2 === 0 ? -8 : 8}px, 0) rotate(${index % 2 === 0 ? 1 : -1}deg)` },
+        { transform: "translate3d(0, 0, 0) rotate(0deg)" },
+      ],
+      {
+        duration: 7000 + index * 500,
+        iterations: Infinity,
+        easing: "ease-in-out",
+      }
+    );
   });
+
+  // -----------------------------
+  // Support reduced motion
+  // -----------------------------
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (prefersReducedMotion) {
+    document.documentElement.style.scrollBehavior = "auto";
+    revealItems.forEach((item) => item.classList.add("is-visible"));
+  }
+
+  // Small polish
+  body.classList.add("js-ready");
 });
