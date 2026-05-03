@@ -69,49 +69,62 @@
         </p>
 
         <div class="hero__media reveal">
-          <div class="hero__frame hero__frame--large">
-            <!-- Replace with Joe photo #1 -->
-            <img
-              src="image1.jpg"
-              alt="Joe portrait 1"
-              class="hero__img hero__img--large"
-            />
-          </div>
+  <svg class="hero__glyph hero__glyph--one" viewBox="0 0 200 200" aria-hidden="true">
+    <path d="M100 20 C140 20 180 60 180 100 C180 140 140 180 100 180 C60 180 20 140 20 100 C20 60 60 20 100 20 Z" fill="none" stroke="rgba(242,211,123,.28)" stroke-width="2" stroke-dasharray="6 10">
+      <animateTransform attributeName="transform" type="rotate" values="0 100 100;360 100 100" dur="20s" repeatCount="indefinite" />
+    </path>
+  </svg>
 
-          <div class="hero__frame hero__frame--small">
-            <!-- Replace with Joe photo #2 -->
-            <img
-              src="image2.jpg"
-              alt="Joe portrait 2"
-              class="hero__img hero__img--small"
-              style="transform: translateY(34px);"
-            />
-          </div>
+  <svg class="hero__glyph hero__glyph--two" viewBox="0 0 220 220" aria-hidden="true">
+    <path d="M110 24 L124 86 L186 110 L124 134 L110 196 L96 134 L34 110 L96 86 Z" fill="none" stroke="rgba(214,177,90,.35)" stroke-width="2">
+      <animateTransform attributeName="transform" type="rotate" values="0 110 110;-360 110 110" dur="18s" repeatCount="indefinite" />
+    </path>
+  </svg>
 
-          <svg class="hero__rays" viewBox="0 0 600 600" aria-hidden="true">
-            <circle cx="300" cy="300" r="210" fill="none" stroke="rgba(242,211,123,.15)" stroke-width="1.5" stroke-dasharray="14 12">
-              <animate attributeName="stroke-dashoffset" values="0;260" dur="22s" repeatCount="indefinite" />
-            </circle>
-            <circle cx="300" cy="300" r="165" fill="none" stroke="rgba(214,177,90,.2)" stroke-width="1">
-              <animateTransform attributeName="transform" type="rotate" values="0 300 300;360 300 300" dur="26s" repeatCount="indefinite" />
-            </circle>
-          </svg>
-        </div>
+  <div class="hero__frame hero__frame--large">
+    <img
+      src="assets/joe-1.jpg"
+      alt="Joe portrait 1"
+      class="hero__img hero__img--large"
+    />
+  </div>
+
+  <div class="hero__frame hero__frame--small">
+    <img
+      src="assets/joe-2.jpg"
+      alt="Joe portrait 2"
+      class="hero__img hero__img--small"
+    />
+  </div>
+
+  <div class="hero__shine" aria-hidden="true"></div>
+
+  <svg class="hero__rays" viewBox="0 0 600 600" aria-hidden="true">
+    <circle cx="300" cy="300" r="210" fill="none" stroke="rgba(242,211,123,.15)" stroke-width="1.5" stroke-dasharray="14 12">
+      <animate attributeName="stroke-dashoffset" values="0;260" dur="22s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="300" cy="300" r="165" fill="none" stroke="rgba(214,177,90,.2)" stroke-width="1">
+      <animateTransform attributeName="transform" type="rotate" values="0 300 300;360 300 300" dur="26s" repeatCount="indefinite" />
+    </circle>
+  </svg>
+</div>
 
         <div class="hero__copy reveal">
-          <p class="hero__line hero__line--soft">Shhh...</p>
-          <h1 class="hero__title">Tonight is for Joe.</h1>
-          <p class="hero__line hero__line--accent">Something special is waiting.</p>
+  <p class="hero__line hero__line--soft">A private celebration</p>
+  <h1 class="hero__title">Joe is being celebrated.</h1>
+  <p class="hero__line hero__line--accent">Something beautiful is being prepared.</p>
 
-          <div class="hero__actions">
-            <a href="#details" class="btn btn--primary">
-              Open Invitation <i class="fa-solid fa-arrow-right"></i>
-            </a>
-            <a href="#rsvp" class="btn btn--ghost">
-              RSVP <i class="fa-regular fa-circle-check"></i>
-            </a>
-          </div>
-        </div>
+  <div class="hero__actions">
+    <a href="#details" class="btn btn--primary btn--reveal">
+      <span class="btn__text">Unveil the celebration</span>
+      <span class="btn__orb" aria-hidden="true"></span>
+      <i class="fa-solid fa-wand-sparkles"></i>
+    </a>
+    <a href="#rsvp" class="btn btn--ghost">
+      RSVP <i class="fa-regular fa-circle-check"></i>
+    </a>
+  </div>
+</div>
       </div>
 
       <a href="#details" class="scroll-prompt" aria-label="Scroll to details">
@@ -180,30 +193,50 @@
     </section>
 
     <!-- Visual strip with placeholder images -->
-    <section class="gallery section" id="gallery">
-      <div class="gallery__grid">
-        <figure class="gallery__item reveal">
-          <img
-            src="image3.JPG"
-            alt="Elegant restaurant atmosphere"
-          />
-        </figure>
+ <section class="gallery section" id="gallery">
+  <div class="section__heading reveal">
+    <p class="section__eyebrow">
+      <i class="fa-solid fa-star"></i> The mood
+    </p>
+    <h2 class="section__title">A glimpse of the evening</h2>
+  </div>
 
-        <figure class="gallery__item reveal">
-          <img
-            src="image4.JPG"
-            alt="Fine dining table setting"
-          />
-        </figure>
+  <div class="gallery__grid gallery__grid--styled">
+    <figure class="gallery__item gallery__item--tall reveal">
+      <img
+        src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80"
+        alt="Elegant restaurant atmosphere"
+      />
+      <span class="gallery__frame"></span>
+      <svg class="gallery__spark gallery__spark--one" viewBox="0 0 100 100" aria-hidden="true">
+        <path d="M50 10 L58 38 L90 50 L58 62 L50 90 L42 62 L10 50 L42 38 Z" fill="none" stroke="rgba(242,211,123,.35)" stroke-width="1.8">
+          <animateTransform attributeName="transform" type="rotate" values="0 50 50;360 50 50" dur="16s" repeatCount="indefinite" />
+        </path>
+      </svg>
+    </figure>
 
-        <figure class="gallery__item reveal">
-          <img
-            src="image5.JPG"
-            alt="Dinner plate placeholder"
-          />
-        </figure>
-      </div>
-    </section>
+    <figure class="gallery__item reveal">
+      <img
+        src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=900&q=80"
+        alt="Fine dining table setting"
+      />
+      <span class="gallery__frame"></span>
+    </figure>
+
+    <figure class="gallery__item reveal">
+      <img
+        src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80"
+        alt="Dinner plate placeholder"
+      />
+      <span class="gallery__frame"></span>
+      <svg class="gallery__spark gallery__spark--two" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="25" fill="none" stroke="rgba(214,177,90,.32)" stroke-width="1.5" stroke-dasharray="5 8">
+          <animateTransform attributeName="transform" type="rotate" values="0 50 50;360 50 50" dur="18s" repeatCount="indefinite" />
+        </circle>
+      </svg>
+    </figure>
+  </div>
+</section>
 
     <!-- RSVP -->
     <section class="rsvp section" id="rsvp">
