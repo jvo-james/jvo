@@ -93,6 +93,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  const revealBtn = document.querySelector(".btn--reveal");
+
+if (revealBtn) {
+  revealBtn.addEventListener("click", () => {
+    revealBtn.classList.add("is-active");
+    setTimeout(() => revealBtn.classList.remove("is-active"), 1200);
+  });
+}
   // -----------------------------
   // Subtle floating particles
   // -----------------------------
