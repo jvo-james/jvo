@@ -3,652 +3,110 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="JVO builds websites, apps, backend systems, automations, and AI-powered solutions for businesses, creators, and brands." />
-  <meta name="theme-color" content="#050816" />
+  <meta name="description" content="Selected works by JVO." />
   <title>Powered by JVO</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkR4j8lJym7N3m9aQEVg7FZC2S4h/KP1Y0w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+
   <header class="site-header">
-    <div class="header-inner">
-      <a href="#home" class="brand" aria-label="JVO home">
-        <div class="brand-mark"><span>J</span></div>
-        <div class="brand-copy">
-          <strong>JVO</strong>
-          <small>Design, development & intelligent systems</small>
-        </div>
-      </a>
-
-      <div class="nav-shell">
-        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
-          <span></span>
-        </button>
-
-        <nav class="nav-menu" aria-label="Primary navigation">
-          <a href="#home">Home</a>
-          <a href="#services">Services</a>
-          <a href="#work">Work</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
-        </nav>
-
-        <div class="header-cta">
-          <a href="#contact" class="btn btn-primary">
-            <i class="fa-solid fa-paper-plane"></i>
-            <span>Start a Project</span>
-          </a>
-        </div>
-      </div>
+    <div class="container">
+      <a href="index.html" class="logo">JVO</a>
+      <nav class="nav">
+        <a href="#works">Works</a>
+        <a href="#contact">Contact</a>
+      </nav>
     </div>
   </header>
 
   <main>
-   <section class="hero" id="home">
-  <div class="grid-overlay"></div>
-  <span class="blur-line one"></span>
-  <span class="blur-line two"></span>
-
-  <div class="container hero-inner">
-    <div class="hero-copy" data-reveal>
-      <span class="eyebrow">Powered by JVO</span>
-      <h1 class="hero-title">
-        Design, development, and <span class="text-gradient">intelligent systems</span> by JVO.
-      </h1>
-      <p class="lead hero-description">
-        JVO builds websites, apps, backend systems, automations, and AI-powered solutions for businesses, creators, brands, and organizations that want to build something modern, scalable, and effective.
-      </p>
-
-      <div class="hero-actions">
-        <a href="#work" class="btn btn-primary">
-          <i class="fa-solid fa-arrow-up-right-from-square"></i>
-          <span>View Work</span>
-        </a>
-        <a href="#contact" class="btn btn-secondary">
-          <i class="fa-solid fa-envelope"></i>
-          <span>Get in Touch</span>
-        </a>
-      </div>
-
-      <div class="hero-meta">
-        <div class="meta-chip">
-          <i class="fa-solid fa-code"></i>
-          <span>Full-stack execution</span>
-        </div>
-        <div class="meta-chip">
-          <i class="fa-solid fa-server"></i>
-          <span>Backend & infrastructure</span>
-        </div>
-        <div class="meta-chip">
-          <i class="fa-solid fa-robot"></i>
-          <span>AI & automation</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="hero-visual hero-visual--abstract" data-reveal>
-      <div class="ambient-one"></div>
-      <div class="ambient-two"></div>
-      <div class="hero-orbit orbit-ring orbit-ring--one"></div>
-      <div class="hero-orbit orbit-ring orbit-ring--two"></div>
-
-      <div class="hero-abstract-stage">
-        <div class="abstract-grid"></div>
-        <div class="abstract-glow abstract-glow--one"></div>
-        <div class="abstract-glow abstract-glow--two"></div>
-
-        <div class="abstract-core">
-          <div class="core-badge">
-            <i class="fa-solid fa-sparkles"></i>
-            <span>JVO Studio</span>
-          </div>
-
-          <div class="core-title-block">
-            <span class="core-kicker">Creative + Technical</span>
-            <h3>Web, Systems, AI</h3>
-            <p>Clean design, serious build quality, and motion that makes the brand feel alive.</p>
-          </div>
-
-          <div class="core-metrics">
-            <div class="core-metric">
-              <strong>Web</strong>
-              <span>Sites & landing pages</span>
-            </div>
-            <div class="core-metric">
-              <strong>Apps</strong>
-              <span>Dashboards & platforms</span>
-            </div>
-            <div class="core-metric">
-              <strong>AI</strong>
-              <span>Automation & features</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="floating-object float-object--a">
-          <div class="object-icon"><i class="fa-solid fa-code"></i></div>
-          <div>
-            <strong>Frontend</strong>
-            <span>Polished interfaces</span>
-          </div>
-        </div>
-
-        <div class="floating-object float-object--b">
-          <div class="object-icon"><i class="fa-solid fa-database"></i></div>
-          <div>
-            <strong>Backend</strong>
-            <span>Logic, APIs, systems</span>
-          </div>
-        </div>
-
-        <div class="floating-object float-object--c">
-          <div class="object-icon"><i class="fa-solid fa-brain"></i></div>
-          <div>
-            <strong>AI Tools</strong>
-            <span>Smart workflows</span>
-          </div>
-        </div>
-
-        <div class="floating-object float-object--d">
-          <div class="object-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-          <div>
-            <strong>Creative Direction</strong>
-            <span>Premium digital feel</span>
-          </div>
-        </div>
-
-        <div class="mini-node mini-node--one"></div>
-        <div class="mini-node mini-node--two"></div>
-        <div class="mini-node mini-node--three"></div>
-        <div class="mini-node mini-node--four"></div>
-
-        <div class="path-line path-line--one"></div>
-        <div class="path-line path-line--two"></div>
-        <div class="path-line path-line--three"></div>
-
-        <div class="code-pill code-pill--one">&lt;/&gt;</div>
-        <div class="code-pill code-pill--two">API</div>
-        <div class="code-pill code-pill--three">AI</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-    <section class="section-surface">
+    <section class="works-section" id="works">
       <div class="container">
-        <div class="stats-bar">
-          <div class="stat-card" data-reveal>
-            <strong>Websites</strong>
-            <span>Business sites, landing pages, portfolio sites, redesigns</span>
-          </div>
-          <div class="stat-card" data-reveal>
-            <strong>Apps</strong>
-            <span>Full-stack web apps, dashboards, portals, custom platforms</span>
-          </div>
-          <div class="stat-card" data-reveal>
-            <strong>Systems</strong>
-            <span>Backend architecture, APIs, integrations, automation flows</span>
-          </div>
-          <div class="stat-card" data-reveal>
-            <strong>AI</strong>
-            <span>AI-powered features, assistants, workflows, smart tools</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="services">
-      <div class="container">
-        <div class="section-heading" data-reveal>
-          <span class="eyebrow">What JVO does</span>
-          <h2>Broad capability, organized with clarity.</h2>
-          <p class="lead">
-            JVO offers end-to-end digital solutions, from design and development to backend systems, automation, and AI integration.
-          </p>
-        </div>
-
-        <div class="services-grid">
-          <article class="service-group" data-reveal>
-            <div class="card-icon"><i class="fa-solid fa-globe"></i></div>
-            <h3>Web</h3>
-            <p>Modern websites designed to look professional, perform smoothly, and represent your brand with confidence.</p>
-            <ul class="service-list">
-              <li>Business websites</li>
-              <li>Landing pages</li>
-              <li>Portfolio sites</li>
-              <li>Website redesigns</li>
-            </ul>
-          </article>
-
-          <article class="service-group" data-reveal>
-            <div class="card-icon"><i class="fa-solid fa-layer-group"></i></div>
-            <h3>Development</h3>
-            <p>Strong technical builds across frontend, backend, and full-stack products tailored to different goals and workflows.</p>
-            <ul class="service-list">
-              <li>Frontend development</li>
-              <li>Backend development</li>
-              <li>Full-stack applications</li>
-              <li>APIs and integrations</li>
-            </ul>
-          </article>
-
-          <article class="service-group" data-reveal>
-            <div class="card-icon"><i class="fa-solid fa-microchip"></i></div>
-            <h3>Systems & AI</h3>
-            <p>Smart digital solutions that improve operations, enable automation, and bring intelligent functionality into products.</p>
-            <ul class="service-list">
-              <li>Automation tools</li>
-              <li>Admin dashboards</li>
-              <li>AI-powered features</li>
-              <li>Custom digital solutions</li>
-            </ul>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="work" class="section-surface">
-      <div class="container">
-        <div class="section-heading" data-reveal>
-          <span class="eyebrow">Selected work</span>
-          <h2>Projects that make the brand feel real.</h2>
-          <p class="lead">
-            Showcase a few strong projects here. Even with 2 to 4 projects, this section adds trust fast and helps visitors understand your range.
-          </p>
+        <div class="section-heading">
+          <h1>Selected Works</h1>
+          <p>A few projects I’ve designed and built.</p>
         </div>
 
         <div class="projects-grid">
-          <article class="project-card" data-reveal>
-            <div class="project-cover">
-  <img src="image.png" alt="Oaklawn Southern Dining preview">
-</div>
-            <h3>Oaklawn Southern Dining</h3>
-            <p>A refined restaurant website concept crafted to feel elegant, immersive, and brand-led, with a premium presentation style that supports upscale dining and visual storytelling.</p>
-            <div class="project-tags">
-              <span>Restaurant</span>
-              <span>Luxury</span>
-              <span>Responsive</span>
-              <span>Brand Experience</span>
-            </div>
-            <div class="project-meta">
-              <p><strong>What JVO did:</strong> Premium layout design, frontend build, polished content flow, and visual brand presentation.</p>
-              <p><strong>Stack used:</strong> HTML, CSS, JavaScript.</p>
-            </div>
-            <div class="project-links">
-              <a href="https://jvo-james.github.io/osd/" target="_blank" rel="noreferrer" class="text-link"><span>Live Demo</span><i class="fa-solid fa-arrow-right"></i></a>
-            </div>
+          <article class="project-card">
+            <img src="image.png" alt="Oaklawn Southern Dining">
+            <h2>Oaklawn Southern Dining</h2>
+            <p>Restaurant website concept.</p>
+            <a href="#" target="_blank" rel="noreferrer">View Project</a>
           </article>
 
-          <article class="project-card" data-reveal>
-            <div class="project-cover">
-  <img src="vitra-ai.jpg" alt="Vitra AI">
-</div>
-            <h3>VITRA AI</h3>
-            <p>A health-tech product concept with a broader system feel — service pages, dashboard sections, booking flows, and a product-style layout built around modern digital healthcare.</p>
-            <div class="project-tags">
-              <span>AI Product</span>
-              <span>Health-tech</span>
-              <span>Dashboard</span>
-              <span>UI Systems</span>
-            </div>
-            <div class="project-meta">
-              <p><strong>What JVO did:</strong> Product-style structure, interactive UI direction, and modern branding for an AI health platform.</p>
-              <p><strong>Stack used:</strong> HTML, CSS, JavaScript, UI Systems.</p>
-            </div>
-            <div class="project-links">
-              <a href="https://vitra-ai.netlify.app/" target="_blank" rel="noreferrer" class="text-link"><span>Live Demo</span><i class="fa-solid fa-arrow-right"></i></a>
-            </div>
+          <article class="project-card">
+            <img src="cisca.png" alt="Cisca Makeovers">
+            <h2>Cisca Makeovers</h2>
+            <p>Beauty brand website.</p>
+            <a href="#" target="_blank" rel="noreferrer">View Project</a>
           </article>
 
-          <article class="project-card" data-reveal>
-            <div class="project-cover">
-  <img src="maison.png" alt="Maison Elitaire">
-</div>
-            <h3>MAISON ÉLITAIRE</h3>
-            <p>A premium fashion e-commerce concept designed for a modern clothing house selling women’s, men’s, and children’s collections, built around editorial presentation, luxury product storytelling, and a refined mobile-first shopping flow.</p>
-            <div class="project-tags">
-              <span>Fashion</span>
-              <span>E-commerce</span>
-              <span>Luxury</span>
-              <span>Mobile-first</span>
-            </div>
-            <div class="project-meta">
-              <p><strong>What JVO did:</strong> Editorial product presentation, premium storefront structure, and luxury-focused interface design.</p>
-              <p><strong>Stack used:</strong> HTML, CSS, JavaScript.</p>
-            </div>
-            <div class="project-links">
-              <a href="https://jvo-james.github.io/maison/" target="_blank" rel="noreferrer" class="text-link"><span>Live Demo</span><i class="fa-solid fa-arrow-right"></i></a>
-            </div>
+          <article class="project-card">
+            <img src="vitra-ai.jpg" alt="Vitra AI">
+            <h2>Vitra AI</h2>
+            <p>AI product concept.</p>
+            <a href="https://vitra-ai.netlify.app/" target="_blank" rel="noreferrer">View Project</a>
           </article>
 
-          <article class="project-card" data-reveal>
-            <div class="project-cover">
-  <img src="bella.png" alt="Oaklawn Southern Dining preview">
-</div>
-            <h3>Meals by Bella</h3>
-            <p>A pastry-focused food brand concept built for showcasing cakes, pastries, and sweet treats with a clean visual presentation, warm branding, and an inviting storefront feel.</p>
-            <div class="project-tags">
-              <span>Pastries</span>
-              <span>Food Brand</span>
-              <span>Storefront</span>
-              <span>Responsive</span>
-            </div>
-            <div class="project-meta">
-              <p><strong>What JVO did:</strong> Brand presentation, storefront layout, and responsive interface design for a pastries business.</p>
-              <p><strong>Stack used:</strong> HTML, CSS, JavaScript.</p>
-            </div>
-            <div class="project-links">
-              <a href="https://jvo-james.github.io/bella/" class="text-link"><span>Live Demo</span><i class="fa-solid fa-arrow-right"></i></a>
-            </div>
+          <article class="project-card">
+            <img src="maison.png" alt="MAISON ÉLITAIRE">
+            <h2>MAISON ÉLITAIRE</h2>
+            <p>Design template.</p>
+            <a href="https://jvo-james.github.io/maison/" target="_blank" rel="noreferrer">View Project</a>
+          </article>
+
+          <article class="project-card">
+            <img src="bella.png" alt="Meals By Bella">
+            <h2>Meals By Bella</h2>
+            <p>Food brand website.</p>
+            <a href="https://jvo-james.github.io/bella/" target="_blank" rel="noreferrer">View Project</a>
+          </article>
+
+          <article class="project-card">
+            <img src="april-blossoms.png" alt="April Blossoms">
+            <h2>April Blossoms</h2>
+            <p>Kids wear store.</p>
+            <a href="#" target="_blank" rel="noreferrer">View Project</a>
+          </article>
+
+          <article class="project-card">
+            <img src="wrap-district.png" alt="Wrap District">
+            <h2>Wrap District</h2>
+            <p>Mobile-only food site.</p>
+            <a href="#" target="_blank" rel="noreferrer">View Project</a>
+          </article>
+
+          <article class="project-card">
+            <img src="basillissa.png" alt="Basillissa">
+            <h2>Basillissa</h2>
+            <p>Fast food restaurant work in progress.</p>
+            <a href="#" target="_blank" rel="noreferrer">View Progress</a>
           </article>
         </div>
       </div>
     </section>
 
-    <section id="process">
+    <section class="contact-section" id="contact">
       <div class="container">
-        <div class="section-heading" data-reveal>
-          <span class="eyebrow">Approach</span>
-          <h2>Simple process. Professional execution.</h2>
-          <p class="lead">A clear flow helps JVO stay flexible without looking scattered: strategy, design, build, and launch.</p>
+        <div class="section-heading">
+          <h2>Let’s build something great together.</h2>
+          <p>Need a website, app, or custom digital solution? Reach out directly.</p>
         </div>
 
-        <div class="process-grid">
-          <article class="process-card" data-reveal>
-            <div class="step-number">01</div>
-            <h3>Strategy</h3>
-            <p>Understand what you want to build, who it is for, and what the product or site needs to achieve.</p>
-          </article>
-
-          <article class="process-card" data-reveal>
-            <div class="step-number">02</div>
-            <h3>Design</h3>
-            <p>Create a clear visual direction, strong structure, and a user experience that feels modern and trustworthy.</p>
-          </article>
-
-          <article class="process-card" data-reveal>
-            <div class="step-number">03</div>
-            <h3>Build</h3>
-            <p>Develop the frontend, backend, logic, integrations, or intelligent features needed for the project.</p>
-          </article>
-
-          <article class="process-card" data-reveal>
-            <div class="step-number">04</div>
-            <h3>Launch</h3>
-            <p>Refine, test, deploy, and prepare the final solution so it is ready for real-world use and growth.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="about" class="section-surface">
-      <div class="container about-grid">
-        <div class="about-panel">
-          <div class="section-heading" data-reveal>
-            <span class="eyebrow">About JVO</span>
-            <h2>A premium independent studio with broad capability.</h2>
-            <p class="lead">
-              JVO is positioned as a digital studio and technology brand focused on building websites, apps, systems, and AI-powered solutions with modern execution and attention to detail.
-            </p>
-          </div>
-
-          <article class="about-card" data-reveal>
-            <h3>What JVO is</h3>
-            <p>
-              Not just a personal portfolio. Not a generic company site. JVO is presented as a high-capability independent studio that can handle design, development, backend systems, automation, and intelligent product features.
-            </p>
-            <ul class="about-list">
-              <li>Clear positioning as a digital studio</li>
-              <li>Broad capability without looking unfocused</li>
-              <li>Modern, technical, premium presentation</li>
-            </ul>
-          </article>
-        </div>
-
-        <div class="capability-grid">
-          <article class="capability-card" data-reveal>
-            <div class="card-icon"><i class="fa-solid fa-bolt"></i></div>
-            <h3>Why trust JVO</h3>
-            <ul class="capability-list">
-              <li>Strong design sense and technical execution</li>
-              <li>Ability to build across multiple layers of a product</li>
-              <li>Clear communication and organized delivery</li>
-            </ul>
-          </article>
-
-          <article class="capability-card" data-reveal>
-            <div class="card-icon"><i class="fa-solid fa-cubes"></i></div>
-            <h3>What can be built</h3>
-            <ul class="capability-list">
-              <li>Websites and landing pages</li>
-              <li>Full-stack apps and dashboards</li>
-              <li>Backend systems and integrations</li>
-              <li>Automation and AI-powered tools</li>
-            </ul>
-          </article>
-
-          <article class="capability-card" data-reveal>
-            <div class="card-icon"><i class="fa-solid fa-shield-halved"></i></div>
-            <h3>How JVO works</h3>
-            <ul class="capability-list">
-              <li>Build with structure, not clutter</li>
-              <li>Prioritize usability, performance, and clarity</li>
-              <li>Tailor the solution to the goal, not a template</li>
-            </ul>
-          </article>
-
-          <article class="capability-card" data-reveal>
-            <div class="card-icon"><i class="fa-solid fa-diagram-project"></i></div>
-            <h3>Brand direction</h3>
-            <ul class="capability-list">
-              <li>Small studio, high capability, modern execution</li>
-              <li>Confident, technical, premium tone</li>
-              <li>Designed to turn curiosity into contact</li>
-            </ul>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <div class="container">
-        <div class="section-heading" data-reveal>
-          <span class="eyebrow">Proof & trust</span>
-          <h2>Add trust fast, even while growing.</h2>
-          <p class="lead">Selected projects, technologies used, strong presentation, and a few testimonials help visitors take JVO seriously.</p>
-        </div>
-
-        <div class="testimonials-grid">
-          <article class="testimonial-card" data-reveal>
-            <div class="rating">
-              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-            </div>
-            <p>“JVO took the project beyond just a good-looking site. The result felt polished, strategic, and built for actual business use.”</p>
-            <div class="author">
-              <div class="author-avatar">AM</div>
-              <div>
-                <strong>Alex M.</strong>
-                <span>Sales Manager</span>
-              </div>
-            </div>
-          </article>
-
-          <article class="testimonial-card" data-reveal>
-            <div class="rating">
-              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-            </div>
-            <p>“The combination of design, backend thinking, and clean execution made JVO feel more like a studio partner than a typical freelancer.”</p>
-            <div class="author">
-              <div class="author-avatar">RK</div>
-              <div>
-                <strong>Rita K.</strong>
-                <span>Business Owner</span>
-              </div>
-            </div>
-          </article>
-
-          <article class="testimonial-card" data-reveal>
-            <div class="rating">
-              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-            </div>
-            <p>“JVO’s work feels modern, capable, and intentional. It instantly increased our confidence in how the brand shows up online.”</p>
-            <div class="author">
-              <div class="author-avatar">DN</div>
-              <div>
-                <strong>Dennis N.</strong>
-                <span>Business Owner</span>
-              </div>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-  <section id="contact" class="section-surface">
-  <div class="container contact-grid">
-    <div class="contact-panel">
-      <div class="section-heading" data-reveal>
-        <span class="eyebrow">Contact</span>
-        <h2>Let’s build something great together.</h2>
-        <p class="lead">
-          Need a website, app, backend system, automation flow, or AI-powered solution? Reach out directly and let’s talk about your idea.
-        </p>
-      </div>
-
-      <article class="contact-card" data-reveal>
-        <h3>Direct contact</h3>
-        <p>
-          I’m available for websites, full-stack apps, backend systems, automation tools, AI features, and custom digital solutions.
-        </p>
-
-        <ul class="contact-list contact-list--icons">
-          <li>
-            <i class="fa-solid fa-envelope"></i>
-            <a href="mailto:senujames23@gmail.com">senujames23@gmail.com</a>
-          </li>
-          <li>
-            <i class="fa-solid fa-phone"></i>
-            <a href="tel:+233594121246">+233 (0)594-121-246</a>
-          </li>
-          <li>
-            <i class="fa-brands fa-whatsapp"></i>
-            <a href="https://wa.me/233594121246" target="_blank" rel="noreferrer">Chat on WhatsApp</a>
-          </li>
-         
-          <li>
-            <i class="fa-brands fa-snapchat"></i>
-            <a href="https://www.snapchat.com/add/jvo_james" target="_blank" rel="noreferrer">@jvo_james</a>
-          </li>
-        </ul>
-
-        <div class="contact-quick-actions">
-          <a href="mailto:senujames23@gmail.com" class="btn btn-primary">
-            <i class="fa-solid fa-paper-plane"></i>
-            <span>Email JVO</span>
-          </a>
-          <a href="https://wa.me/233594121246" target="_blank" rel="noreferrer" class="btn btn-secondary">
-            <i class="fa-brands fa-whatsapp"></i>
-            <span>WhatsApp</span>
-          </a>
-        </div>
-      </article>
-    </div>
-
-    <form class="contact-form" id="contactForm" action="https://formspree.io/f/xrbyrqry" method="POST" data-reveal>
-      <div class="form-grid">
-        <div class="form-field">
-          <label for="name">Name</label>
-          <input id="name" name="name" type="text" placeholder="Your name" required />
-        </div>
-
-        <div class="form-field">
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" placeholder="you@example.com" required />
-        </div>
-
-        <div class="form-field full">
-          <label for="project-type">Project type</label>
-          <select id="project-type" name="project-type" required>
-            <option value="">Select a project type</option>
-            <option>Website</option>
-            <option>Landing page</option>
-            <option>Full-stack app</option>
-            <option>Backend system</option>
-            <option>Automation</option>
-            <option>AI solution</option>
-            <option>Something custom</option>
-          </select>
-        </div>
-
-        <div class="form-field full">
-          <label for="message">Project details</label>
-          <textarea id="message" name="message" placeholder="Tell me what you want to build, and I’ll help bring it to life." required></textarea>
-        </div>
-      </div>
-
-      <input type="hidden" name="_subject" value="New Portfolio Inquiry from James Website">
-      <input type="hidden" name="_captcha" value="false">
-
-      <div class="form-actions">
-        <button type="submit" class="btn btn-primary">
-          <i class="fa-solid fa-paper-plane"></i>
-          <span>Send Inquiry</span>
-        </button>
-        <p class="form-feedback"></p>
-      </div>
-    </form>
-  </div>
-</section>
-
-    <section>
-      <div class="container">
-        <div class="cta-band" data-reveal>
-          <div>
-            <h2>Need a website, app, or custom solution? Let’s build it.</h2>
-            <p class="lead">Powered by JVO should lead people from curiosity to confidence to contact.</p>
-          </div>
-          <div class="inline-actions">
-            <a href="#work" class="btn btn-secondary">
-              <i class="fa-solid fa-grid-2"></i>
-              <span>See Projects</span>
-            </a>
-            <a href="#contact" class="btn btn-primary">
-              <i class="fa-solid fa-comments"></i>
-              <span>Let’s Talk</span>
-            </a>
-          </div>
+        <div class="contact-links">
+          <a href="mailto:senujames23@gmail.com">senujames23@gmail.com</a>
+          <a href="tel:+233594121246">+233 (0)594-121-246</a>
+          <a href="https://wa.me/233594121246" target="_blank" rel="noreferrer">WhatsApp</a>
+          <a href="https://www.snapchat.com/add/jvo_james" target="_blank" rel="noreferrer">@jvo_james</a>
         </div>
       </div>
     </section>
   </main>
-
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-shell">
-        <div class="footer-meta">
-          <strong>Powered by JVO</strong>
-          <span>© <span data-current-year></span> JVO. Design, development, and intelligent systems.</span>
-        </div>
-
-        <div class="footer-links">
-          <a href="#services">Services</a>
-          <a href="#work">Work</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-  <script src="script.js"></script>
 
 </body>
 </html>
