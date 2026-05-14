@@ -55,19 +55,21 @@ document.addEventListener("DOMContentLoaded", () => {
     revealEls.forEach((el) => el.classList.add("is-visible"));
   }
 });
-const contactForm = document.getElementById("contactForm");
-const formMessage = document.getElementById("formMessage");
 
-if (contactForm) {
-  contactForm.addEventListener("submit", async (e) => {
+const contactForm = document.querySelector("#contactForm");
+const formMessage = document.querySelector("#formMessage");
+
+if (contactForm && formMessage) {
+  contactForm.addEventListener("submit", async function (e) {
     e.preventDefault();
 
-    const formData = new FormData(contactForm);
+    formMessage.textContent = "Sending...";
+    formMessage.className = "form-message";
 
     try {
       const response = await fetch(contactForm.action, {
         method: "POST",
-        body: formData,
+        body: new FormData(contactForm),
         headers: {
           Accept: "application/json",
         },
@@ -76,7 +78,7 @@ if (contactForm) {
       if (response.ok) {
         formMessage.textContent =
           "Message sent successfully. I’ll get back to you soon.";
-        
+
         formMessage.classList.add("success");
 
         contactForm.reset();
@@ -94,4 +96,3 @@ if (contactForm) {
     }
   });
 }
-
