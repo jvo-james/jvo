@@ -91,21 +91,104 @@
       </div>
     </section>
 
-    <section class="contact-section" id="contact">
-      <div class="container">
-        <div class="section-heading">
-          <h2>Let’s build something great together.</h2>
-          <p>Need a website, app, or custom digital solution? Reach out directly.</p>
-        </div>
+  <section id="contact" class="contact-section">
+  <div class="container">
+    <div class="contact-shell">
+      <div class="contact-copy">
+        <span class="eyebrow">Contact</span>
+        <h2>Let’s build something great together.</h2>
+        <p>
+          Need a website, app, backend system, automation, or AI-powered solution?
+          Reach out through any of the options below or send a direct message.
+        </p>
 
-        <div class="contact-links">
-          <a href="mailto:senujames23@gmail.com">senujames23@gmail.com</a>
-          <a href="tel:+233594121246">+233 (0)594-121-246</a>
-          <a href="https://wa.me/233594121246" target="_blank" rel="noreferrer">WhatsApp</a>
-          <a href="https://www.snapchat.com/add/jvo_james" target="_blank" rel="noreferrer">@jvo_james</a>
+        <div class="contact-methods">
+          <a href="mailto:senujames23@gmail.com" class="contact-method">
+            <span class="method-icon"><i class="fa-solid fa-envelope"></i></span>
+            <span class="method-text">
+              <strong>Email</strong>
+              <small>senujames23@gmail.com</small>
+            </span>
+          </a>
+
+          <a href="tel:+233594121246" class="contact-method">
+            <span class="method-icon"><i class="fa-solid fa-phone"></i></span>
+            <span class="method-text">
+              <strong>Phone</strong>
+              <small>+233 (0)594-121-246</small>
+            </span>
+          </a>
+
+          <a href="https://wa.me/233594121246" target="_blank" rel="noreferrer" class="contact-method">
+            <span class="method-icon"><i class="fa-brands fa-whatsapp"></i></span>
+            <span class="method-text">
+              <strong>WhatsApp</strong>
+              <small>Chat instantly</small>
+            </span>
+          </a>
+
+          <a href="https://www.snapchat.com/add/jvo_james" target="_blank" rel="noreferrer" class="contact-method">
+            <span class="method-icon"><i class="fa-brands fa-snapchat"></i></span>
+            <span class="method-text">
+              <strong>Snapchat</strong>
+              <small>@jvo_james</small>
+            </span>
+          </a>
         </div>
       </div>
-    </section>
+
+      <form class="contact-form" action="https://formspree.io/f/xrbyrqry" method="POST">
+        <div class="form-top">
+          <span class="form-badge">
+            <i class="fa-solid fa-paper-plane"></i>
+            Send a message
+          </span>
+          <h3>Tell me about your project</h3>
+          <p>Share a few details and I’ll get back to you.</p>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="name">Name</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-user"></i>
+              <input id="name" name="name" type="text" placeholder="Your name" required />
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="email">Email address</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-at"></i>
+              <input id="email" name="email" type="email" placeholder="you@example.com" required />
+            </div>
+          </div>
+
+          <div class="form-field full">
+            <label for="message">Message</label>
+            <div class="input-wrap textarea">
+              <i class="fa-solid fa-pen-to-square"></i>
+              <textarea
+                id="message"
+                name="message"
+                placeholder="Tell me what you want to build..."
+                required
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <input type="hidden" name="_subject" value="New Inquiry from JVO Portfolio" />
+        <input type="hidden" name="_captcha" value="false" />
+
+        <button type="submit" class="send-btn">
+          <i class="fa-solid fa-paper-plane"></i>
+          <span>Send Message</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
   </main>
 
 </body>
