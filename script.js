@@ -55,3 +55,43 @@ document.addEventListener("DOMContentLoaded", () => {
     revealEls.forEach((el) => el.classList.add("is-visible"));
   }
 });
+const contactForm = document.getElementById("contactForm");
+const formMessage = document.getElementById("formMessage");
+
+if (contactForm) {
+  contactForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(contactForm);
+
+    try {
+      const response = await fetch(contactForm.action, {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (response.ok) {
+        formMessage.textContent =
+          "Message sent successfully. I’ll get back to you soon.";
+        
+        formMessage.classList.add("success");
+
+        contactForm.reset();
+      } else {
+        formMessage.textContent =
+          "Something went wrong. Please try again.";
+
+        formMessage.classList.add("error");
+      }
+    } catch (error) {
+      formMessage.textContent =
+        "Network error. Please try again.";
+
+      formMessage.classList.add("error");
+    }
+  });
+}
+
