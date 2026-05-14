@@ -54,45 +54,41 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     revealEls.forEach((el) => el.classList.add("is-visible"));
   }
-});
 
-const contactForm = document.querySelector("#contactForm");
-const formMessage = document.querySelector("#formMessage");
+  // Contact form submission
+  const contactForm = document.querySelector("#contactForm");
+  const formMessage = document.querySelector("#formMessage");
 
-if (contactForm && formMessage) {
-  contactForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
+  if (contactForm && formMessage) {
+    contactForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    formMessage.textContent = "Sending...";
-    formMessage.className = "form-message";
+      formMessage.textContent = "Sending...";
+      formMessage.className = "form-message";
 
-    try {
-      const response = await fetch(contactForm.action, {
-        method: "POST",
-        body: new FormData(contactForm),
-        headers: {
-          Accept: "application/json",
-        },
-      });
+      try {
+        const response = await fetch(contactForm.action, {
+          method: "POST",
+          body: new FormData(contactForm),
+          headers: {
+            Accept: "application/json",
+          },
+        });
 
-      if (response.ok) {
-        formMessage.textContent =
-          "Message sent successfully. I’ll get back to you soon.";
-
-        formMessage.classList.add("success");
-
-        contactForm.reset();
-      } else {
-        formMessage.textContent =
-          "Something went wrong. Please try again.";
-
+        if (response.ok) {
+          formMessage.textContent =
+            "Message sent successfully. I’ll get back to you soon.";
+          formMessage.classList.add("success");
+          contactForm.reset();
+        } else {
+          formMessage.textContent =
+            "Something went wrong. Please try again.";
+          formMessage.classList.add("error");
+        }
+      } catch (error) {
+        formMessage.textContent = "Network error. Please try again.";
         formMessage.classList.add("error");
       }
-    } catch (error) {
-      formMessage.textContent =
-        "Network error. Please try again.";
-
-      formMessage.classList.add("error");
-    }
-  });
-}
+    });
+  }
+});
