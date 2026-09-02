@@ -1,269 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Selected web design and full-stack development work by James Senu — JVO_JAMES." />
-  <title>JVO_JAMES — Web Developer & Designer</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="James Senu is a Ghana-based full-stack developer and web designer building responsive commerce, hospitality, service and product experiences.">
+  <meta name="theme-color" content="#eee9df">
+  <title>James Senu / JVO_JAMES</title>
   <link rel="icon" type="image/png" href="images/title.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Italiana&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Italiana&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="preload" as="image" href="images/hero.webp" fetchpriority="high">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <a class="skip-link" href="#content">Skip to the good stuff</a>
   <div class="noise" aria-hidden="true"></div>
   <div class="cursor-dot" aria-hidden="true"></div>
   <div class="cursor-ring" aria-hidden="true"></div>
 
-  <aside class="page-rail page-rail--left" aria-hidden="true"><span>FULL-STACK DEVELOPMENT · WEB DESIGN</span></aside>
-  <aside class="page-rail page-rail--right" aria-hidden="true"><span>JVO_JAMES · SELECTED WORKS · 2026</span></aside>
+  <aside class="page-rail page-rail--left" aria-hidden="true">DESIGN · CODE · PROBABLY TOO MANY TABS</aside>
+  <aside class="page-rail page-rail--right" aria-hidden="true">JVO_JAMES · ACCRA · 2026</aside>
 
   <header class="site-header">
-   <a href="#top" class="brand" aria-label="JVO James home">
-  <svg
-    viewBox="0 0 92 42"
-    role="img"
-    aria-label="JVO monogram"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M6 7H25
-         M20 7V27
-         C20 34 17 37 12 37
-         C7 37 4 34 4 29"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2.2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-
-    <path
-      d="M35 7L46 37L57 7"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2.2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-
-    <ellipse
-      cx="75"
-      cy="22"
-      rx="12"
-      ry="15"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2.2"
-    />
-  </svg>
-
-  <span>JVO_JAMES</span>
-</a>
+    <a href="#top" class="brand" aria-label="JVO James home">
+      <svg viewBox="0 0 92 42" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M6 7H25 M20 7V27 C20 34 17 37 12 37 C7 37 4 34 4 29" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M35 7L46 37L57 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="75" cy="22" rx="12" ry="15" fill="none" stroke="currentColor" stroke-width="2.2"/></svg>
+      <span>JVO_JAMES</span>
+    </a>
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-panel"><span>Menu</span><i></i></button>
   </header>
 
-  <nav class="menu-panel" id="menu-panel" aria-hidden="true">
+  <nav class="menu-panel" id="menu-panel" aria-hidden="true" aria-label="Primary navigation" inert>
     <div class="menu-panel__inner">
-      <span class="eyebrow">Index</span>
-      <a href="#work">Selected work</a>
-      <a href="#about">About James</a>
-      <a href="#process">Process</a>
-      <a href="#contact">Start a project</a>
-      <p>Available for freelance projects, product collaborations, and ambitious digital builds.</p>
+      <span class="eyebrow">Pick a scene</span>
+      <a href="#work">Featured work</a>
+      <a href="#archive">All projects</a>
+      <a href="#capabilities">What I do</a>
+      <a href="#about">About</a>
+      <a href="#contact">Say hello</a>
+      <a class="menu-panel__resume" href="resume.html">The ridiculously nice résumé ↗</a>
+      <p>Freelance builds, product ideas, weirdly specific website dreams. I’m listening.</p>
     </div>
   </nav>
 
-  <main id="top">
-    <section class="hero section-shell">
-      <div class="hero__stamp stamp-reveal">
-        <svg viewBox="0 0 180 180" aria-hidden="true">
-          <defs><path id="circlePath" d="M90,90 m-66,0 a66,66 0 1,1 132,0 a66,66 0 1,1 -132,0"/></defs>
-          <text><textPath href="#circlePath">GHANA-BASED DEVELOPER · DESIGN-LED BUILDER · </textPath></text>
-          <path d="M90 49v82M49 90h82" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="90" cy="90" r="11" fill="none" stroke="currentColor"/>
-        </svg>
-      </div>
-
+  <main id="content">
+    <section class="hero section-shell" id="top">
+      <div class="hero__stamp" aria-hidden="true"><svg viewBox="0 0 180 180"><defs><path id="circlePath" d="M90,90 m-66,0 a66,66 0 1,1 132,0 a66,66 0 1,1 -132,0"/></defs><text><textPath href="#circlePath">DESIGN · CODE · FIX · REFRESH · REPEAT · </textPath></text><path d="M90 49v82M49 90h82" fill="none" stroke="currentColor"/><circle cx="90" cy="90" r="11" fill="none" stroke="currentColor"/></svg></div>
       <div class="hero__intro">
-        <p class="eyebrow reveal">James Senu / Portfolio</p>
-        <h1 class="hero__title">
-          <span class="reveal">I build digital</span>
-          <span class="reveal hero__title-line--offset"><em>experiences</em> with</span>
-          <span class="reveal">polish &amp; purpose.</span>
-        </h1>
+        <p class="eyebrow reveal">James Senu / full-stack developer + web designer</p>
+        <h1 class="hero__title"><span class="reveal">I make websites</span><span class="reveal hero__title-line--offset">that look <em>good</em></span><span class="reveal">and actually work.</span></h1>
       </div>
-
       <div class="hero__visual reveal">
-        <div class="hero__image-wrap parallax-card" data-speed="0.08">
-          <img src="images/hero.png" alt="A vintage cinema camera in dramatic light" />
-          <span class="image-index">FRAME 001 / JVO</span>
-          <span class="film-burn" aria-hidden="true"></span>
-          <svg class="hero__scribble" viewBox="0 0 320 150" aria-hidden="true"><path d="M5 95c58-52 123-71 188-51 45 14 83 44 120 28M11 113c68-27 126-35 176-17 39 14 76 38 127 31" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </div>
+        <div class="hero__image-wrap parallax-card"><img src="images/hero.webp" width="1525" height="1031" fetchpriority="high" decoding="async" alt="A vintage cinema camera in dramatic light"><span class="image-index">FRAME 001 / YES, I LIKE DRAMA</span></div>
         <div class="hero__caption">
-          <p>I’m James — a Ghana-based full-stack developer and web designer creating responsive, intentional, and modern web experiences.</p>
-          <a href="#work" class="text-link">Explore the archive <span>↘</span></a>
+          <p>I’m James. I design and build websites from Accra, Ghana. Shops, restaurants, booking flows, weird product ideas, the whole thing. If it lives in a browser, I’ll probably try to make it nicer.</p>
+          <a href="#work" class="text-link">See the work <span>↘</span></a>
+          <a href="resume.html" class="text-link">Open my résumé <span>↗</span></a>
         </div>
       </div>
-
-      <div class="hero__ticker" aria-label="Portfolio specialties"><div class="ticker-track">
-        <span>FULL-STACK DEVELOPMENT ✦ RESPONSIVE DESIGN ✦ E-COMMERCE ✦ FIREBASE ✦ INTERACTION DESIGN ✦</span>
-        <span>FULL-STACK DEVELOPMENT ✦ RESPONSIVE DESIGN ✦ E-COMMERCE ✦ FIREBASE ✦ INTERACTION DESIGN ✦</span>
-      </div></div>
-    </section>
-
-    <section class="manifesto section-shell reveal" id="about">
-      <p class="section-number">02 / About</p>
-      <div class="manifesto__copy">
-        <p>Frontend quality. Full-stack thinking.</p>
-        <h2>Websites that feel <em>considered</em>, complete, and alive.</h2>
-        <p class="manifesto__body">I combine clean hierarchy, responsive structure, thoughtful motion, dependable logic, and refined presentation to turn business ideas into polished digital products.</p>
-      </div>
-      <svg class="manifesto__mark" viewBox="0 0 180 180" aria-hidden="true"><path d="M90 12c8 42 23 70 70 78-47 8-62 36-70 78-8-42-23-70-70-78 47-8 62-36 70-78Z" fill="none" stroke="currentColor"/><circle cx="90" cy="90" r="17" fill="currentColor"/></svg>
+      <div class="hero__ticker" aria-hidden="true"><div class="ticker-track"><span>FULL-STACK ✦ RESPONSIVE ✦ E-COMMERCE ✦ FIREBASE ✦ PAYSTACK ✦ UI/UX ✦ “WHY IS THIS DIV MOVING?” ✦ </span><span>FULL-STACK ✦ RESPONSIVE ✦ E-COMMERCE ✦ FIREBASE ✦ PAYSTACK ✦ UI/UX ✦ “WHY IS THIS DIV MOVING?” ✦ </span></div></div>
     </section>
 
     <section class="work section-shell" id="work">
-      <div class="section-heading reveal">
-        <p class="section-number">03 / Selected works</p>
-        <h2>Twelve projects.<br><em>Twelve distinct worlds.</em></h2>
-        <p>A selection of commerce, hospitality, beauty, food, fashion, AI, and utility experiences.</p>
-      </div>
-
-      <div class="project-grid">
-        <article class="project project--wide reveal" data-category="Luxury Fashion / E-commerce">
-          <a href="https://jvo-james.github.io/fashion/" target="_blank" rel="noreferrer" class="project__link" aria-label="Visit AURENZA">
-            <figure class="project__image project__image--landscape"><img src="images/a1.jpg" alt="Editorial fashion silhouette in a cinematic interior" /><span class="project__hover-label">Visit live site ↗</span></figure>
-            <div class="project__meta"><span>01</span><h3>FASHION WEBSITE</h3><p>Luxury fashion commerce</p><time>Live</time></div>
-          </a>
+      <div class="section-heading reveal"><p class="section-number">02 / Featured work</p><h2>Four projects I’d put<br>on the <em>big screen.</em></h2><p>Not mystery thumbnails. Here’s what the things actually are.</p></div>
+      <div class="featured-list">
+        <article class="featured-project reveal">
+          <a class="featured-project__visual" href="https://jvo-james.github.io/fashion/" target="_blank" rel="noreferrer"><figure class="project__image"><img src="images/a1.webp" width="736" height="736" loading="lazy" decoding="async" alt="Aurenza fashion project preview"><span class="project__hover-label">Aurenza ↗</span></figure></a>
+          <div class="featured-project__content"><div class="featured-project__title"><span>01 / Fashion</span><h3>Aurenza</h3><p>Modern Italian opulence, but in browser form.</p></div><p class="case-summary">A luxury fashion storefront concept built around strong imagery, quiet type and a very deliberate sense of space. The goal was simple: make it feel expensive without making the visitor fight the website.</p><div class="case-tags"><span>Fashion</span><span>Responsive UI</span><span>Commerce</span><span>Art direction</span></div><a class="case-link" href="https://jvo-james.github.io/fashion/" target="_blank" rel="noreferrer">Visit Aurenza <span>↗</span></a></div>
         </article>
 
-        <article class="project project--portrait reveal" data-category="Hospitality / Restaurant">
-          <a href="https://jvo-james.github.io/osd/" target="_blank" rel="noreferrer" class="project__link" aria-label="Visit Oaklawn Southern Dining">
-            <figure class="project__image project__image--portrait"><img src="images/a2.jpg" alt="Warm vintage restaurant interior" /><span class="project__hover-label">Visit live site ↗</span></figure>
-            <div class="project__meta"><span>02</span><h3>RESTAURANT WEBSITE</h3><p>Southern dining experience</p><time>Live</time></div>
-          </a>
+        <article class="featured-project featured-project--reverse reveal">
+          <a class="featured-project__visual" href="https://jvo-james.github.io/osd/" target="_blank" rel="noreferrer"><figure class="project__image"><img src="images/a2.webp" width="540" height="360" loading="lazy" decoding="async" alt="Oaklawn Southern Dining project preview"><span class="project__hover-label">Oaklawn ↗</span></figure></a>
+          <div class="featured-project__content"><div class="featured-project__title"><span>02 / Hospitality</span><h3>Oaklawn Southern Dining</h3><p>A proper dinner website. No QR-menu sadness.</p></div><p class="case-summary">A restaurant experience for Oaklawn in Paris, Tennessee, built around its restored 1954 home, steaks, seafood, cocktails, reservations and private evenings. Warm, calm and intentionally not screaming “ORDER NOW” at you every six pixels.</p><div class="case-tags"><span>Restaurant</span><span>Reservations</span><span>Menus</span><span>Events</span></div><a class="case-link" href="https://jvo-james.github.io/osd/" target="_blank" rel="noreferrer">Visit Oaklawn <span>↗</span></a></div>
         </article>
 
-        <article class="project project--square reveal" data-category="Services / Booking Platform">
-          <a href="https://faustinacleaning.netlify.app" target="_blank" rel="noreferrer" class="project__link" aria-label="Visit Faustina’s Sparkly Services">
-            <figure class="project__image project__image--square"><img src="images/a3.jpg" alt="Sunlit cleaning tools in a refined home interior" /><span class="project__hover-label">Visit live site ↗</span></figure>
-            <div class="project__meta"><span>03</span><h3>Cleaning Company Website</h3><p>Booking &amp; business management</p><time>Live</time></div>
-          </a>
+        <article class="featured-project reveal">
+          <a class="featured-project__visual" href="https://bandfactory.store/" target="_blank" rel="noreferrer"><figure class="project__image project__image--band"><img src="images/band-factory.webp" width="1600" height="1067" loading="lazy" decoding="async" alt="Band Factory fashion store project preview"><span class="project__hover-label">Band Factory ↗</span></figure></a>
+          <div class="featured-project__content"><div class="featured-project__title"><span>03 / Full-stack commerce</span><h3>Band Factory</h3><p>My latest one. Pretty outside, serious business in the back.</p></div><p class="case-summary">A Ghanaian fashion store for signature hairbands, tops and sets with retail and wholesale shopping. Behind the storefront there’s Paystack payment verification, Firestore orders and stock, customer history, analytics, notifications and an admin control centre. Basically, the part nobody sees is also doing push-ups.</p><div class="case-tags"><span>Paystack</span><span>Firebase</span><span>Inventory</span><span>Admin</span><span>Wholesale</span></div><a class="case-link" href="https://bandfactory.store/" target="_blank" rel="noreferrer">Visit Band Factory <span>↗</span></a></div>
         </article>
 
-        <article class="project project--offset reveal" data-category="Bakery / E-commerce">
-          <a href="https://jvo-james.github.io/knot" target="_blank" rel="noreferrer" class="project__link" aria-label="Visit The Knot Guilty French Bakery">
-            <figure class="project__image project__image--landscape"><img src="images/a4.jpg" alt="Artisan bread arranged in a rustic bakery" /><span class="project__hover-label">Visit live site ↗</span></figure>
-            <div class="project__meta"><span>04</span><h3>Bakery Website</h3><p>Premium bakery commerce</p><time>Live</time></div>
-          </a>
-        </article>
-
-        <article class="project project--portrait reveal" data-category="Beauty / Brand">
-          <a href="https://ciscamakeovers.com" target="_blank" rel="noreferrer" class="project__link" aria-label="Visit Cisca Makeovers">
-            <figure class="project__image project__image--portrait"><img src="images/a5.jpg" alt="Beauty editorial with a timeless cinematic mood" /><span class="project__hover-label">Visit live site ↗</span></figure>
-            <div class="project__meta"><span>05</span><h3>Beauty brand website</h3><p>Cisca Makeovers</p><time>Live</time></div>
-          </a>
-        </article>
-
-        <article class="project project--square reveal" data-category="AI / Health Technology">
-          <a href="https://vitra-ai.netlify.app/" target="_blank" rel="noreferrer" class="project__link" aria-label="Visit Vitra AI">
-            <figure class="project__image project__image--square"><img src="images/a6.jpg" alt="Retro technology circuitry in moody light" /><span class="project__hover-label">Visit live site ↗</span></figure>
-            <div class="project__meta"><span>06</span><h3>Vitra AI</h3><p>AI product concept</p><time>Live</time></div>
-          </a>
-        </article>
-
-        <article class="project project--wide reveal" data-category="Fashion / E-commerce">
-          <a href="https://jvo-james.github.io/maison/" target="_blank" rel="noreferrer" class="project__link" aria-label="Visit Maison Élitaire">
-            <figure class="project__image project__image--cinema"><img src="images/a7.jpg" alt="Editorial fashion portrait with vintage tones" /><span class="project__hover-label">Visit live site ↗</span></figure>
-            <div class="project__meta"><span>07</span><h3>Fashion storefront</h3><p>Maison</p><time>Live</time></div>
-          </a>
-        </article>
- 
-        <article class="project project--square reveal" data-category="Food / Commerce">
-          <a href="https://mealsbybella.netlify.app" target="_blank" rel="noreferrer" class="project__link" aria-label="Visit Meals by Bella">
-            <figure class="project__image project__image--square"><img src="images/a8.jpg" alt="Fine dining table in atmospheric light" /><span class="project__hover-label">Visit live site ↗</span></figure>
-            <div class="project__meta"><span>08</span><h3>MealsbyBella</h3><p>Food brand website</p><time>Live</time></div>
-          </a>
-        </article>
-
-        <article class="project project--portrait reveal" data-category="Kidswear / E-commerce">
-          <a href="https://aprilblossoms.netlify.app" target="_blank" rel="noreferrer" class="project__link" aria-label="Visit April Blossoms">
-            <figure class="project__image project__image--portrait"><img src="images/a9.jpg" alt="Children clothing details in soft nostalgic light" /><span class="project__hover-label">Visit live site ↗</span></figure>
-            <div class="project__meta"><span>09</span><h3>Kidswear store</h3><p>April Blossoms</p><time>Live</time></div>
-          </a>
-        </article>
-
-        <article class="project project--offset reveal" data-category="Food / Mobile Experience">
-          <a href="https://wrap-district.netlify.app" target="_blank" rel="noreferrer" class="project__link" aria-label="Visit Wrap District">
-            <figure class="project__image project__image--landscape"><img src="images/a10.jpg" alt="Gourmet wrap presented like a food editorial" /><span class="project__hover-label">Visit live site ↗</span></figure>
-            <div class="project__meta"><span>10</span><h3>Mobile-first food site</h3><p>Wrap District</p><time>Live</time></div>
-          </a>
-        </article>
-
-        <article class="project project--portrait reveal" data-category="Restaurant / Ordering">
-          <a href="https://jvo-james.github.io/bas/" target="_blank" rel="noreferrer" class="project__link" aria-label="Visit Basilissa">
-            <figure class="project__image project__image--portrait"><img src="images/a11.jpg" alt="Elegant restaurant table with rich cinematic tones" /><span class="project__hover-label">View project ↗</span></figure>
-            <div class="project__meta"><span>11</span><h3>Basilissa</h3><p>Fast-food ordering experience</p><time>WIP</time></div>
-          </a>
-        </article>
-
-        <article class="project project--square reveal" data-category="Mobility / Campus Utility">
-          <a href="#contact" class="project__link" aria-label="Ask about Shuttle Tracker for KNUST">
-            <figure class="project__image project__image--square"><img src="images/a12.jpg" alt="City shuttle travelling through an atmospheric urban scene" /><span class="project__hover-label">In development ↘</span></figure>
-            <div class="project__meta"><span>12</span><h3>Shuttle Tracker</h3><p>KNUST campus mobility tool</p><time>WIP</time></div>
-          </a>
+        <article class="featured-project featured-project--reverse reveal">
+          <a class="featured-project__visual" href="https://faustinacleaning.netlify.app/" target="_blank" rel="noreferrer"><figure class="project__image"><img src="images/a3.webp" width="1456" height="816" loading="lazy" decoding="async" alt="Faustina's Sparkly Services project preview"><span class="project__hover-label">Faustina’s ↗</span></figure></a>
+          <div class="featured-project__content"><div class="featured-project__title"><span>04 / Services</span><h3>Faustina’s Sparkly Services</h3><p>Cleaning website. Ironically, the code also got cleaned up.</p></div><p class="case-summary">A service site for domestic and commercial cleaning across Manchester, London, Luton, Salford, Stockport, Bolton and Oldham. It handles service discovery, clear rates, estimates, bookings, hiring and customer feedback without making people dig through a maze first.</p><div class="case-tags"><span>Booking</span><span>Service UX</span><span>Hiring</span><span>Mobile first</span></div><a class="case-link" href="https://faustinacleaning.netlify.app/" target="_blank" rel="noreferrer">Visit Faustina’s <span>↗</span></a></div>
         </article>
       </div>
     </section>
 
-    <section class="process section-shell" id="process">
-      <div class="section-heading reveal"><p class="section-number">04 / The method</p><h2>Structure first.<br><em>Polish in every detail.</em></h2></div>
-      <div class="process__list">
-        <article class="process__item reveal"><span>01</span><h3>Discover</h3><p>Clarify the business, audience, functionality, and feeling the experience needs to create.</p></article>
-        <article class="process__item reveal"><span>02</span><h3>Design</h3><p>Shape the hierarchy, responsive system, visual language, and interaction rhythm.</p></article>
-        <article class="process__item reveal"><span>03</span><h3>Develop</h3><p>Build accessible, responsive interfaces with clean logic and dependable integrations.</p></article>
-        <article class="process__item reveal"><span>04</span><h3>Refine</h3><p>Test, optimize, and polish the details until the product feels complete and launch-ready.</p></article>
+    <section class="capabilities section-shell" id="capabilities">
+      <div class="section-heading reveal"><p class="section-number">03 / The toolbox</p><h2>Things I can do.<br><em>Things CSS has made personal.</em></h2><p>Swipe the cards on smaller screens. Your thumb deserves a change of scenery.</p></div>
+      <div class="studio-console reveal" aria-label="Playful developer terminal"><div class="console-top"><span></span><span></span><span></span><b>jvo@studio:~</b></div><div class="console-body"><p><i>$</i> build something nice</p><p class="console-answer">→ designing... coding... testing at 320px because chaos lives there.</p><p><i>$</i> does it work on mobile?</p><p class="console-answer">→ it better. I have been warned.</p><span class="console-caret">_</span></div></div>
+      <div class="capability-deck" aria-label="Capabilities">
+        <article class="capability"><span>01</span><h3>Build</h3><p>HTML, CSS, JavaScript, Firebase, APIs, Git, Netlify and GitHub Pages.</p><small>Yes, the buttons work.</small></article>
+        <article class="capability"><span>02</span><h3>Design</h3><p>Responsive UI, visual hierarchy, interaction, motion and design systems.</p><small>Spacing is a personality trait now.</small></article>
+        <article class="capability"><span>03</span><h3>Sell</h3><p>E-commerce, carts, checkout flows, Paystack and conversion-focused product journeys.</p><small>“Add to cart” should actually add to cart. Revolutionary.</small></article>
+        <article class="capability"><span>04</span><h3>Ship</h3><p>Testing, performance cleanup, accessibility basics and launch-ready handoff.</p><small>Then I refresh it 14 times for emotional support.</small></article>
       </div>
     </section>
 
-    <section class="quote-section section-shell reveal">
-      <svg viewBox="0 0 100 70" aria-hidden="true"><path d="M8 64c22-6 31-20 31-37C39 12 31 5 21 5 10 5 3 13 3 24c0 11 8 18 19 18 3 0 5 0 7-1-3 8-11 14-23 18l2 5Zm54 0c22-6 31-20 31-37C93 12 85 5 75 5c-11 0-18 8-18 19 0 11 8 18 19 18 3 0 5 0 7-1-3 8-11 14-23 18l2 5Z" fill="currentColor"/></svg>
-      <blockquote>Premium presentation should be backed by thoughtful structure, real functionality, and full-stack capability.</blockquote>
+    <section class="archive section-shell" id="archive">
+      <div class="section-heading reveal"><p class="section-number">04 / The rest of the film roll</p><h2>Nine more.<br><em>No filler episodes.</em></h2><p>In the exact order my inner control freak requested.</p></div>
+      <div class="archive-grid">
+        <a class="archive-card reveal" href="https://wrapdistrict.food/" target="_blank" rel="noreferrer"><figure><img src="images/a10.webp" width="612" height="408" loading="lazy" decoding="async" alt="Wrap District project preview"></figure><div><span>05 / Food</span><h3>Wrap District</h3><p>Shawarma, burgers, loaded meals and a build-your-own flow. Also Feed the Street, because good food can do more than sit in a cart.</p><b>Live ↗</b></div></a>
+        <a class="archive-card reveal" href="https://jvo-james.github.io/knot/" target="_blank" rel="noreferrer"><figure><img src="images/a4.webp" width="643" height="360" loading="lazy" decoding="async" alt="The Knot Guilty French Bakery project preview"></figure><div><span>06 / Bakery</span><h3>The Knot Guilty French Bakery</h3><p>Small-batch French baking, weekly pre-orders, pickup windows, a shop and cart. Butter has entered the chat.</p><b>Live ↗</b></div></a>
+        <a class="archive-card reveal" href="https://ciscamakeovers.com/" target="_blank" rel="noreferrer"><figure><img src="images/a5.webp" width="1200" height="1500" loading="lazy" decoding="async" alt="Cisca Makeovers project preview"></figure><div><span>07 / Beauty</span><h3>Cisca Makeovers</h3><p>Makeup, hair, nails, lashes and brows with appointment flows for weddings, birthdays, graduations and more. Fine girl energy included.</p><b>Live ↗</b></div></a>
+        <a class="archive-card reveal" href="https://jvo-james.github.io/maison/" target="_blank" rel="noreferrer"><figure><img src="images/a7.webp" width="683" height="1024" loading="lazy" decoding="async" alt="Maison Elitaire project preview"></figure><div><span>08 / Fashion</span><h3>Maison Élitaire</h3><p>A fashion-house concept for women, men and children with collections, editorial storytelling, search and a shopping bag. Very quiet luxury. Loud CSS.</p><b>Live ↗</b></div></a>
+        <a class="archive-card reveal" href="https://vitra-ai.netlify.app/" target="_blank" rel="noreferrer"><figure><img src="images/a6.webp" width="360" height="257" loading="lazy" decoding="async" alt="Vitra AI project preview"></figure><div><span>09 / Product concept</span><h3>Vitra AI</h3><p>An AI healthcare concept covering wellness services, mental health chat, dietetics, e-pharmacy and consult booking. A product exploration, not your doctor.</p><b>Live ↗</b></div></a>
+        <a class="archive-card reveal" href="https://mealsbybella.netlify.app/" target="_blank" rel="noreferrer"><figure><img src="images/a8.webp" width="480" height="639" loading="lazy" decoding="async" alt="Meals by Bella project preview"></figure><div><span>10 / Food brand</span><h3>Meals by Bella</h3><p>A student-run Accra food brand for pastries, brownies, cakes, drinks and more with a menu, gallery, cart and checkout. Dangerous when hungry.</p><b>Live ↗</b></div></a>
+        <a class="archive-card reveal" href="https://aprilblossoms.netlify.app/" target="_blank" rel="noreferrer"><figure><img src="images/a9.webp" width="399" height="501" loading="lazy" decoding="async" alt="April Blossoms project preview"></figure><div><span>11 / Kidswear commerce</span><h3>April Blossoms</h3><p>A 50-piece one-off kidswear drop with unique dresses, smart cart, Paystack checkout, receipts and purchase history. One dress means one dress. No cloning machine.</p><b>Live ↗</b></div></a>
+        <a class="archive-card reveal" href="https://jvo-james.github.io/bas/" target="_blank" rel="noreferrer"><figure><img src="images/a11.webp" width="1400" height="1372" loading="lazy" decoding="async" alt="Basilissa project preview"></figure><div><span>12 / Restaurant concept</span><h3>Basilissa</h3><p>A Ghana family restaurant concept built around pizzas, burgers, shawarma, crispy chicken, combos, branches and ordering. Basically a hunger attack with navigation.</p><b>Live ↗</b></div></a>
+        <a class="archive-card reveal" href="https://jvo-james.github.io/shuttle/" target="_blank" rel="noreferrer"><figure><img src="images/a12.webp" width="447" height="447" loading="lazy" decoding="async" alt="ShuttlePulse KNUST project preview"></figure><div><span>13 / Campus utility</span><h3>Shuttle Tracker</h3><p>ShuttlePulse for KNUST: live map, nearby stops, trip planning, best-shuttle recommendations, ETA, capacity, reports and service alerts. Less guessing at the roadside.</p><b>Live ↗</b></div></a>
+      </div>
     </section>
 
-    <section class="contact section-shell" id="contact">
-      <div class="contact__beam" aria-hidden="true"></div>
-      <div class="contact__grain" aria-hidden="true"></div>
-      <p class="section-number reveal">05 / Contact — End Credits</p>
+    <section class="manifesto section-shell reveal" id="about"><p class="section-number">05 / About</p><div class="manifesto__copy"><p>Designer brain. Developer browser tabs.</p><h2>I like websites with <em>personality.</em> I also like when they don’t break.</h2><p>I’m James Senu, based in Accra. I work across visual direction, frontend development and backend-connected experiences. I care about the tiny details, but I also care about the boring useful stuff like forms submitting, carts remembering things and layouts behaving on a phone from 2017.</p></div><div class="manifesto__note">CURRENT STATUS<br><strong>Probably moving a div 2px.</strong></div></section>
 
+    <section class="contact" id="contact">
+      <div class="contact__beam" aria-hidden="true"></div><div class="contact__grain" aria-hidden="true"></div>
       <div class="contact__layout">
-        <div class="contact__content reveal">
-          <p class="contact__kicker">Available for selected commissions</p>
-          <h2>Have a story worth<br><em>bringing to screen?</em></h2>
-          <p class="contact__intro">Tell me what you are building, what success looks like, and when you would like to launch. Email is best for detailed briefs; WhatsApp is best for a quick conversation.</p>
-          <a class="contact__primary" href="mailto:senujames23@gmail.com?subject=Project%20enquiry%20for%20James">
-            <span>Email James</span><strong>senujames23@gmail.com</strong><i>↗</i>
-          </a>
-        </div>
-
-        <div class="contact__cards reveal" aria-label="Ways to contact James">
-          <a class="contact-card" href="https://wa.me/233594121246?text=Hi%20James%2C%20I%20would%20like%20to%20discuss%20a%20website%20project." target="_blank" rel="noreferrer">
-            <span class="contact-card__number">01</span><span class="contact-card__label">Quick conversation</span><strong>WhatsApp</strong><small>Usually the fastest way to reach me</small><i>↗</i>
-          </a>
-          <a class="contact-card" href="tel:+233594121246">
-            <span class="contact-card__number">02</span><span class="contact-card__label">Call directly</span><strong>+233 (0)594 121 246</strong><small>Accra, Ghana · GMT</small><i>↗</i>
-          </a>
-          <div class="contact-card contact-card--social">
-            <span class="contact-card__number">03</span><span class="contact-card__label">Find my work</span><strong>Elsewhere</strong>
-            <div class="contact-card__links"><a href="https://github.com/jvo-james" target="_blank" rel="noreferrer">GitHub ↗</a><a href="https://www.linkedin.com/in/james-senu-6890973aa" target="_blank" rel="noreferrer">LinkedIn ↗</a><a href="https://www.snapchat.com/add/jvo_james" target="_blank" rel="noreferrer">Snapchat ↗</a></div>
-          </div>
-        </div>
+        <div class="contact__content"><p class="contact__kicker">06 / Roll credits?</p><h2>Got an idea?<br><em>Make it weird.</em></h2><p class="contact__intro">Tell me what you’re building, what is currently annoying you or just send the dangerously vague “I need a website” message. We’ll figure it out.</p><a class="contact__primary" href="mailto:senujames23@gmail.com"><span>Email me</span><strong>senujames23@gmail.com</strong><i>↗</i></a></div>
+        <div class="contact__cards"><a class="contact-card" href="https://wa.me/233594121246" target="_blank" rel="noreferrer"><span>01</span><small>WhatsApp</small><strong>Start a chat</strong><i>↗</i></a><a class="contact-card" href="tel:+233594121246"><span>02</span><small>Phone</small><strong>+233 594 121 246</strong><i>↗</i></a><a class="contact-card" href="resume.html"><span>03</span><small>Résumé</small><strong>Meet the printable chaos</strong><i>↗</i></a></div>
       </div>
-
-      <div class="contact__footer">
-        <span>James Senu / JVO_JAMES</span><span>Accra, Ghana / Working worldwide</span><span>© 2026 · Roll credits</span>
-      </div>
+      <footer class="contact__footer"><a class="footer-github" href="https://github.com/jvo-james" target="_blank" rel="noreferrer">GitHub ↗</a><div class="social-icons" aria-label="Social media"><a href="https://www.snapchat.com/add/jvo_james" target="_blank" rel="noreferrer" aria-label="Snapchat, jvo_james"><i class="fa-brands fa-snapchat"></i></a><a href="https://www.instagram.com/jvo.web/" target="_blank" rel="noreferrer" aria-label="Instagram, jvo.web"><i class="fa-brands fa-instagram"></i></a><a href="https://www.tiktok.com/@jvo.web" target="_blank" rel="noreferrer" aria-label="TikTok, jvo.web"><i class="fa-brands fa-tiktok"></i></a></div><span>© 2026 JVO_JAMES · Made with code and unreasonable attention to spacing.</span></footer>
     </section>
   </main>
   <script src="script.js"></script>
