@@ -6,3 +6,9 @@
 @media(max-width:350px){:root{--shell:calc(100% - 20px)}.hero__title{font-size:12.8vw}.archive-grid{grid-template-columns:1fr}.archive-card figure,.archive-card:nth-child(n) figure{aspect-ratio:16/10}.archive-card h3{font-size:30px}.archive-card p{font-size:10px}.contact{padding-inline:14px}}
 @media(hover:none),(pointer:coarse){.project__hover-label{display:none}.cursor-dot,.cursor-ring{display:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}.hero__image-wrap img{transform:none!important}}
+.portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+}
