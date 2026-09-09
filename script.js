@@ -3,7 +3,6 @@ const menuToggle = document.querySelector('.menu-toggle');
 const menuPanel = document.querySelector('.menu-panel');
 const menuLinks = document.querySelectorAll('.menu-panel a');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-const finePointer = window.matchMedia('(pointer: fine)');
 
 function toggleMenu(forceState) {
   const open = typeof forceState === 'boolean' ? forceState : !menuPanel.classList.contains('is-open');
@@ -45,37 +44,6 @@ if ('IntersectionObserver' in window && !reduceMotion.matches) {
   document.querySelectorAll('.reveal').forEach(element => element.classList.add('is-visible'));
 }
 
-const cursorDot = document.querySelector('.cursor-dot');
-const cursorRing = document.querySelector('.cursor-ring');
-let mouseX = innerWidth / 2;
-let mouseY = innerHeight / 2;
-let ringX = mouseX;
-let ringY = mouseY;
-
-if (finePointer.matches && !reduceMotion.matches && cursorDot && cursorRing) {
-  window.addEventListener('mousemove', (event) => {
-    mouseX = event.clientX;
-    mouseY = event.clientY;
-    cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
-  }, { passive: true });
-
-  const renderCursor = () => {
-    ringX += (mouseX - ringX) * 0.14;
-    ringY += (mouseY - ringY) * 0.14;
-    cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
-    requestAnimationFrame(renderCursor);
-  };
-  renderCursor();
-
-  document.querySelectorAll('a, button, .project__image').forEach((item) => {
-    item.addEventListener('mouseenter', () => cursorRing.classList.add('is-active'));
-    item.addEventListener('mouseleave', () => cursorRing.classList.remove('is-active'));
-  });
-} else {
-  cursorDot?.remove();
-  cursorRing?.remove();
-}
-
 const parallaxCard = document.querySelector('.parallax-card img');
 let scrollTicking = false;
 function updateParallax() {
@@ -91,16 +59,3 @@ window.addEventListener('scroll', () => {
     scrollTicking = true;
   }
 }, { passive: true });
-
-const contactLink = document.querySelector('.contact__primary');
-if (contactLink && finePointer.matches && !reduceMotion.matches) {
-  contactLink.addEventListener('mousemove', (event) => {
-    const rect = contactLink.getBoundingClientRect();
-    const x = (event.clientX - rect.left - rect.width / 2) * 0.025;
-    const y = (event.clientY - rect.top - rect.height / 2) * 0.025;
-    contactLink.style.transform = `translate(${x}px, ${y}px)`;
-  });
-  contactLink.addEventListener('mouseleave', () => {
-    contactLink.style.transform = 'translate(0, 0)';
-  });
-}
