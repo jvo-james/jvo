@@ -1,1 +1,10 @@
-{"name":"jvo-site","private":true,"version":"2.0.0","engines":{"node":">=18"},"dependencies":{"firebase-admin":"^13.0.2"}}
+{
+  "name": "jvo-site",
+  "private": true,
+  "version": "3.0.0",
+  "engines": {"node": ">=18"},
+  "dependencies": {
+    "firebase-admin": "^13.0.2",
+    "pdfkit": "^0.16.0"
+  }
+}

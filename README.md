@@ -1,86 +1,271 @@
 # JVO
 
-Portfolio + private JVO Desk + client project agreement flow.
+JVO is James Senu's portfolio and private project desk.
+
+The public site stays at `index.html`. The project system adds a private admin area at `admin.html` and a private client project page at `form.html?id=...`.
 
 ## What is included
 
-- `index.html` and `resume.html`: current public portfolio
-- `form.html`: client agreement page
-- `admin.html`: private JVO Desk
-- `firebase-config.js`: Firebase browser config
-- `netlify/api.js`: secure server function for Firestore, agreements, payments and Resend
-- `firestore.rules`: blocks direct Firestore access. The Netlify function uses Firebase Admin on the server.
+- JVO portfolio
+- Firebase email and password admin login
+- Draft project creation
+- Project agreement sending
+- Client details filled by the client
+- Immutable signed agreement snapshots
+- Versioned agreement terms stored on the server
+- Signed agreement PDF downloads
+- Client project portal
+- Project dates and next actions
+- Additional work quotes with client approve or decline controls
+- Payment ledger with partial payments, refunds and voided mistakes
+- Branded PDF payment receipts
+- Multi-currency totals kept separate
+- Automatic agreement and payment emails
+- Branded HTML email templates through Resend
+- Client website approval and change requests
+- Client project updates
+- Privacy note
+- Manual JSON desk backup
+- Security headers and server-side validation
+- Rate limiting on public project actions
+- Idempotency protection for payments and emails
 
-## Before publishing
+There are no revision limits in the agreement. Client change requests are recorded without setting a fixed number of rounds.
 
-### 1. Firebase
+## Folder structure
 
-Create a Firebase project, enable **Authentication > Email/Password** and create the admin account using `senujames23@gmail.com`.
+Only two folders are used:
 
-Create a Firestore database.
+- `images/`
+- `netlify/`
 
-Copy your Firebase web app values into `firebase-config.js`.
+Everything else is in the repo root.
 
-Deploy `firestore.rules` in Firebase. The site does not need direct browser access to Firestore.
+## 1. Firebase web config
 
-Create a Firebase service account and add these values to Netlify environment variables:
+Create a Firebase web app and copy the web config into `firebase-config.js`.
 
-- `FIREBASE_PROJECT_ID`
-- `FIREBASE_CLIENT_EMAIL`
-- `FIREBASE_PRIVATE_KEY`
-- `ADMIN_EMAIL` = `senujames23@gmail.com`
+```js
+window.JVO_FIREBASE_CONFIG = {
+  apiKey: "YOUR_FIREBASE_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.firebasestorage.app",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+```
 
-For `FIREBASE_PRIVATE_KEY`, paste the full private key. Netlify can store multiline values. The function also supports `\\n` line breaks.
+This browser config is not the Firebase Admin private key.
 
-### 2. Resend
+## 2. Firebase Authentication
 
-Verify `jvo.me` in Resend. Add these Netlify environment variables:
+In Firebase:
 
-- `RESEND_API_KEY`
-- `RESEND_FROM` = for example `JVO <hello@jvo.me>`
-- `REPLY_TO` = `senujames23@gmail.com`
+1. Open Authentication
+2. Enable Email/Password
+3. Create the admin user `senujames23@gmail.com`
+4. Use that account to log into `admin.html`
+5. Add `jvo.me` and your Netlify site domain to Authorized domains
 
-Do not put the Resend key in any browser JavaScript file.
+For extra security, enable MFA for the admin account if your Firebase plan and Identity Platform setup support it.
 
-### 3. Netlify
+## 3. Firestore
 
-Connect the GitHub repo to Netlify. `netlify.toml` already sets the publish directory and function directory.
+Create a Firestore database in Production mode.
+
+Publish the included `firestore.rules` file. It blocks all browser reads and writes. JVO Desk talks to Firestore through the Netlify server function instead.
+
+You do not need to create the collections yourself.
+
+The app can create collections such as:
+
+- `projects`
+- `agreements`
+- `payments`
+- `changeRequests`
+- `reviews`
+- `activities`
+- `emails`
+- `clientUpdates`
+- `settings`
+- `meta`
+
+## 4. Firebase Admin credentials in Netlify
+
+From Firebase Project Settings > Service accounts, generate a private key.
+
+Add these environment variables in Netlify:
+
+```text
+FIREBASE_PROJECT_ID=your-project-id
+FIREBASE_CLIENT_EMAIL=your-service-account-email
+FIREBASE_PRIVATE_KEY=-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n
+ADMIN_EMAIL=senujames23@gmail.com
+```
+
+Never put the service account JSON file or private key in GitHub.
+
+## 5. Resend
+
+Verify `jvo.me` in Resend, create a sending API key and add these Netlify environment variables:
+
+```text
+RESEND_API_KEY=re_...
+RESEND_FROM_EMAIL=JVO <projects@jvo.me>
+RESEND_REPLY_TO=senujames23@gmail.com
+```
+
+The code also supports the older names `RESEND_FROM` and `REPLY_TO` if they already exist.
+
+## 6. Netlify
 
 Add:
 
-- `SITE_URL` = `https://jvo.me`
+```text
+SITE_URL=https://jvo.me
+```
 
-No build command is needed.
+The full Netlify environment variable list is:
 
-### 4. First login
+```text
+FIREBASE_PROJECT_ID
+FIREBASE_CLIENT_EMAIL
+FIREBASE_PRIVATE_KEY
+ADMIN_EMAIL
+RESEND_API_KEY
+RESEND_FROM_EMAIL
+RESEND_REPLY_TO
+SITE_URL
+```
 
-Open `/admin.html` and log in with the Firebase email/password account you created.
+Then redeploy the site.
 
-Go to **Settings** first. Add your payment instructions and an optional payment link. These details are copied into each new project when it is created.
+## 7. First setup inside JVO Desk
 
-## Normal workflow
+Open:
 
-1. Agree on the job and price in chat.
-2. Open JVO Desk and click **New project**.
-3. Add the project name, price, timeline, scope and features.
-4. JVO Desk creates the agreement and copies the client link.
-5. Send the link to the client.
-6. The client adds their name, email, phone and company name then signs.
-7. The project automatically moves to **Awaiting Deposit**.
-8. When the deposit arrives, open the project and record the payment.
-9. Send the payment confirmation email with one click.
-10. Move the project through Development, Client Review, Approved, Fully Paid, Launched and Completed as needed.
+```text
+https://jvo.me/admin.html
+```
 
-## Important notes
+Go to Settings and check:
 
-- The deposit is always calculated as 50%.
-- There is no revision limit in the agreement.
-- Free bug support defaults to 30 days and can be changed per project or in Settings.
-- New work outside the agreed scope can be saved under **Extra work** in a project.
-- Client links use a long random token. Client details and signatures are stored in Firestore through the Netlify function.
-- The admin area checks Firebase Authentication and the server also checks that the logged-in email matches `ADMIN_EMAIL`.
-- Payment records are manual. This works well for MoMo, bank transfers and cash. A payment provider can be connected later without changing the agreement flow.
+- Business name
+- Your name
+- Email
+- Phone
+- WhatsApp
+- Address
+- Default currency
+- Default bug support days
+- Payment instructions
+- Payment link
+- Email sender name
+
+These settings are used across the client portal, emails and PDF receipts.
+
+## Project workflow
+
+A normal project can follow this flow:
+
+```text
+Draft
+Agreement Sent
+Awaiting Deposit
+Deposit Received
+Development
+Client Review
+Approved
+Awaiting Final Payment
+Fully Paid
+Launched
+Completed
+```
+
+The project page shows the next action so you do not have to remember what should happen next.
+
+## Signed agreements
+
+When the client signs, JVO creates a separate agreement document that contains the exact:
+
+- project name
+- price
+- currency
+- payment plan
+- timeline
+- scope
+- features
+- support period
+- agreement terms
+- client details
+- signature
+- accepted confirmations
+- signing time
+- agreement version
+- terms version
+
+That agreement record is not edited when the live project changes later.
+
+Use additional work records for changes after signing.
+
+## Payment records
+
+Payments are treated as a ledger. The payment documents are the source of truth.
+
+Supported use includes:
+
+- deposits
+- partial payments
+- final payments
+- additional work payments
+- refunds
+- mistaken entries marked as void
+
+Each posted incoming payment gets a JVO receipt number and can produce a branded PDF receipt.
+
+## Client portal
+
+The same private project link keeps working after signing.
+
+The client can see:
+
+- signed project details
+- agreement PDF
+- payment totals
+- payment receipts
+- project status
+- additional work quotes
+- project updates
+- client review controls
+- live website link after launch
+
+Treat the private client link like a password. Do not post it publicly.
+
+## Email design
+
+Transactional email HTML is generated in `netlify/api.js` so it is not exposed as a browser secret. Emails use a responsive table layout that works well in Gmail, Apple Mail and most Outlook versions.
+
+Automatic emails are sent when:
+
+- an agreement is signed
+- a payment is recorded
+- a project is moved to Client Review
+- a project is moved to Launched
+- an additional work quote is sent to the client
+
+You can also send reminders and custom messages from a project.
+
+## Backups
+
+Settings contains a `Download desk backup` button that exports the currently loaded JVO Desk records as JSON.
+
+For stronger production backups, also enable scheduled Firestore exports or another backup process in Google Cloud. The JSON download is a convenient extra copy, not a replacement for managed database backups.
+
+## Privacy
+
+`privacy.html` contains a short client privacy note. Review it before production use and update it if your data handling changes.
 
 ## Legal note
 
-The included terms are practical plain-language project terms, not jurisdiction-specific legal advice. Before relying on them for large projects or disputes, have a lawyer in your jurisdiction review them.
+The project agreement is a practical plain-language business agreement. It is still worth having a Ghanaian lawyer review the final terms once, especially for larger projects or if you change your cancellation, liability or dispute process.
