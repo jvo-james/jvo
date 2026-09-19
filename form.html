@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f3efe7">
+  <meta name="description" content="Review and sign your JVO website project agreement.">
+  <title>Project Agreement | JVO</title>
+  <link rel="icon" href="images/title.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="form.css">
+</head>
+<body>
+  <header class="topbar"><a class="mark" href="/"><strong>JVO</strong><span>Web development</span></a><span class="secure-note">Project agreement</span></header>
+  <main class="agreement-shell">
+    <section id="loadingState" class="state-card"><span class="loader"></span><p>Opening your project...</p></section>
+    <section id="errorState" class="state-card hidden"><p class="eyebrow">JVO</p><h1>This link is not available.</h1><p id="errorText">Ask James for a fresh project link.</p></section>
+
+    <div id="agreementApp" class="hidden">
+      <section class="intro">
+        <div><p class="eyebrow">Project <span id="projectRef"></span></p><h1>Let’s make this <em>official.</em></h1></div>
+        <p class="intro-copy">Everything we agreed on is below. Check it, add your details and sign. Your project starts after the 50% deposit is received.</p>
+      </section>
+
+      <section class="summary-card">
+        <div><span>Project</span><strong id="projectName"></strong></div>
+        <div><span>Total</span><strong id="projectTotal"></strong></div>
+        <div><span>Deposit</span><strong id="projectDeposit"></strong></div>
+        <div><span>Balance</span><strong id="projectBalance"></strong></div>
+        <div><span>Timeline</span><strong id="projectTimeline"></strong></div>
+        <div><span>Support</span><strong id="projectSupport"></strong></div>
+      </section>
+
+      <section class="paper-section">
+        <div class="section-label">01</div><div><h2>What I’m building</h2><div id="projectScope" class="scope-copy"></div><div id="projectFeatures" class="chips"></div></div>
+      </section>
+
+      <section class="paper-section">
+        <div class="section-label">02</div><div><h2>The simple terms</h2><div id="termsList" class="terms-list"></div></div>
+      </section>
+
+      <section class="paper-section client-section">
+        <div class="section-label">03</div>
+        <div>
+          <h2>Your details</h2><p class="muted">Please use your real details. This is what will be attached to the agreement.</p>
+          <form id="agreementForm">
+            <div class="field-grid">
+              <label><span>Full name *</span><input name="fullName" autocomplete="name" required placeholder="Your full name"></label>
+              <label><span>Email address *</span><input name="email" type="email" autocomplete="email" required placeholder="you@example.com"></label>
+              <label><span>Phone / WhatsApp *</span><input name="phone" autocomplete="tel" required placeholder="Your phone number"></label>
+              <label><span>Brand / company</span><input name="company" autocomplete="organization" placeholder="Optional"></label>
+            </div>
+            <label class="check"><input type="checkbox" required><span>I checked the project details and they match what I agreed with JVO.</span></label>
+            <label class="check"><input type="checkbox" required><span>I understand that anything outside the scope can be priced separately.</span></label>
+            <label class="check"><input type="checkbox" required><span>I understand that work starts after the 50% deposit is received.</span></label>
+            <label class="check"><input type="checkbox" required><span>I agree to the terms on this page.</span></label>
+            <div class="signature-wrap"><label><span>Type your full name to sign *</span><input name="signature" required placeholder="Your full name"></label><p>Typing your name here counts as your signature for this agreement.</p></div>
+            <button class="primary-btn" type="submit" id="signButton">Sign and accept <span>→</span></button>
+            <p class="form-note">You’ll see the deposit details right after signing.</p>
+          </form>
+        </div>
+      </section>
+
+      <section id="signedState" class="signed-card hidden">
+        <div class="signed-icon">✓</div><p class="eyebrow">Agreement signed</p><h2>Nice. One last step.</h2><p>Your project is confirmed once the deposit is received.</p>
+        <div class="payment-box"><span>Deposit due</span><strong id="signedDeposit"></strong><p id="paymentInstructions"></p></div>
+        <a id="paymentLink" class="primary-btn hidden" target="_blank" rel="noreferrer">Pay deposit <span>→</span></a>
+        <p class="small">Already paid? James will confirm it and you’ll get an email receipt.</p>
+      </section>
+    </div>
+  </main>
+  <footer><strong>JVO</strong><span>James Senu · 0594121246 · senujames23@gmail.com</span></footer>
+  <script src="form.js"></script>
+</body>
+</html>
