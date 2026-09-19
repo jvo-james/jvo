@@ -1,9 +1,20 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 
-const app = initializeApp(window.JVO_FIREBASE_CONFIG);
-const auth = getAuth(app);
 const $ = s => document.querySelector(s);
+
+let auth;
+try {
+  const config = window.JVO_FIREBASE_CONFIG;
+  if (!config || !config.apiKey || !config.authDomain || !config.projectId) {
+    throw new Error('Firebase configuration is missing or incomplete.');
+  }
+  const app = initializeApp(config);
+  auth = getAuth(app);
+} catch (err) {
+  console.error('JVO Desk failed to initialize Firebase:', err);
+  window.__JVO_DESK_INIT_ERROR__ = err;
+}
 let state = { projects: [], payments: [], emails: [], activities: [], changeRequests: [], reviews: [], settings: {} };
 let modalReturnFocus = null;
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -68,5 +79,61 @@ document.addEventListener('click',e=>{if(!e.target.closest('.more-wrap'))$('#mor
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#modal').classList.contains('hidden'))closeModal();else closeMenu()}});
 $('#menuBtn').onclick=openMenu;document.querySelectorAll('[data-close-menu]').forEach(b=>b.onclick=closeMenu);$('#quickNew').onclick=openNewProject;$('#logoutBtn').onclick=()=>signOut(auth);$('#modal').addEventListener('click',e=>{if(e.target.matches('[data-close-modal]'))closeModal()});
 window.addEventListener('hashchange',render);window.addEventListener('resize',()=>{if(innerWidth>940)closeMenu()});document.querySelectorAll('.sidebar nav a').forEach(a=>a.addEventListener('click',closeMenu));
-$('#loginForm').onsubmit=async e=>{e.preventDefault();const btn=e.currentTarget.querySelector('button');const email=$('#loginEmail').value.trim();const password=$('#loginPassword').value;$('#loginError').textContent='';busy(btn,true,'Opening');try{await signInWithEmailAndPassword(auth,email,password)}catch(err){console.error('Firebase login error:',err);const code=err?.code||'';const message=err?.message||'';$('#loginError').textContent=code?`${code}: ${message.replace(/^Firebase:\s*/,'')}`:'Login failed. Please try again.'}finally{busy(btn,false)}};
-onAuthStateChanged(auth,async user=>{if(user){$('#loginView').classList.add('hidden');$('#adminApp').classList.remove('hidden');try{await load()}catch(e){toast(e.message)}}else{$('#loginView').classList.remove('hidden');$('#adminApp').classList.add('hidden')}});
+const loginForm = $('#loginForm');
+loginForm.onsubmit = async e => {
+  e.preventDefault();
+  const btn = e.currentTarget.querySelector('button');
+  const errorEl = $('#loginError');
+  errorEl.textContent = '';
+  if (!auth) {
+    errorEl.textContent = window.__JVO_DESK_INIT_ERROR__?.message || 'Firebase could not be initialized. Open the browser console for details.';
+    return;
+  }
+  busy(btn, true, 'Opening');
+  try {
+    await signInWithEmailAndPassword(
+      auth,
+      $('#loginEmail').value.trim(),
+      $('#loginPassword').value
+    );
+  } catch (err) {
+    console.error('JVO Desk Firebase sign-in error:', err);
+    const code = err?.code || 'auth/unknown-error';
+    const messages = {
+      'auth/invalid-credential': 'Invalid email or password.',
+      'auth/invalid-email': 'Enter a valid email address.',
+      'auth/user-disabled': 'This Firebase user has been disabled.',
+      'auth/user-not-found': 'No Firebase user exists with this email.',
+      'auth/wrong-password': 'The Firebase password is incorrect.',
+      'auth/operation-not-allowed': 'Email/password sign-in is disabled in Firebase Authentication.',
+      'auth/too-many-requests': 'Too many attempts. Wait a little and try again.',
+      'auth/unauthorized-domain': 'This website is not authorized in Firebase Authentication.',
+      'auth/network-request-failed': 'Firebase could not be reached. Check your connection or deployment.'
+    };
+    errorEl.textContent = `${messages[code] || 'Login failed.'} (${code})`;
+  } finally {
+    busy(btn, false);
+  }
+};
+
+if (auth) {
+  onAuthStateChanged(auth, async user => {
+    if (user) {
+      $('#loginView').classList.add('hidden');
+      $('#adminApp').classList.remove('hidden');
+      try {
+        await load();
+      } catch (e) {
+        console.error('JVO Desk data load error:', e);
+        toast(e.message);
+      }
+    } else {
+      $('#loginView').classList.remove('hidden');
+      $('#adminApp').classList.add('hidden');
+    }
+  });
+} else {
+  $('#loginError').textContent =
+    window.__JVO_DESK_INIT_ERROR__?.message ||
+    'Firebase could not be initialized. Open the browser console for details.';
+}
