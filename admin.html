@@ -76,20 +76,14 @@
 
   <script src="firebase-config.js"></script>
   <script>
-    // Safety net: if the ES module fails to load, never let the login form
-    // perform a normal POST/reload. The real handler in admin.js replaces this.
     window.__JVO_LOGIN_HANDLER_READY__ = false;
     document.addEventListener('submit', function (event) {
-      if (event.target && event.target.id === 'loginForm' && !window.__JVO_LOGIN_HANDLER_READY__) {
+      if (event.target && event.target.id === 'loginForm') {
         event.preventDefault();
         event.stopPropagation();
-        var error = document.getElementById('loginError');
-        if (error) {
-          error.textContent = 'The admin login script did not load. Refresh the page and try again.';
-        }
       }
     }, true);
   </script>
-  <script type="module" src="admin.js"></script>
+  <script src="admin-bootstrap.js"></script>
 </body>
 </html>
