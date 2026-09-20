@@ -75,6 +75,26 @@
   </div>
 
   <script src="firebase-config.js"></script>
+  <script>
+    // Keep a failed module load from falling back to the browser's native form submit,
+    // which otherwise makes the login page look like it is simply reloading.
+    window.__JVO_DESK_MODULE_READY__ = false;
+    window.addEventListener('load', () => {
+      if (window.__JVO_DESK_MODULE_READY__) return;
+      const form = document.getElementById('loginForm');
+      const error = document.getElementById('loginError');
+      if (!form || !error || typeof form.onsubmit === 'function') return;
+      form.addEventListener('submit', event => {
+        event.preventDefault();
+        error.textContent = window.location.protocol === 'file:'
+          ? 'JVO Desk cannot run from a file:// URL. Open the deployed site, or serve this folder over HTTP (for example: python3 -m http.server 8000).'
+          : 'JVO Desk could not start. Open the browser console and check the first error, then reload the page.';
+      }, { once: false });
+      if (window.location.protocol === 'file:') {
+        error.textContent = 'This page was opened directly as a file. Use the deployed site or a local HTTP server so Firebase can load the login scripts.';
+      }
+    }, { once: true });
+  </script>
   <script type="module" src="admin.js"></script>
 </body>
 </html>

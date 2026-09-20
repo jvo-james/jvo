@@ -137,3 +137,5 @@ if (auth) {
     window.__JVO_DESK_INIT_ERROR__?.message ||
     'Firebase could not be initialized. Open the browser console for details.';
 }
+
+window.__JVO_DESK_MODULE_READY__ = true;

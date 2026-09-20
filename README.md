@@ -58,6 +58,24 @@ window.JVO_FIREBASE_CONFIG = {
 
 This browser config is not the Firebase Admin private key.
 
+## Running the admin page locally
+
+Do not double-click `admin.html`. That opens it as a `file://` URL, and modern browsers can block the Firebase ES modules used by the login screen. The browser then falls back to a normal HTML form submit, which looks like the page is just reloading.
+
+Serve the repo over HTTP instead:
+
+```bash
+python3 -m http.server 8000
+```
+
+Then open:
+
+```text
+http://localhost:8000/admin.html
+```
+
+For a deployed site, use the HTTPS `admin.html` URL and make sure that host is listed under Firebase Authentication > Settings > Authorized domains.
+
 ## 2. Firebase Authentication
 
 In Firebase:
