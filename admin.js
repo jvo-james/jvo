@@ -15,6 +15,91 @@ try {
   console.error('JVO Desk failed to initialize Firebase:', err);
   window.__JVO_DESK_INIT_ERROR__ = err;
 }
+
+/*
+ * Login bootstrap
+ * ----------------
+ * Keep the login handler immediately after Firebase initialization so a
+ * problem elsewhere in the dashboard cannot make the browser fall back to
+ * a normal HTML form submission/reload.
+ */
+const loginForm = $('#loginForm');
+const loginButton = loginForm?.querySelector('button[type="submit"]');
+const loginError = $('#loginError');
+
+function setLoginBusy(on) {
+  if (!loginButton) return;
+  loginButton.disabled = on;
+  loginButton.classList.toggle('loading', on);
+  const label = loginButton.querySelector('.button-label');
+  if (!label) return;
+  if (on) {
+    if (!loginButton.dataset.oldLabel) loginButton.dataset.oldLabel = label.textContent;
+    label.textContent = 'Opening';
+  } else {
+    label.textContent = loginButton.dataset.oldLabel || 'Open JVO Desk';
+  }
+}
+
+function showLoginError(message) {
+  if (loginError) loginError.textContent = message;
+}
+
+function firebaseLoginMessage(err) {
+  const code = err?.code || 'auth/unknown-error';
+  const messages = {
+    'auth/invalid-credential': 'Invalid email or password.',
+    'auth/invalid-email': 'Enter a valid email address.',
+    'auth/user-disabled': 'This Firebase user has been disabled.',
+    'auth/user-not-found': 'No Firebase user exists with this email.',
+    'auth/wrong-password': 'The Firebase password is incorrect.',
+    'auth/operation-not-allowed': 'Email/password sign-in is disabled in Firebase Authentication.',
+    'auth/too-many-requests': 'Too many attempts. Wait a little and try again.',
+    'auth/unauthorized-domain': 'This website is not authorized in Firebase Authentication.',
+    'auth/network-request-failed': 'Firebase could not be reached. Check your connection or deployment.',
+    'auth/internal-error': 'Firebase returned an internal error. Please try again.'
+  };
+  return `${messages[code] || 'Login failed.'} (${code})`;
+}
+
+if (loginForm) {
+  loginForm.onsubmit = async event => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    showLoginError('');
+
+    if (!auth) {
+      showLoginError(
+        window.__JVO_DESK_INIT_ERROR__?.message ||
+        'Firebase could not be initialized.'
+      );
+      return false;
+    }
+
+    const email = $('#loginEmail')?.value.trim();
+    const password = $('#loginPassword')?.value || '';
+
+    if (!email || !password) {
+      showLoginError('Enter your email and password.');
+      return false;
+    }
+
+    setLoginBusy(true);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (err) {
+      console.error('JVO Desk Firebase sign-in error:', err);
+      showLoginError(firebaseLoginMessage(err));
+    } finally {
+      setLoginBusy(false);
+    }
+
+    return false;
+  };
+  window.__JVO_LOGIN_HANDLER_READY__ = true;
+}
+
 let state = { projects: [], payments: [], emails: [], activities: [], changeRequests: [], reviews: [], settings: {} };
 let modalReturnFocus = null;
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -79,43 +164,6 @@ document.addEventListener('click',e=>{if(!e.target.closest('.more-wrap'))$('#mor
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#modal').classList.contains('hidden'))closeModal();else closeMenu()}});
 $('#menuBtn').onclick=openMenu;document.querySelectorAll('[data-close-menu]').forEach(b=>b.onclick=closeMenu);$('#quickNew').onclick=openNewProject;$('#logoutBtn').onclick=()=>signOut(auth);$('#modal').addEventListener('click',e=>{if(e.target.matches('[data-close-modal]'))closeModal()});
 window.addEventListener('hashchange',render);window.addEventListener('resize',()=>{if(innerWidth>940)closeMenu()});document.querySelectorAll('.sidebar nav a').forEach(a=>a.addEventListener('click',closeMenu));
-const loginForm = $('#loginForm');
-loginForm.onsubmit = async e => {
-  e.preventDefault();
-  const btn = e.currentTarget.querySelector('button');
-  const errorEl = $('#loginError');
-  errorEl.textContent = '';
-  if (!auth) {
-    errorEl.textContent = window.__JVO_DESK_INIT_ERROR__?.message || 'Firebase could not be initialized. Open the browser console for details.';
-    return;
-  }
-  busy(btn, true, 'Opening');
-  try {
-    await signInWithEmailAndPassword(
-      auth,
-      $('#loginEmail').value.trim(),
-      $('#loginPassword').value
-    );
-  } catch (err) {
-    console.error('JVO Desk Firebase sign-in error:', err);
-    const code = err?.code || 'auth/unknown-error';
-    const messages = {
-      'auth/invalid-credential': 'Invalid email or password.',
-      'auth/invalid-email': 'Enter a valid email address.',
-      'auth/user-disabled': 'This Firebase user has been disabled.',
-      'auth/user-not-found': 'No Firebase user exists with this email.',
-      'auth/wrong-password': 'The Firebase password is incorrect.',
-      'auth/operation-not-allowed': 'Email/password sign-in is disabled in Firebase Authentication.',
-      'auth/too-many-requests': 'Too many attempts. Wait a little and try again.',
-      'auth/unauthorized-domain': 'This website is not authorized in Firebase Authentication.',
-      'auth/network-request-failed': 'Firebase could not be reached. Check your connection or deployment.'
-    };
-    errorEl.textContent = `${messages[code] || 'Login failed.'} (${code})`;
-  } finally {
-    busy(btn, false);
-  }
-};
-
 if (auth) {
   onAuthStateChanged(auth, async user => {
     if (user) {
@@ -133,9 +181,8 @@ if (auth) {
     }
   });
 } else {
-  $('#loginError').textContent =
+  showLoginError(
     window.__JVO_DESK_INIT_ERROR__?.message ||
-    'Firebase could not be initialized. Open the browser console for details.';
+    'Firebase could not be initialized.'
+  );
 }
-
-window.__JVO_DESK_MODULE_READY__ = true;
