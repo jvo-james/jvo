@@ -1,21 +1,8 @@
-import { getApp, getApps, initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 
 const $ = s => document.querySelector(s);
-
-let auth;
-try {
-  const config = window.JVO_FIREBASE_CONFIG;
-  if (!config || !config.apiKey || !config.authDomain || !config.projectId) {
-    throw new Error('Firebase configuration is missing or incomplete.');
-  }
-  const app = getApps().length ? getApp() : initializeApp(config);
-  auth = getAuth(app);
-  window.__JVO_AUTH__ = auth;
-} catch (err) {
-  console.error('JVO Desk failed to initialize Firebase:', err);
-  window.__JVO_DESK_INIT_ERROR__ = err;
-}
+const auth = window.__JVO_AUTH__;
+if (!auth) throw new Error('JVO authentication did not initialize before the dashboard loaded.');
 let state = { projects: [], payments: [], emails: [], activities: [], changeRequests: [], reviews: [], settings: {} };
 let modalReturnFocus = null;
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -58,7 +45,7 @@ function openMenu(){if(innerWidth>940)return;$('#sidebar').classList.add('open')
 function closeMenu(){$('#sidebar').classList.remove('open');$('#sidebarBackdrop').classList.add('hidden');document.body.classList.remove('drawer-open')}
 function parseMilestones(type,textValue){if(type!=='custom')return[];return textValue.split('\n').map(line=>line.trim()).filter(Boolean).map(line=>{const m=line.match(/^(\d+(?:\.\d+)?)\s*%?\s*[-:]?\s*(.+)$/);return m?{percent:Number(m[1]),label:m[2].trim()}:null}).filter(Boolean)}
 function projectForm(p={}){const plan=p.paymentPlan?.type||'50-50';const custom=plan==='custom'?(p.paymentPlan?.milestones||[]).map(m=>`${m.percent} ${m.label}`).join('\n'):'';return`<div class="form-grid"><label class="field wide"><span>Project name *</span><input name="projectName" required value="${esc(p.projectName||'')}" placeholder="Acme Website"><small class="field-error"></small></label><label class="field"><span>Total price *</span><input name="total" required type="number" min="1" step="0.01" value="${esc(p.total||'')}" placeholder="4000"><small class="field-error"></small></label><label class="field"><span>Currency</span><select name="currency">${['GHS','USD','GBP','EUR'].map(c=>`<option ${c===(p.currency||state.settings.defaultCurrency||'GHS')?'selected':''}>${c}</option>`).join('')}</select></label><label class="field"><span>Payment plan</span><select name="paymentPlanType" id="paymentPlanType"><option value="50-50" ${plan==='50-50'?'selected':''}>50% / 50%</option><option value="60-40" ${plan==='60-40'?'selected':''}>60% / 40%</option><option value="100" ${plan==='100'?'selected':''}>100% upfront</option><option value="custom" ${plan==='custom'?'selected':''}>Custom milestones</option></select></label><label class="field"><span>Timeline text</span><input name="timeline" value="${esc(p.timeline||'')}" placeholder="About 3 weeks"></label><label class="field"><span>Estimated start date</span><input name="estimatedStartDate" type="date" value="${esc(p.dates?.estimatedStartDate||'')}"></label><label class="field"><span>Target delivery date</span><input name="targetDeliveryDate" type="date" value="${esc(p.dates?.targetDeliveryDate||'')}"></label><label class="field"><span>Final payment due date</span><input name="paymentDueDate" type="date" value="${esc(p.dates?.paymentDueDate||'')}"></label><label class="field"><span>Bug support days</span><input name="supportDays" type="number" min="0" max="365" value="${esc(p.supportDays??state.settings.supportDays??30)}"></label><label class="field wide custom-plan ${plan==='custom'?'':'hidden'}"><span>Custom milestones</span><textarea name="milestoneText" placeholder="40 Deposit\n30 First review\n30 Launch">${esc(custom)}</textarea><small>Each line starts with the percentage. All lines must add up to 100.</small></label><label class="field wide"><span>Project scope *</span><textarea name="scope" required placeholder="Write exactly what is included.">${esc(p.scope||'')}</textarea><small class="field-error"></small></label><label class="field wide"><span>Features</span><textarea name="featuresText" placeholder="One feature per line">${esc((p.features||[]).join('\n'))}</textarea></label><label class="field wide"><span>Live URL</span><input name="liveUrl" type="url" value="${esc(p.liveUrl||'')}" placeholder="https://..."></label><label class="field wide"><span>Private notes</span><textarea name="notes" placeholder="Only you see this">${esc(p.notes||'')}</textarea></label></div>`}
-function collectProject(form){const fd=new FormData(form);const type=fd.get('paymentPlanType');return{projectName:fd.get('projectName'),total:Number(fd.get('total')),currency:fd.get('currency'),paymentPlanType:type,milestones:parseMilestones(type,fd.get('milestoneText')||''),timeline:fd.get('timeline'),estimatedStartDate:fd.get('estimatedStartDate'),targetDeliveryDate:fd.get('targetDeliveryDate'),paymentDueDate:fd.get('paymentDueDate'),supportDays:Number(fd.get('supportDays')||30),scope:fd.get('scope'),features:String(fd.get('featuresText')||'').split('\n').map(x=>x.trim()).filter(Boolean),liveUrl:fd.get('liveUrl'),notes:fd.get('notes')}
+function collectProject(form){const fd=new FormData(form);const type=fd.get('paymentPlanType');return{projectName:fd.get('projectName'),total:Number(fd.get('total')),currency:fd.get('currency'),paymentPlanType:type,milestones:parseMilestones(type,fd.get('milestoneText')||''),timeline:fd.get('timeline'),estimatedStartDate:fd.get('estimatedStartDate'),targetDeliveryDate:fd.get('targetDeliveryDate'),paymentDueDate:fd.get('paymentDueDate'),supportDays:Number(fd.get('supportDays')||30),scope:fd.get('scope'),features:String(fd.get('featuresText')||'').split('\n').map(x=>x.trim()).filter(Boolean),liveUrl:fd.get('liveUrl'),notes:fd.get('notes')}}
 function wirePlan(){const sel=$('#paymentPlanType');if(!sel)return;const box=$('.custom-plan');const run=()=>box.classList.toggle('hidden',sel.value!=='custom');sel.onchange=run;run()}
 function openNewProject(){openModal(`<p class="eyebrow">New project</p><h2>Build the deal first.</h2><p class="muted">Create it as a draft. Send the agreement only when the details are ready.</p><form id="projectForm">${projectForm()}<div class="form-actions"><button type="button" class="btn ghost" data-close-modal>Cancel</button><button class="btn dark" type="submit"><span class="button-label">Create draft</span></button></div></form>`);wirePlan();$('#projectForm').onsubmit=async e=>{e.preventDefault();const btn=e.currentTarget.querySelector('[type=submit]');busy(btn,true,'Creating');try{const d=await api('createProject',collectProject(e.currentTarget));closeModal();toast('Draft created.');await load();location.hash=`project/${d.project.id}`}catch(err){toast(err.message)}finally{busy(btn,false)}};bindModalClose()}
 function renderProjectPage(id){const p=state.projects.find(x=>x.id===id);if(!p){$('#viewRoot').innerHTML=emptyState('Project not found.','Go back to Projects and try again.');return}const f=financials(p);const changes=changesFor(id);const pays=paymentsFor(id).slice().sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));const acts=state.activities.filter(a=>a.projectId===id).slice(0,20);const reviews=state.reviews.filter(r=>r.projectId===id).slice(0,5);const [next,desc]=nextAction(p);const signed=!!p.signedAt;$('#viewRoot').innerHTML=`<section class="project-hero"><p class="eyebrow">${esc(p.ref)}</p><h2>${esc(p.projectName)}</h2><div class="project-actions"><button class="btn dark" id="emailThis"><span>Email</span>${icon('mail')}</button><button class="btn ghost" id="recordThis"><span>Payment</span>${icon('money')}</button><button class="btn ghost" id="changeThis"><span>Extra work</span>${icon('plus')}</button><div class="more-wrap"><button class="btn ghost" id="moreBtn"><span>More</span>${icon('more')}</button><div class="more-menu hidden" id="moreMenu"><button id="statusThis">Change status</button><button id="editThis">Edit project</button><button id="sendAgreement">Send agreement</button><button id="addUpdate">Post client update</button><button id="copyLink">Copy client link</button></div></div></div></section><div class="project-layout"><div class="project-main"><section class="detail-block"><div class="panel-head" style="padding:0 0 14px;border:0"><div><span class="status" data-tone="${statusTone(p.status)}">${esc(p.status)}</span><h3 style="margin-top:12px">Next action: ${esc(next)}</h3></div></div><p class="muted">${esc(desc)}</p></section><section class="detail-block"><h3>Financials</h3><div class="money-line"><span>Contract value</span><strong>${money(f.contract,p.currency)}</strong></div><div class="money-line"><span>Approved extras</span><strong>${money(f.extras,p.currency)}</strong></div><div class="money-line"><span>Total</span><strong>${money(f.total,p.currency)}</strong></div><div class="money-line"><span>Paid</span><strong>${money(f.paid,p.currency)}</strong></div><div class="money-line"><span>Outstanding</span><strong>${money(f.outstanding,p.currency)}</strong></div></section><section class="detail-block"><div class="panel-head" style="padding:0 0 10px;border:0"><h3>Payments</h3><span class="panel-sub">${pays.length} records</span></div><div class="section-list">${pays.length?pays.map(x=>`<div class="list-row"><div><h4>${esc(x.type)}</h4><p>${date(x.date||x.createdAt)} · ${esc(x.method||'No method')} · ${esc(x.receiptNo||'')}</p></div><div class="list-row-side"><strong>${x.direction==='out'?'-':''}${money(x.amount,x.currency)}</strong><br><a class="tiny-link" href="/.netlify/functions/api?action=receiptPdf&id=${encodeURIComponent(p.publicToken)}&payment=${encodeURIComponent(x.id)}" target="_blank" rel="noreferrer">Receipt PDF</a></div></div>`).join(''):'<p class="muted">No payments yet.</p>'}</div></section><section class="detail-block"><div class="panel-head" style="padding:0 0 10px;border:0"><h3>Additional work</h3><span class="panel-sub">${changes.length} items</span></div><div class="section-list">${changes.length?changes.map(x=>`<div class="list-row"><div><h4>${esc(x.description)}</h4><p>${esc(x.status)}${x.decidedAt?` · ${date(x.decidedAt)}`:''}</p></div><div class="list-row-side"><strong>${money(x.amount,x.currency)}</strong><br><button class="tiny-link" data-change-status="${x.id}">Update</button></div></div>`).join(''):'<p class="muted">No additional work yet.</p>'}</div></section><section class="detail-block"><h3>Scope</h3><p style="white-space:pre-line;line-height:1.75">${esc(p.scope)}</p>${p.features?.length?`<p class="muted"><strong>Features:</strong> ${esc(p.features.join(' · '))}</p>`:''}</section>${reviews.length?`<section class="detail-block"><h3>Client review</h3><div class="section-list">${reviews.map(r=>`<div class="list-row"><div><h4>${esc(r.decision)}</h4><p>${esc(r.message||'No note')}</p></div><span class="eyebrow">${date(r.createdAt)}</span></div>`).join('')}</div></section>`:''}<section class="detail-block"><h3>Activity</h3><div class="timeline">${acts.length?acts.map(a=>`<div class="timeline-item"><time>${date(a.createdAt)}</time><p>${esc(a.text)}</p></div>`).join(''):'<p class="muted">No activity yet.</p>'}</div></section></div><aside class="project-side"><section class="detail-block"><h3>Client</h3><div class="fact-grid"><div class="fact"><span>Name</span><strong>${esc(p.clientName||'Not signed yet')}</strong></div><div class="fact"><span>Company</span><strong>${esc(p.clientCompany||'-')}</strong></div><div class="fact"><span>Email</span><strong>${esc(p.clientEmail||p.prefillClientEmail||'-')}</strong></div><div class="fact"><span>Phone</span><strong>${esc(p.clientPhone||'-')}</strong></div></div></section><section class="detail-block"><h3>Agreement</h3><p>${signed?`Signed ${date(p.signedAt)}. The signed copy is locked.`:'Not signed yet.'}</p><div class="mini-actions">${signed?`<a class="btn small ghost" href="/.netlify/functions/api?action=agreementPdf&id=${encodeURIComponent(p.publicToken)}" target="_blank" rel="noreferrer">Agreement PDF ${icon('download')}</a>`:`<button class="btn small ghost" id="agreementSideBtn">Send agreement</button>`}</div></section><section class="detail-block"><h3>Dates</h3><div class="money-line"><span>Estimated start</span><strong>${date(p.dates?.estimatedStartDate)}</strong></div><div class="money-line"><span>Started</span><strong>${date(p.dates?.startDate)}</strong></div><div class="money-line"><span>Target delivery</span><strong>${date(p.dates?.targetDeliveryDate)}</strong></div><div class="money-line"><span>Review</span><strong>${date(p.dates?.reviewDate)}</strong></div><div class="money-line"><span>Payment due</span><strong>${date(p.dates?.paymentDueDate)}</strong></div><div class="money-line"><span>Launch</span><strong>${date(p.dates?.launchDate)}</strong></div></section>${p.notes?`<section class="detail-block"><h3>Private notes</h3><p style="white-space:pre-line">${esc(p.notes)}</p></section>`:''}</aside></div>`;
@@ -80,63 +67,9 @@ document.addEventListener('click',e=>{if(!e.target.closest('.more-wrap'))$('#mor
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#modal').classList.contains('hidden'))closeModal();else closeMenu()}});
 $('#menuBtn').onclick=openMenu;document.querySelectorAll('[data-close-menu]').forEach(b=>b.onclick=closeMenu);$('#quickNew').onclick=openNewProject;$('#logoutBtn').onclick=()=>signOut(auth);$('#modal').addEventListener('click',e=>{if(e.target.matches('[data-close-modal]'))closeModal()});
 window.addEventListener('hashchange',render);window.addEventListener('resize',()=>{if(innerWidth>940)closeMenu()});document.querySelectorAll('.sidebar nav a').forEach(a=>a.addEventListener('click',closeMenu));
-const loginForm = $('#loginForm');
-loginForm.onsubmit = async e => {
-  e.preventDefault();
-  const btn = e.currentTarget.querySelector('button');
-  const errorEl = $('#loginError');
-  errorEl.textContent = '';
-  if (!auth) {
-    errorEl.textContent = window.__JVO_DESK_INIT_ERROR__?.message || 'Firebase could not be initialized. Open the browser console for details.';
-    return;
-  }
-  busy(btn, true, 'Opening');
-  try {
-    await signInWithEmailAndPassword(
-      auth,
-      $('#loginEmail').value.trim(),
-      $('#loginPassword').value
-    );
-  } catch (err) {
-    console.error('JVO Desk Firebase sign-in error:', err);
-    const code = err?.code || 'auth/unknown-error';
-    const messages = {
-      'auth/invalid-credential': 'Invalid email or password.',
-      'auth/invalid-email': 'Enter a valid email address.',
-      'auth/user-disabled': 'This Firebase user has been disabled.',
-      'auth/user-not-found': 'No Firebase user exists with this email.',
-      'auth/wrong-password': 'The Firebase password is incorrect.',
-      'auth/operation-not-allowed': 'Email/password sign-in is disabled in Firebase Authentication.',
-      'auth/too-many-requests': 'Too many attempts. Wait a little and try again.',
-      'auth/unauthorized-domain': 'This website is not authorized in Firebase Authentication.',
-      'auth/network-request-failed': 'Firebase could not be reached. Check your connection or deployment.'
-    };
-    errorEl.textContent = `${messages[code] || 'Login failed.'} (${code})`;
-  } finally {
-    busy(btn, false);
-  }
-};
-
-if (auth) {
-  onAuthStateChanged(auth, async user => {
-    if (user) {
-      $('#loginView').classList.add('hidden');
-      $('#adminApp').classList.remove('hidden');
-      try {
-        await load();
-      } catch (e) {
-        console.error('JVO Desk data load error:', e);
-        toast(e.message);
-      }
-    } else {
-      $('#loginView').classList.remove('hidden');
-      $('#adminApp').classList.add('hidden');
-    }
-  });
-} else {
-  $('#loginError').textContent =
-    window.__JVO_DESK_INIT_ERROR__?.message ||
-    'Firebase could not be initialized. Open the browser console for details.';
-}
+load().catch(err => {
+  console.error('JVO Desk data load error:', err);
+  toast(err?.message || 'The dashboard could not load.');
+});
 
 window.__JVO_DESK_MODULE_READY__ = true;
