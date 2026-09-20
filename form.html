@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#f3efe7">
-  <meta name="description" content="Review and sign your JVO website project agreement.">
-  <title>Project Agreement | JVO</title>
+  <meta name="theme-color" content="#f1ede5">
+  <meta name="description" content="Review your JVO project, sign the agreement and follow the work.">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Project | JVO</title>
   <link rel="icon" href="images/title.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,65 +14,146 @@
   <link rel="stylesheet" href="form.css">
 </head>
 <body>
-  <header class="topbar"><a class="mark" href="/"><strong>JVO</strong><span>Web development</span></a><span class="secure-note">Project agreement</span></header>
-  <main class="agreement-shell">
-    <section id="loadingState" class="state-card"><span class="loader"></span><p>Opening your project...</p></section>
-    <section id="errorState" class="state-card hidden"><p class="eyebrow">JVO</p><h1>This link is not available.</h1><p id="errorText">Ask James for a fresh project link.</p></section>
+  <header class="topbar">
+    <a class="mark" href="/" aria-label="JVO home"><strong id="brandName">JVO</strong><span>Project desk</span></a>
+    <span class="secure-note"><i class="status-dot"></i> Private project link</span>
+  </header>
 
-    <div id="agreementApp" class="hidden">
+  <main class="shell">
+    <section id="loadingState" class="state-card" aria-live="polite">
+      <div class="skeleton hero-skeleton"></div>
+      <div class="skeleton line-skeleton"></div>
+      <div class="skeleton card-skeleton"></div>
+    </section>
+
+    <section id="errorState" class="state-card hidden">
+      <p class="eyebrow">JVO</p>
+      <h1>This link is not available.</h1>
+      <p id="errorText">Ask James for a fresh project link.</p>
+    </section>
+
+    <div id="app" class="hidden">
       <section class="intro">
-        <div><p class="eyebrow">Project <span id="projectRef"></span></p><h1>Let’s make this <em>official.</em></h1></div>
-        <p class="intro-copy">Everything we agreed on is below. Check it, add your details and sign. Your project starts after the 50% deposit is received.</p>
+        <div>
+          <p class="eyebrow">Project <span id="projectRef"></span></p>
+          <h1 id="introTitle">Let’s make this <em>official.</em></h1>
+        </div>
+        <p id="introCopy" class="intro-copy">Everything we agreed on is below. Check it, add your details and sign.</p>
       </section>
 
-      <section class="summary-card">
+      <section class="project-strip" aria-label="Project summary">
         <div><span>Project</span><strong id="projectName"></strong></div>
-        <div><span>Total</span><strong id="projectTotal"></strong></div>
-        <div><span>Deposit</span><strong id="projectDeposit"></strong></div>
-        <div><span>Balance</span><strong id="projectBalance"></strong></div>
+        <div><span>Project value</span><strong id="projectTotal"></strong></div>
+        <div><span>Status</span><strong id="projectStatus"></strong></div>
         <div><span>Timeline</span><strong id="projectTimeline"></strong></div>
-        <div><span>Support</span><strong id="projectSupport"></strong></div>
       </section>
 
-      <section class="paper-section">
-        <div class="section-label">01</div><div><h2>What I’m building</h2><div id="projectScope" class="scope-copy"></div><div id="projectFeatures" class="chips"></div></div>
+      <section id="portalProgress" class="portal-progress hidden"></section>
+
+      <section class="paper-section" id="scopeSection">
+        <div class="section-label">01</div>
+        <div>
+          <h2>What JVO is building</h2>
+          <p id="projectScope" class="scope-copy"></p>
+          <div id="projectFeatures" class="chips"></div>
+        </div>
       </section>
 
-      <section class="paper-section">
-        <div class="section-label">02</div><div><h2>The simple terms</h2><div id="termsList" class="terms-list"></div></div>
+      <section class="paper-section" id="paymentPlanSection">
+        <div class="section-label">02</div>
+        <div>
+          <h2>Payment plan</h2>
+          <div id="paymentPlan" class="plan-list"></div>
+        </div>
       </section>
 
-      <section class="paper-section client-section">
+      <section class="paper-section" id="termsSection">
         <div class="section-label">03</div>
         <div>
-          <h2>Your details</h2><p class="muted">Please use your real details. This is what will be attached to the agreement.</p>
-          <form id="agreementForm">
+          <div class="section-title-row"><h2>The simple terms</h2><span id="termsVersion" class="micro"></span></div>
+          <div id="termsList" class="terms-list"></div>
+        </div>
+      </section>
+
+      <section class="paper-section client-section" id="signSection">
+        <div class="section-label">04</div>
+        <div>
+          <h2>Your details</h2>
+          <p class="muted">Fill this part yourself. These details will be saved with the agreement.</p>
+          <form id="agreementForm" novalidate>
             <div class="field-grid">
-              <label><span>Full name *</span><input name="fullName" autocomplete="name" required placeholder="Your full name"></label>
-              <label><span>Email address *</span><input name="email" type="email" autocomplete="email" required placeholder="you@example.com"></label>
-              <label><span>Phone / WhatsApp *</span><input name="phone" autocomplete="tel" required placeholder="Your phone number"></label>
-              <label><span>Brand / company</span><input name="company" autocomplete="organization" placeholder="Optional"></label>
+              <label class="field"><span>Full name *</span><input name="fullName" autocomplete="name" required placeholder="Your full name"><small class="field-error"></small></label>
+              <label class="field"><span>Email address *</span><input name="email" type="email" autocomplete="email" required placeholder="you@example.com"><small class="field-error"></small></label>
+              <label class="field"><span>Phone / WhatsApp *</span><input name="phone" autocomplete="tel" required placeholder="Your phone number"><small class="field-error"></small></label>
+              <label class="field"><span>Brand / company</span><input name="company" autocomplete="organization" placeholder="Optional"><small class="field-error"></small></label>
             </div>
-            <label class="check"><input type="checkbox" required><span>I checked the project details and they match what I agreed with JVO.</span></label>
-            <label class="check"><input type="checkbox" required><span>I understand that anything outside the scope can be priced separately.</span></label>
-            <label class="check"><input type="checkbox" required><span>I understand that work starts after the 50% deposit is received.</span></label>
-            <label class="check"><input type="checkbox" required><span>I agree to the terms on this page.</span></label>
-            <div class="signature-wrap"><label><span>Type your full name to sign *</span><input name="signature" required placeholder="Your full name"></label><p>Typing your name here counts as your signature for this agreement.</p></div>
-            <button class="primary-btn" type="submit" id="signButton">Sign and accept <span>→</span></button>
-            <p class="form-note">You’ll see the deposit details right after signing.</p>
+            <div class="checks">
+              <label class="check"><input type="checkbox" name="confirm_scope" required><span>I checked the project details and they match what I agreed with JVO.</span></label>
+              <label class="check"><input type="checkbox" name="confirm_extra" required><span>I understand that work outside this scope can be priced separately.</span></label>
+              <label class="check"><input type="checkbox" name="confirm_payment" required><span>I understand that work starts after the required upfront payment is received.</span></label>
+              <label class="check"><input type="checkbox" name="confirm_terms" required><span>I agree to the terms on this page.</span></label>
+            </div>
+            <div class="signature-wrap">
+              <label class="field"><span>Type your full name to sign *</span><input name="signature" required placeholder="Your full name"><small class="field-error" id="signatureError"></small></label>
+              <p>Typing your name here counts as your signature for this agreement.</p>
+            </div>
+            <button class="primary-btn" type="submit" id="signButton"><span class="button-label">Sign agreement</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
+            <p class="form-note">JVO stores these details for project records, payment records and communication. <a href="privacy.html" target="_blank" rel="noreferrer">Privacy note</a></p>
           </form>
         </div>
       </section>
 
-      <section id="signedState" class="signed-card hidden">
-        <div class="signed-icon">✓</div><p class="eyebrow">Agreement signed</p><h2>Nice. One last step.</h2><p>Your project is confirmed once the deposit is received.</p>
-        <div class="payment-box"><span>Deposit due</span><strong id="signedDeposit"></strong><p id="paymentInstructions"></p></div>
-        <a id="paymentLink" class="primary-btn hidden" target="_blank" rel="noreferrer">Pay deposit <span>→</span></a>
-        <p class="small">Already paid? James will confirm it and you’ll get an email receipt.</p>
+      <section id="signedPanel" class="signed-panel hidden">
+        <div class="signed-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></div>
+        <div>
+          <p class="eyebrow">Signed agreement</p>
+          <h2 id="signedBy">Agreement signed</h2>
+          <p id="signedMeta" class="muted"></p>
+          <div class="button-row">
+            <a id="agreementPdf" class="secondary-btn" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 20h14"/></svg> Download agreement</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="paymentSection" class="portal-card hidden">
+        <div class="portal-card-head"><div><p class="eyebrow">Payments</p><h2>Project money</h2></div><strong id="outstandingAmount"></strong></div>
+        <div id="financialGrid" class="financial-grid"></div>
+        <div id="paymentInstructionsWrap" class="payment-instructions hidden"><span>Payment details</span><p id="paymentInstructions"></p><a id="paymentLink" class="primary-btn compact hidden" target="_blank" rel="noreferrer"><span>Open payment link</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 16 16 8M10 8h6v6"/></svg></a></div>
+        <div id="paymentHistory" class="record-list"></div>
+      </section>
+
+      <section id="changesSection" class="portal-card hidden">
+        <div class="portal-card-head"><div><p class="eyebrow">Additional work</p><h2>Changes we agreed on</h2></div></div>
+        <div id="changeOrders" class="record-list"></div>
+      </section>
+
+      <section id="reviewSection" class="portal-card hidden">
+        <div class="portal-card-head"><div><p class="eyebrow">Client review</p><h2>Tell JVO what happens next</h2></div></div>
+        <p class="muted">If the website is ready for your review, you can approve it or send changes here.</p>
+        <form id="reviewForm">
+          <label class="field"><span>Message</span><textarea name="message" placeholder="Optional note"></textarea></label>
+          <div class="button-row">
+            <button type="submit" name="decision" value="approve" class="primary-btn compact"><span>Approve website</span></button>
+            <button type="submit" name="decision" value="changes" class="secondary-btn">Request changes</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="updatesSection" class="portal-card hidden">
+        <div class="portal-card-head"><div><p class="eyebrow">Updates</p><h2>What has happened</h2></div></div>
+        <div id="updates" class="updates"></div>
+      </section>
+
+      <section id="liveSection" class="launch-card hidden">
+        <p class="eyebrow">Website launched</p>
+        <h2>Your site is live.</h2>
+        <a id="liveUrl" class="primary-btn" target="_blank" rel="noreferrer"><span>Open website</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 16 16 8M10 8h6v6"/></svg></a>
       </section>
     </div>
   </main>
-  <footer><strong>JVO</strong><span>James Senu · 0594121246 · senujames23@gmail.com</span></footer>
+
+  <footer><strong id="footerBrand">JVO</strong><span id="footerContact">James Senu</span></footer>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="form.js"></script>
 </body>
 </html>
