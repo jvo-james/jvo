@@ -37,7 +37,7 @@ const DEFAULT_RESTAURANT_TEMPLATE = {
   logoText:'Common Table',
   primaryCta:'Book a table',
   secondaryCta:'See the menu',
-  heroImage:{source:'repo',id:'diningRoomWide',alt:'Warm restaurant dining room'},
+  heroImage:{source:'repo',id:'heroUnsplash',alt:'Elegant restaurant dining room'},
   storyTitle:'Good food. Properly served.',
   storyText:'We cook familiar things with a little edge, pour good drinks and keep the room easy so the evening can take its own shape.',
   storyImage:{source:'repo',id:'diningRoom',alt:'Warm dining room before service'},
@@ -119,8 +119,8 @@ async function uniqueRestaurantSlug(base, ignoreId = '') {
   }
 }
 function cleanImageObject(image, fallback = {}) {
-  const source = image?.source === 'cloudinary' ? 'cloudinary' : 'repo';
-  const out = { source, id: text(image?.id), url: source === 'cloudinary' ? safeUrl(image?.url) : '', publicId: source === 'cloudinary' ? text(image?.publicId) : '', alt: text(image?.alt) };
+  const source = image?.source === 'cloudinary' ? 'cloudinary' : image?.source === 'url' ? 'url' : 'repo';
+  const out = { source, id: text(image?.id), url: (source === 'cloudinary' || source === 'url') ? safeUrl(image?.url) : '', publicId: source === 'cloudinary' ? text(image?.publicId) : '', alt: text(image?.alt) };
   if (source === 'repo' && !out.id && fallback.id) out.id = fallback.id;
   return out;
 }
@@ -168,18 +168,21 @@ function publicRestaurantDemo(d) {
 function restaurantDemoLink(slug) { return `${SITE}/restaurant/${encodeURIComponent(slug)}`; }
 function resolveRestaurantImageUrl(image) {
   if (image?.source === 'cloudinary' && image.url) return image.url;
+  if (image?.source === 'url' && image.url) return /^https:\/\//i.test(text(image.url)) ? text(image.url) : '';
   if (image?.source === 'repo' && image.url) {
     const raw = text(image.url);
     if (/^https?:\/\//i.test(raw)) return raw;
     return raw.startsWith('/') ? `${SITE}${raw}` : `${SITE}/${raw.replace(/^\/+/, '')}`;
   }
   const map = {
+    heroUnsplash:'https://images.unsplash.com/photo-1766832255363-c9f060ade8b0?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=88&w=3200', heroUnsplashWarm:'https://images.unsplash.com/photo-1743793056164-67c6ce029d34?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=88&w=2600', eveningUnsplash:'https://images.unsplash.com/photo-1774509619298-5ee42287b75b?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=88&w=2400', platedUnsplash:'https://images.unsplash.com/photo-1753722421529-478a04442baf?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=88&w=2200',
     diningRoom:'restaurant-hero.jpg', diningRoomWide:'restaurant-sunshine.jpg', diningRoomBlue:'restaurant-reserve.jpg', barInterior:'restaurant-interior.jpg', exterior:'restaurant-exterior.jpg', candlelight:'restaurant-blacklit.jpg',
     platedSteak:'restaurant-ribeye.jpg', tomahawk:'restaurant-tomahawk.jpg', filet:'restaurant-filet.jpg', salmon:'restaurant-salmon.jpg', scallops:'restaurant-risotto.jpg', shrimp:'restaurant-shrimp.jpg', salad:'restaurant-salad.jpg', seafood:'restaurant-seafood.jpg', smallBites:'restaurant-menusides.jpg', baconBites:'restaurant-bacon.jpg',
     dessert:'restaurant-gallery4.jpg', platedDetail:'restaurant-gallery3.jpg', tableSetting:'restaurant-plate.jpg', kitchenDetail:'restaurant-gallery6.jpg', cocktail:'restaurant-cocktail1.jpg', cocktails:'restaurant-cocktail3.jpg', cocktail3:'restaurant-cocktail3.jpg', champagne:'restaurant-champagne.jpg', wine:'restaurant-wine1.jpg', bourbon:'restaurant-bourbon1.jpg', whiskey:'restaurant-whiskey.jpg', barShelf:'restaurant-bourbon4.jpg', privateRoom:'restaurant-reserve2.jpg', tableConversation:'restaurant-c2.jpg', gathering:'restaurant-c.jpg', wineWall:'restaurant-wine2.jpg', barTable:'restaurant-gallery7.jpg',
     diningTable:'restaurant-plate.jpg', warmTerrace:'restaurant-sunshine.jpg', kitchenHands:'restaurant-gallery6.jpg', baker:'restaurant-gallery4.jpg', platedDish:'restaurant-ribeye.jpg', serviceWarm:'restaurant-gallery7.jpg', nightStreet:'restaurant-exterior.jpg'
   };
-  return image?.source === 'repo' && map[image.id] ? `${SITE}/images/${map[image.id]}` : '';
+  if (image?.source === 'repo' && map[image.id]) { const mapped = map[image.id]; return /^https:\/\//i.test(mapped) ? mapped : `${SITE}/images/${mapped}`; }
+  return '';
 }
 function renderOutreachEmailHtml({ demo, recipientName, body, subject, link, settings }) {
   const ownerName = text(settings.ownerName || 'James Senu');
