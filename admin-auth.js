@@ -1,5 +1,5 @@
 import { getApp, getApps, initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { browserLocalPersistence, getAuth, onAuthStateChanged, setPersistence, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 
 const $ = selector => document.querySelector(selector);
 const form = $('#loginForm');
@@ -17,7 +17,15 @@ const messages = {
   'auth/operation-not-allowed': 'Email/password sign-in is disabled in Firebase Authentication.',
   'auth/too-many-requests': 'Too many attempts. Wait a little and try again.',
   'auth/unauthorized-domain': 'This website is not authorized in Firebase Authentication.',
-  'auth/network-request-failed': 'Firebase could not be reached. Check your connection or deployment.'
+  'auth/network-request-failed': 'Firebase could not be reached. Check your connection or deployment.',
+  'auth/invalid-api-key': 'The Firebase API key in firebase-config.js is invalid.',
+  'auth/app-not-authorized': 'This Firebase app is not authorized for this sign-in request.',
+  'auth/requests-from-referer-blocked': 'Firebase blocked this domain. Check the API key restrictions and Firebase Authentication authorized domains.',
+  'auth/operation-not-supported-in-this-environment': 'Firebase sign-in is not supported from this page. Open the HTTPS site instead of a local file.',
+  'auth/internal-error': 'Firebase returned an internal sign-in error. Refresh the page and try again.',
+  'auth/quota-exceeded': 'Firebase Authentication temporarily rejected the request because a quota was exceeded.',
+  'auth/timeout': 'Firebase sign-in timed out. Check your connection and try again.',
+  'auth/credential-already-in-use': 'This Firebase account is already linked to another credential.'
 };
 
 function setError(message = '') {
@@ -54,13 +62,14 @@ async function loadAdminCode() {
   if (window.__JVO_ADMIN_CODE_LOADED__) return;
   window.__JVO_ADMIN_CODE_LOADING__ = true;
   try {
-    await import('./admin.js?v=20261004-restaurant-studio');
+    await import('./admin.js?v=20261004-authfix-1');
     window.__JVO_ADMIN_CODE_LOADED__ = true;
   } catch (err) {
     console.error('JVO Desk admin dashboard failed to load:', err);
     window.__JVO_ADMIN_CODE_ERROR__ = err;
     showLogin();
     setError(`The login succeeded, but the admin dashboard failed to start: ${err?.message || err}`);
+    throw err;
   } finally {
     window.__JVO_ADMIN_CODE_LOADING__ = false;
   }
@@ -80,6 +89,16 @@ async function boot() {
   const app = getApps().length ? getApp() : initializeApp(config);
   const auth = getAuth(app);
   window.__JVO_AUTH__ = auth;
+
+  // Keep the signed-in admin session across refreshes. Firebase defaults to
+  // local persistence in browsers, but setting it explicitly prevents a
+  // browser/environment change from making the dashboard appear logged out.
+  try {
+    await setPersistence(auth, browserLocalPersistence);
+  } catch (persistenceError) {
+    console.warn('JVO Desk could not set browser auth persistence. Continuing with Firebase defaults.', persistenceError);
+  }
+
   window.__JVO_AUTH_BOOTED__ = true;
 
   form.addEventListener('submit', async event => {
@@ -113,10 +132,22 @@ async function boot() {
       return;
     }
 
-    showApp();
-    setError('');
     setBusy(false);
-    await loadAdminCode();
+    setError('');
+    try {
+      await loadAdminCode();
+      showApp();
+    } catch (err) {
+      console.error('JVO Desk authenticated session could not start:', err);
+      showLogin();
+      setError(`Your Firebase login worked, but the desk could not finish loading: ${err?.message || err}`);
+    }
+  }, error => {
+    console.error('JVO Desk Firebase auth state error:', error);
+    showLogin();
+    setBusy(false);
+    const code = error?.code || 'auth/unknown-error';
+    setError(`${messages[code] || 'Firebase authentication could not start.'} (${code})`);
   });
 }
 

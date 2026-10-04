@@ -1,5 +1,5 @@
 import { signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import { renderDemos as renderRestaurantDemos } from './restaurant-studio.js';
+import { renderDemos as renderRestaurantDemos } from './restaurant-studio.js?v=20261004-authfix-1';
 
 const $ = s => document.querySelector(s);
 const auth = window.__JVO_AUTH__;
@@ -12,9 +12,37 @@ const date = x => x ? new Date(x).toLocaleDateString('en-GB',{day:'numeric',mont
 const today = () => new Date().toISOString().slice(0,10);
 const uid = () => crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`;
 function icon(name){const paths={plus:'M12 5v14M5 12h14',external:'M8 16 16 8M10 8h6v6',more:'M5 12h.01M12 12h.01M19 12h.01',download:'M12 3v12m0 0 4-4m-4 4-4-4M5 20h14',copy:'M9 9h10v10H9zM5 15H4V5h10v1',mail:'M4 6h16v12H4zM4 7l8 6 8-6',money:'M4 7h16v10H4zM8 12h.01M16 12h.01M12 15c1.4 0 2.5-1.3 2.5-3S13.4 9 12 9s-2.5 1.3-2.5 3S10.6 15 12 15',edit:'M5 19h4L19 9l-4-4L5 15v4zM13 7l4 4',check:'m5 12 4 4L19 6',clock:'M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18'};return `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${paths[name]||paths.more}"/></svg>`}
-async function api(action, body, method='POST'){
-  const u=auth.currentUser;if(!u)throw new Error('Please log in again.');const token=await u.getIdToken();const options={method:body?method:'GET',headers:{authorization:`Bearer ${token}`}};if(body){options.headers['content-type']='application/json';options.body=JSON.stringify(body)}const r=await fetch(`/.netlify/functions/api?action=${encodeURIComponent(action)}`,options);const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||'Something went wrong.');return d;
+async function api(action, body, method='POST') {
+  const u = auth.currentUser;
+  if (!u) throw new Error('Your session has ended. Please sign in again.');
+
+  const request = async forceRefresh => {
+    const token = await u.getIdToken(forceRefresh);
+    const options = {
+      method: body ? method : 'GET',
+      headers: { authorization: `Bearer ${token}` }
+    };
+    if (body) {
+      options.headers['content-type'] = 'application/json';
+      options.body = JSON.stringify(body);
+    }
+    return fetch(`/.netlify/functions/api?action=${encodeURIComponent(action)}`, options);
+  };
+
+  let response = await request(false);
+  let data = await response.json().catch(() => ({}));
+
+  // A freshly deployed site can occasionally have a stale Firebase ID token
+  // in the browser. Give it one clean retry before reporting a session error.
+  if (response.status === 401 && auth.currentUser) {
+    response = await request(true);
+    data = await response.json().catch(() => ({}));
+  }
+
+  if (!response.ok) throw new Error(data.error || 'Something went wrong.');
+  return data;
 }
+
 function toast(msg){$('#toastText').textContent=msg;$('#toast').classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>$('#toast').classList.remove('show'),2800)}
 function busy(btn,on,label='Working'){if(!btn)return;btn.disabled=on;btn.classList.toggle('loading',on);const s=btn.querySelector('.button-label');if(s){if(on){btn.dataset.oldLabel=s.textContent;s.textContent=label}else{s.textContent=btn.dataset.oldLabel||s.textContent}}}
 async function load(){const d=await api('adminData');state={...state,...d};render()}

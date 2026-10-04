@@ -1,4 +1,4 @@
-import { JVO_RESTAURANT_TEMPLATE, JVO_RESTAURANT_EMAIL_TEMPLATE } from './restaurant-studio-data.js';
+import { JVO_RESTAURANT_TEMPLATE, JVO_RESTAURANT_EMAIL_TEMPLATE } from './restaurant-studio-data.js?v=20261004-authfix-1';
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
 const uid = () => crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`;
