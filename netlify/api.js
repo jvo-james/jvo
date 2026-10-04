@@ -17,6 +17,96 @@ const SITE = process.env.SITE_URL || 'https://jvo.me';
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || 'senujames23@gmail.com').toLowerCase();
 const TERMS_VERSION = '2026-09-v2';
 const AGREEMENT_VERSION = '2.0';
+const RESTAURANT_LEAD_STATUSES = ['New', 'Contacted', 'Replied', 'Interested', 'Won', 'Not now'];
+const RESTAURANT_CATEGORIES = ['Small plates', 'Mains', 'Dessert', 'Drinks', 'Lunch', 'Sides'];
+const DEFAULT_RESTAURANT_TEMPLATE = {
+  name: 'The Common Table', eyebrow: 'Kitchen · Bar · Table', tagline: 'Good food, warm light and nowhere to rush.',
+  intro: 'A neighbourhood restaurant built around honest cooking, generous plates and the kind of evenings you want to stretch out a little longer.',
+  city: 'Accra, Ghana', address: '18 Olive Street, Osu', phone: '+233 20 123 4567', email: 'hello@restaurant.com',
+  hours: 'Mon–Thu 12:00–22:00 · Fri–Sat 12:00–23:00 · Sun 13:00–21:00', reservationUrl: '', orderUrl: '', instagramUrl: '',
+  logoText: 'Common Table', primaryCta: 'Book a table', secondaryCta: 'See the menu',
+  heroImage: { source: 'repo', id: 'warmTerrace', alt: 'A warmly lit restaurant terrace at night' },
+  storyTitle: 'A table worth coming back to.',
+  storyText: 'We cook food that feels familiar but never flat. The menu moves with the season, the room stays easy and the bar is always ready for one more round. Come for dinner, stay because the night got good.',
+  storyImage: { source: 'repo', id: 'kitchenHands', alt: 'Hands plating a dish in the kitchen' },
+  experienceTitle: 'Come hungry. Leave happy.', experienceText: 'Good food, a proper drink and enough room to talk. That is really the whole point.',
+  menu: [
+    { name: 'Charred prawns', category: 'Small plates', description: 'Garlic, chilli, lime and warm flatbread.', price: '95', currency: 'GHS', image: { source: 'repo', id: 'platedDish', alt: 'A beautifully plated dish' } },
+    { name: 'Market salad', category: 'Small plates', description: 'Crisp greens, roasted vegetables, herbs and citrus dressing.', price: '65', currency: 'GHS', image: { source: 'repo', id: 'diningTable', alt: 'Fresh food shared around a table' } },
+    { name: 'Ember chicken', category: 'Mains', description: 'Slow-roasted chicken, smoky jus and crispy potatoes.', price: '140', currency: 'GHS', image: { source: 'repo', id: 'kitchenHands', alt: 'Chef preparing a dish' } },
+    { name: 'Coconut fish', category: 'Mains', description: 'Market fish, coconut sauce, herbs and steamed rice.', price: '155', currency: 'GHS', image: { source: 'repo', id: 'serviceWarm', alt: 'A warm restaurant scene' } },
+    { name: 'House burger', category: 'Mains', description: 'Dry-aged beef, smoked cheddar, pickles and house fries.', price: '125', currency: 'GHS', image: { source: 'repo', id: 'warmTerrace', alt: 'Warmly lit restaurant dining room' } },
+    { name: 'Burnt cheesecake', category: 'Dessert', description: 'Soft centre, caramelised top and a little sea salt.', price: '55', currency: 'GHS', image: { source: 'repo', id: 'baker', alt: 'Freshly baked food from the kitchen' } }
+  ],
+  gallery: [
+    { image: { source: 'repo', id: 'warmTerrace', alt: 'Warmly lit restaurant terrace' } },
+    { image: { source: 'repo', id: 'kitchenHands', alt: 'Chef plating a dish' } },
+    { image: { source: 'repo', id: 'diningTable', alt: 'Shared dining table' } },
+    { image: { source: 'repo', id: 'platedDish', alt: 'Plated dish' } },
+    { image: { source: 'repo', id: 'serviceWarm', alt: 'Restaurant service scene' } }
+  ],
+  leadStatus: 'New', notes: '', recipientName: '', recipientEmail: ''
+};
+const DEFAULT_RESTAURANT_EMAIL = {
+  subject: 'I made a quick website idea for {{restaurantName}}',
+  body: 'Hi {{recipientName}},\n\nI came across {{restaurantName}} and liked what you’re doing in {{city}}.\n\nThe restaurant already has the part that is hardest to fake, the food and the atmosphere. I wanted to see what it would look like if that came through online just as clearly.\n\nSo I put together a quick website concept for {{restaurantName}}:\n{{demoLink}}\n\nIt’s built around your restaurant, not a generic portfolio link. The menu, story, location and booking flow are all there.\n\nThere’s no pressure at all. I just thought you might want to see it.\n\nIf you like the direction, I can turn it into the full site and connect the real menu, photos and booking or ordering setup.\n\nThanks,\n{{yourName}}\n{{businessName}}'
+};
+function slugify(value) {
+  return text(value).toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 70) || 'restaurant';
+}
+async function uniqueRestaurantSlug(base, ignoreId = '') {
+  let slug = slugify(base), n = 2;
+  while (true) {
+    const q = await db.collection('restaurantDemos').where('slug', '==', slug).limit(2).get();
+    const conflict = q.docs.some(d => d.id !== ignoreId);
+    if (!conflict) return slug;
+    slug = `${slugify(base)}-${n++}`;
+  }
+}
+function cleanImageObject(image, fallback = {}) {
+  const source = image?.source === 'cloudinary' ? 'cloudinary' : 'repo';
+  const out = { source, id: text(image?.id), url: source === 'cloudinary' ? safeUrl(image?.url) : '', publicId: source === 'cloudinary' ? text(image?.publicId) : '', alt: text(image?.alt) };
+  if (source === 'repo' && !out.id && fallback.id) out.id = fallback.id;
+  return out;
+}
+function cleanRestaurantDemoPayload(body, old = {}) {
+  const base = { ...DEFAULT_RESTAURANT_TEMPLATE, ...old };
+  const menu = Array.isArray(body.menu) ? body.menu.slice(0, 30).map((item, i) => ({
+    name: text(item?.name).slice(0, 100) || `Menu item ${i + 1}`,
+    category: RESTAURANT_CATEGORIES.includes(item?.category) ? item.category : (text(item?.category).slice(0, 40) || 'Mains'),
+    description: text(item?.description).slice(0, 300), price: text(item?.price).slice(0, 32), currency: text(item?.currency).slice(0, 8),
+    image: cleanImageObject(item?.image, { id: 'platedDish' })
+  })) : (old.menu || DEFAULT_RESTAURANT_TEMPLATE.menu);
+  const gallery = Array.isArray(body.gallery) ? body.gallery.slice(0, 12).map(entry => ({ image: cleanImageObject(entry?.image, { id: 'warmTerrace' }) })).filter(entry => entry.image.id || entry.image.url) : (old.gallery || DEFAULT_RESTAURANT_TEMPLATE.gallery);
+  const allowedStatus = RESTAURANT_LEAD_STATUSES.includes(body.leadStatus) ? body.leadStatus : (old.leadStatus || 'New');
+  return {
+    name: text(body.name).slice(0, 100) || base.name, eyebrow: text(body.eyebrow).slice(0, 80) || base.eyebrow, tagline: text(body.tagline).slice(0, 180) || base.tagline,
+    intro: text(body.intro).slice(0, 500), city: text(body.city).slice(0, 100), address: text(body.address).slice(0, 200), phone: text(body.phone).slice(0, 60), email: text(body.email).toLowerCase().slice(0, 140),
+    hours: text(body.hours).slice(0, 260), reservationUrl: safeUrl(body.reservationUrl), orderUrl: safeUrl(body.orderUrl), instagramUrl: safeUrl(body.instagramUrl), logoText: text(body.logoText).slice(0, 80),
+    primaryCta: text(body.primaryCta).slice(0, 40) || 'Book a table', secondaryCta: text(body.secondaryCta).slice(0, 40) || 'See the menu',
+    heroImage: cleanImageObject(body.heroImage, { id: 'warmTerrace' }), storyTitle: text(body.storyTitle).slice(0, 120), storyText: text(body.storyText).slice(0, 1000), storyImage: cleanImageObject(body.storyImage, { id: 'kitchenHands' }),
+    experienceTitle: text(body.experienceTitle).slice(0, 120), experienceText: text(body.experienceText).slice(0, 500), menu, gallery, leadStatus: allowedStatus, notes: text(body.notes).slice(0, 1200),
+    recipientName: text(body.recipientName).slice(0, 100), recipientEmail: text(body.recipientEmail).toLowerCase().slice(0, 140)
+  };
+}
+function publicRestaurantDemo(d) {
+  return { id: d.id, slug: d.slug, name: d.name, eyebrow: d.eyebrow, tagline: d.tagline, intro: d.intro, city: d.city, address: d.address, phone: d.phone, email: d.email, hours: d.hours,
+    reservationUrl: d.reservationUrl || '', orderUrl: d.orderUrl || '', instagramUrl: d.instagramUrl || '', logoText: d.logoText || d.name, primaryCta: d.primaryCta || 'Book a table', secondaryCta: d.secondaryCta || 'See the menu',
+    heroImage: d.heroImage || {}, storyTitle: d.storyTitle, storyText: d.storyText, storyImage: d.storyImage || {}, experienceTitle: d.experienceTitle, experienceText: d.experienceText, menu: Array.isArray(d.menu) ? d.menu : [], gallery: Array.isArray(d.gallery) ? d.gallery : [],
+    createdAt: d.createdAt, updatedAt: d.updatedAt, leadStatus: d.leadStatus || 'New' };
+}
+function restaurantDemoLink(slug) { return `${SITE}/restaurant/${encodeURIComponent(slug)}`; }
+function resolveRestaurantImageUrl(image) {
+  if (image?.source === 'cloudinary' && image.url) return image.url;
+  const map = { diningTable:'images/a11.webp', warmTerrace:'images/a2.webp', kitchenHands:'images/a10.webp', baker:'images/a4.webp', platedDish:'images/a8.webp', serviceWarm:'images/a3.webp', nightStreet:'images/a12.webp' };
+  return image?.source === 'repo' && map[image.id] ? `${SITE}/${map[image.id]}` : '';
+}
+function renderOutreachEmailHtml({ demo, recipientName, body, subject, link, settings }) {
+  const brand = esc(settings.businessName || 'JVO'), owner = esc(settings.ownerName || 'James Senu'), reply = esc(settings.email || '');
+  const image = resolveRestaurantImageUrl(demo.heroImage), cleanName = esc(demo.name || 'your restaurant'), city = esc(demo.city || '');
+  const paragraphs = String(body || '').split(/\n\s*\n/).filter(p => p.trim()).map(p => `<p style="margin:0 0 18px;font:400 15px/1.78 Arial,sans-serif;color:#4f4b44">${esc(p).replace(/\n/g,'<br>')}</p>`).join('');
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head><body style="margin:0;background:#eee9e0;color:#171511"><div style="display:none;max-height:0;overflow:hidden;opacity:0">A quick website idea for ${cleanName}</div><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eee9e0;padding:24px 10px"><tr><td align="center"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:650px;background:#fbf8f1;border:1px solid #d8d0c2"><tr><td style="padding:19px 23px;border-bottom:1px solid #ddd6ca"><table width="100%" role="presentation"><tr><td style="font:700 22px Georgia,serif">${brand}</td><td align="right" style="font:500 9px monospace;letter-spacing:.16em;text-transform:uppercase;color:#81796e">A QUICK IDEA</td></tr></table></td></tr>${image ? `<tr><td><img src="${esc(image)}" alt="${cleanName}" width="650" style="display:block;width:100%;height:auto;max-height:310px;object-fit:cover"></td></tr>` : ''}<tr><td style="padding:33px 28px 17px"><div style="font:500 9px monospace;letter-spacing:.14em;text-transform:uppercase;color:#b44a34;margin-bottom:12px">${esc(city || 'Restaurant website concept')}</div><h1 style="margin:0 0 24px;font:600 36px/1.04 Georgia,serif;letter-spacing:-.03em">A cleaner online home for ${cleanName}.</h1>${paragraphs}<table role="presentation" cellpadding="0" cellspacing="0"><tr><td><a href="${esc(link)}" style="display:inline-block;background:#171511;color:#fff;text-decoration:none;padding:14px 20px;font:600 12px Arial,sans-serif">View the restaurant concept ↗</a></td></tr></table><p style="margin:19px 0 0;font:400 11px/1.6 Arial,sans-serif;color:#827a70">Private concept prepared for ${cleanName}. ${city ? `Based in ${city}.` : ''}</p></td></tr><tr><td style="padding:23px 28px 28px;background:#171511;color:#eee7dc"><p style="margin:0;font:400 12px/1.6 Arial,sans-serif">Thanks,<br><strong>${owner}</strong><br>${brand}${reply ? ` · ${reply}` : ''}</p></td></tr></table></td></tr></table></body></html>`;
+}
 const ALLOWED_CURRENCIES = ['GHS', 'USD', 'GBP', 'EUR'];
 const STATUSES = ['Draft', 'Agreement Sent', 'Agreement Signed', 'Awaiting Deposit', 'Deposit Received', 'Development', 'Client Review', 'Approved', 'Awaiting Final Payment', 'Fully Paid', 'Launched', 'Completed', 'On Hold', 'Cancelled'];
 
@@ -141,7 +231,7 @@ function emailFrame({ preheader = '', eyebrow = 'JVO', title, intro = '', conten
   return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${esc(title)}</title></head><body style="margin:0;background:#ebe5dc;color:#171512"><div style="display:none;max-height:0;overflow:hidden;opacity:0">${esc(preheader)}</div><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ebe5dc;padding:26px 12px"><tr><td align="center"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:620px;background:#fffdf8;border:1px solid #d8d0c4"><tr><td style="padding:22px 26px;border-bottom:1px solid #d8d0c4"><table width="100%" role="presentation"><tr><td style="font:700 25px Georgia,serif">${brand}</td><td align="right" style="font:500 10px monospace;letter-spacing:.12em;text-transform:uppercase;color:#756f65">PROJECT DESK</td></tr></table></td></tr><tr><td style="padding:42px 26px 10px"><div style="font:600 10px monospace;letter-spacing:.14em;text-transform:uppercase;color:#c74e34;margin-bottom:14px">${esc(eyebrow)}</div><h1 style="margin:0;font:600 42px/1.02 Georgia,serif;letter-spacing:-1px">${esc(title)}</h1>${intro ? `<p style="margin:18px 0 0;font:400 15px/1.7 Arial,sans-serif;color:#5f594f">${esc(intro)}</p>` : ''}</td></tr><tr><td style="padding:12px 26px 4px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">${content}${button}</table></td></tr><tr><td style="padding:25px 26px 34px"><p style="margin:0;font:400 14px/1.7 Arial,sans-serif">Thanks,<br><strong>${owner}</strong><br>${brand}</p></td></tr><tr><td style="background:#171512;color:#e8e0d5;padding:20px 26px"><table width="100%" role="presentation"><tr><td style="font:600 11px Arial,sans-serif">jvo.me</td><td align="right" style="font:400 10px Arial,sans-serif;color:#aaa196">${email}${phone ? ` &nbsp; ${phone}` : ''}</td></tr></table></td></tr></table></td></tr></table></body></html>`;
 }
 const infoRow = (label, value, strong = false) => `<tr><td style="padding:13px 0;border-bottom:1px solid #e6dfd5;font:500 10px monospace;text-transform:uppercase;color:#756f65">${esc(label)}</td><td align="right" style="padding:13px 0;border-bottom:1px solid #e6dfd5;font:${strong ? '700 18px Georgia,serif' : '600 13px Arial,sans-serif'}">${esc(value)}</td></tr>`;
-async function sendMail({ to, subject, textMessage, html, projectId = '', projectName = '', template = 'custom', idempotencyKey = '' }) {
+async function sendMail({ to, subject, textMessage, html, projectId = '', projectName = '', template = 'custom', idempotencyKey = '', demoId = '', restaurantName = '', demoLink = '' }) {
   if (!process.env.RESEND_API_KEY) throw new Error('RESEND_API_KEY is missing.');
   if (idempotencyKey) {
     const seen = await db.collection('emailKeys').doc(idempotencyKey).get();
@@ -154,7 +244,7 @@ async function sendMail({ to, subject, textMessage, html, projectId = '', projec
   const r = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'content-type': 'application/json' }, body: JSON.stringify(payload) });
   const d = await r.json();
   if (!r.ok) throw new Error(d.message || 'Email could not be sent.');
-  const emailRecord = { to, subject, message: textMessage, html, template, projectId, projectName, resendId: d.id || '', createdAt: now() };
+  const emailRecord = { to, subject, message: textMessage, html, template, projectId, projectName, demoId, restaurantName, demoLink, resendId: d.id || '', createdAt: now() };
   await db.collection('emails').add(emailRecord);
   if (idempotencyKey) await db.collection('emailKeys').doc(idempotencyKey).set({ resendId: d.id || '', createdAt: now() });
   return d;
@@ -353,6 +443,15 @@ exports.handler = async event => {
       }
     }
 
+    if (action === 'restaurantDemo') {
+      const slug = slugify(event.queryStringParameters?.slug || '');
+      if (!slug) return json(400, { error: 'Restaurant slug is missing.' });
+      await rateLimit(event, slug, action, 120);
+      const q = await db.collection('restaurantDemos').where('slug', '==', slug).limit(1).get();
+      if (q.empty || q.docs[0].data().archivedAt) return json(404, { error: 'This restaurant demo was not found.' });
+      return json(200, { demo: publicRestaurantDemo(cleanProject(q.docs[0].id, q.docs[0].data())) });
+    }
+
     if (action === 'agreementPdf') {
       const token = event.queryStringParameters?.id || '';
       const project = await getProjectByToken(token);
@@ -376,10 +475,78 @@ exports.handler = async event => {
     await adminOnly(event);
 
     if (action === 'adminData') {
-      const [pq, payq, eq, aq, cq, rq, s] = await Promise.all([
-        db.collection('projects').orderBy('createdAt', 'desc').limit(300).get(), db.collection('payments').orderBy('createdAt', 'desc').limit(500).get(), db.collection('emails').orderBy('createdAt', 'desc').limit(250).get(), db.collection('activities').orderBy('createdAt', 'desc').limit(800).get(), db.collection('changeRequests').orderBy('createdAt', 'desc').limit(500).get(), db.collection('reviews').orderBy('createdAt', 'desc').limit(300).get(), getSettings()
+      const [pq, payq, eq, aq, cq, rq, dq, s] = await Promise.all([
+        db.collection('projects').orderBy('createdAt', 'desc').limit(300).get(), db.collection('payments').orderBy('createdAt', 'desc').limit(500).get(), db.collection('emails').orderBy('createdAt', 'desc').limit(250).get(), db.collection('activities').orderBy('createdAt', 'desc').limit(800).get(), db.collection('changeRequests').orderBy('createdAt', 'desc').limit(500).get(), db.collection('reviews').orderBy('createdAt', 'desc').limit(300).get(), db.collection('restaurantDemos').orderBy('createdAt', 'desc').limit(300).get(), getSettings()
       ]);
-      return json(200, { projects: pq.docs.map(d => cleanProject(d.id, d.data())), payments: payq.docs.map(d => cleanProject(d.id, d.data())), emails: eq.docs.map(d => cleanProject(d.id, d.data())), activities: aq.docs.map(d => cleanProject(d.id, d.data())), changeRequests: cq.docs.map(d => cleanProject(d.id, d.data())), reviews: rq.docs.map(d => cleanProject(d.id, d.data())), settings: s });
+      return json(200, { projects: pq.docs.map(d => cleanProject(d.id, d.data())), payments: payq.docs.map(d => cleanProject(d.id, d.data())), emails: eq.docs.map(d => cleanProject(d.id, d.data())), activities: aq.docs.map(d => cleanProject(d.id, d.data())), changeRequests: cq.docs.map(d => cleanProject(d.id, d.data())), reviews: rq.docs.map(d => cleanProject(d.id, d.data())), restaurantDemos: dq.docs.filter(d => !d.data().archivedAt).map(d => cleanProject(d.id, d.data())), settings: s });
+    }
+
+    if (action === 'createRestaurantDemo') {
+      const payload = cleanRestaurantDemoPayload(body);
+      if (!payload.name) return json(400, { error: 'Restaurant name is required.' });
+      const slug = await uniqueRestaurantSlug(body.slug || payload.name);
+      const createdAt = now();
+      const d = { ...payload, slug, leadStatus: 'New', createdAt, updatedAt: createdAt };
+      const doc = await db.collection('restaurantDemos').add(d);
+      await db.collection('activities').add({ projectId: `restaurant:${doc.id}`, text: `Restaurant demo created: ${payload.name}`, kind: 'restaurantDemo', meta: { demoId: doc.id, slug }, createdAt });
+      return json(200, { demo: cleanProject(doc.id, d), link: restaurantDemoLink(slug) });
+    }
+
+    if (action === 'updateRestaurantDemo') {
+      const ref = db.collection('restaurantDemos').doc(text(body.demoId)); const d = await ref.get();
+      if (!d.exists) return json(404, { error: 'Restaurant demo not found.' });
+      const payload = cleanRestaurantDemoPayload(body, d.data());
+      const slug = await uniqueRestaurantSlug(body.slug || payload.name, d.id);
+      const stamp = now(); const patch = { ...payload, slug, updatedAt: stamp };
+      await ref.update(patch);
+      await db.collection('activities').add({ projectId: `restaurant:${d.id}`, text: `Restaurant demo updated: ${payload.name}`, kind: 'restaurantDemo', meta: { demoId: d.id, slug }, createdAt: stamp });
+      return json(200, { demo: cleanProject(d.id, { ...d.data(), ...patch }), link: restaurantDemoLink(slug) });
+    }
+
+    if (action === 'duplicateRestaurantDemo') {
+      const src = await db.collection('restaurantDemos').doc(text(body.demoId)).get();
+      if (!src.exists) return json(404, { error: 'Restaurant demo not found.' });
+      const original = src.data(); const stamp = now(); const name = `${text(original.name) || 'Restaurant'} copy`; const slug = await uniqueRestaurantSlug(name);
+      const copy = { ...JSON.parse(JSON.stringify(original)), name, slug, leadStatus: 'New', recipientName: '', recipientEmail: '', lastSentAt: '', lastSentTo: '', createdAt: stamp, updatedAt: stamp };
+      const doc = await db.collection('restaurantDemos').add(copy);
+      await db.collection('activities').add({ projectId: `restaurant:${doc.id}`, text: `Restaurant demo duplicated from ${src.id}`, kind: 'restaurantDemo', meta: { demoId: doc.id, sourceDemoId: src.id, slug }, createdAt: stamp });
+      return json(200, { demo: cleanProject(doc.id, copy), link: restaurantDemoLink(slug) });
+    }
+
+    if (action === 'archiveRestaurantDemo') {
+      const ref = db.collection('restaurantDemos').doc(text(body.demoId)); const d = await ref.get(); if (!d.exists) return json(404, { error: 'Restaurant demo not found.' });
+      const stamp = now(); await ref.update({ archivedAt: stamp, updatedAt: stamp });
+      await db.collection('activities').add({ projectId: `restaurant:${d.id}`, text: `Restaurant demo archived: ${text(d.data().name)}`, kind: 'restaurantDemo', meta: { demoId: d.id }, createdAt: stamp });
+      return json(200, { ok: true });
+    }
+
+    if (action === 'saveRestaurantEmailTemplate') {
+      const subject = text(body.subject).slice(0, 220), message = text(body.body).slice(0, 12000);
+      if (!subject || !message) return json(400, { error: 'Subject and body are required.' });
+      await db.collection('settings').doc('business').set({ restaurantOutreachTemplate: { subject, body: message, updatedAt: now() } }, { merge: true });
+      return json(200, { ok: true });
+    }
+
+    if (action === 'sendDemoEmail') {
+      const demoDoc = await db.collection('restaurantDemos').doc(text(body.demoId)).get(); if (!demoDoc.exists) return json(404, { error: 'Restaurant demo not found.' });
+      const demo = cleanProject(demoDoc.id, demoDoc.data()); const to = text(body.to).toLowerCase(); const subjectTemplate = text(body.subject); const messageTemplate = text(body.message);
+      if (!to || !subjectTemplate || !messageTemplate) return json(400, { error: 'Email, subject and message are required.' });
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) return json(400, { error: 'Enter a valid email address.' });
+      const settings = await getSettings(); const link = restaurantDemoLink(demo.slug); const recipientName = text(body.recipientName) || 'there';
+      const vars = { recipientName, restaurantName: demo.name, intro: demo.intro || '', email: demo.email || '', logoText: demo.logoText || '', city: demo.city, address: demo.address || '', phone: demo.phone || '', email: demo.email || '', hours: demo.hours || '', tagline: demo.tagline || '', eyebrow: demo.eyebrow || '', primaryCta: demo.primaryCta || '', secondaryCta: demo.secondaryCta || '', storyTitle: demo.storyTitle || '', experienceTitle: demo.experienceTitle || '', reservationUrl: demo.reservationUrl || '', orderUrl: demo.orderUrl || '', instagramUrl: demo.instagramUrl || '', logoText: demo.logoText || '', demoLink: link, yourName: settings.ownerName || 'James Senu', businessName: settings.businessName || 'JVO' };
+      const interpolate = template => Object.entries(vars).reduce((out, [key, value]) => out.replaceAll(`{{${key}}}`, value), template);
+      const subject = interpolate(subjectTemplate); const message = interpolate(messageTemplate); const html = renderOutreachEmailHtml({ demo, recipientName, body: message, subject, link, settings });
+      const sent = await sendMail({ to, subject, textMessage: `${message}\n\n${link}`, html, projectId: '', projectName: demo.name, template: 'restaurant_outreach', idempotencyKey: text(body.idempotencyKey), demoId: demo.id, restaurantName: demo.name, demoLink: link });
+      const stamp = now(); await db.collection('restaurantDemos').doc(demo.id).update({ recipientName, recipientEmail: to, leadStatus: demo.leadStatus === 'New' ? 'Contacted' : demo.leadStatus, lastSentAt: stamp, lastSentTo: to, updatedAt: stamp });
+      await db.collection('activities').add({ projectId: `restaurant:${demo.id}`, text: `Outreach email sent to ${to}`, kind: 'restaurantEmail', meta: { demoId: demo.id, subject }, createdAt: stamp });
+      return json(200, { ok: true, resendId: sent.id || '', link });
+    }
+
+    if (action === 'cloudinarySignature') {
+      const cloudName = text(process.env.CLOUDINARY_CLOUD_NAME), apiKey = text(process.env.CLOUDINARY_API_KEY), apiSecret = text(process.env.CLOUDINARY_API_SECRET);
+      if (!cloudName || !apiKey || !apiSecret) return json(503, { error: 'Cloudinary is not configured yet. Add CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET in Netlify.' });
+      const timestamp = Math.floor(Date.now() / 1000); const folder = 'jvo-restaurant-demos'; const toSign = `folder=${folder}&timestamp=${timestamp}`; const signature = crypto.createHash('sha1').update(toSign + apiSecret).digest('hex');
+      return json(200, { cloudName, apiKey, timestamp, signature, folder });
     }
 
     if (action === 'createProject') {
