@@ -1,4 +1,4 @@
-import { JVO_RESTAURANT_TEMPLATE, JVO_RESTAURANT_EMAIL_TEMPLATE } from './restaurant-studio-data.js?v=20261004-final9';
+import { JVO_RESTAURANT_TEMPLATE, JVO_RESTAURANT_EMAIL_TEMPLATE } from './restaurant-studio-data.js?v=20261004-admin-safe-2';
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
 const arrowIcon = '<svg class="studio-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 12.5 12.5 3.5M6.5 3.5h6v6"/></svg>';
@@ -136,12 +136,123 @@ function qsa2(s,r){return [...(r||document).querySelectorAll(s)];}
 function bindRepeater(form){ qsa2('[data-menu-row]',form).forEach((row,i)=>{row.dataset.menuIndex=i; row.querySelectorAll('[name^="menu_"]')?.forEach(()=>{});}); qsa2('[data-gallery-row]',form).forEach((row,i)=>row.dataset.galleryIndex=i); form.querySelectorAll('[data-remove-menu]').forEach(b=>{if(b.dataset.bound==='true')return;b.dataset.bound='true';b.onclick=()=>{b.closest('[data-menu-row]').remove();refreshIndexes(form);};});form.querySelectorAll('[data-remove-gallery]').forEach(b=>{if(b.dataset.bound==='true')return;b.dataset.bound='true';b.onclick=()=>{b.closest('[data-gallery-row]').remove();refreshIndexes(form);};}); if(form.querySelector('#addMenuItem')?.dataset.bound!=='true'){form.querySelector('#addMenuItem').dataset.bound='true';form.querySelector('#addMenuItem').addEventListener('click',()=>{const wrap=form.querySelector('#menuItems');const idx=wrap.querySelectorAll('[data-menu-row]').length;wrap.insertAdjacentHTML('beforeend',menuRow({name:'',category:'Mains',description:'',price:'',image:{source:'repo',id:repoImages()[0]?.id}},idx));refreshIndexes(form);bindImageFields(form,form._studioApi);bindRepeater(form);});} if(form.querySelector('#addGalleryItem')?.dataset.bound!=='true'){form.querySelector('#addGalleryItem').dataset.bound='true';form.querySelector('#addGalleryItem').addEventListener('click',()=>{const wrap=form.querySelector('#galleryItems');const idx=wrap.querySelectorAll('[data-gallery-row]').length;wrap.insertAdjacentHTML('beforeend',galleryRow({image:{source:'repo',id:repoImages()[0]?.id}},idx));refreshIndexes(form);bindImageFields(form,form._studioApi);bindRepeater(form);});} }
 function refreshIndexes(form){qsa2('[data-menu-row]',form).forEach((row,i)=>{row.dataset.menuIndex=i; qsa2('.demo-media-field',row).forEach(m=>{const old=m.dataset.mediaField||''; if(old.startsWith('menu_'))m.dataset.mediaField=`menu_${i}_image`; renameMediaInputs(m,`menu_${i}_image`);});});qsa2('[data-gallery-row]',form).forEach((row,i)=>{row.dataset.galleryIndex=i; qsa2('.demo-media-field',row).forEach(m=>{m.dataset.mediaField=`gallery_${i}_image`;renameMediaInputs(m,`gallery_${i}_image`);});});}
 function renameMediaInputs(media,prefix){[['Source',''],['Id',''],['Url',''],['PublicId',''],['Alt','']].forEach(([suffix])=>{const old=[...media.querySelectorAll('input')].find(i=>i.name.endsWith(suffix)); if(old)old.name=prefix+suffix;});}
-function bindEditor(d,isNew,api,refresh){openModal(editorHtml(d,isNew));const form=document.querySelector('#demoForm');form._studioApi=api;bindRepeater(form);bindImageFields(form,api);form.querySelectorAll('[data-reset-copy]').forEach(b=>b.onclick=()=>{const starter=defaultTemplate();if(b.dataset.resetCopy==='hero'){form.elements.tagline.value=starter.tagline;form.elements.intro.value=starter.intro;form.elements.eyebrow.value=starter.eyebrow;}if(b.dataset.resetCopy==='story'){form.elements.storyTitle.value=starter.storyTitle;form.elements.storyText.value=starter.storyText;}if(b.dataset.resetCopy==='experience'){form.elements.experienceTitle.value=starter.experienceTitle;form.elements.experienceText.value=starter.experienceText;}});const previewLink=document.querySelector('#editorPreviewLink');const nameInput=form.elements.name;const updatePreview=()=>previewLink.href=siteDemoUrl(slugPreview(nameInput.value));nameInput.addEventListener('input',updatePreview);form.onsubmit=async e=>{e.preventDefault(); const btn=form.querySelector('[type=submit]'); busy(btn,true,isNew?'Creating':'Saving'); try{const payload=collectForm(form); const res=await api(isNew?'createRestaurantDemo':'updateRestaurantDemo',{demoId:d.id,...payload}); closeModal();toast(isNew?'Demo created.':'Demo saved.'); if(res.link) { try {await navigator.clipboard.writeText(res.link); toast(`${isNew?'Demo created.':'Saved.'} Link copied.`);} catch{} } await refresh(); }catch(err){notifyError(err);}finally{busy(btn,false);}};}
-function cards(demos){return demos.map(d=>{const status=d.leadStatus||'New';const link=siteDemoUrl(d.slug);return `<article class="demo-card"><div class="demo-card-media">${getImageSrc(d.heroImage)?`<img src="${esc(getImageSrc(d.heroImage))}" alt="" loading="lazy">`:''}<span class="demo-status" data-state="${esc(status)}">${esc(status)}</span></div><div class="demo-card-body"><div><p class="eyebrow">${esc(d.city||'Restaurant concept')}</p><h3>${esc(d.name||'Untitled restaurant')}</h3><p>${esc(d.tagline||'No main line yet.')}</p></div><div class="demo-card-meta"><span>${esc(d.recipientEmail||'No email yet')}</span><span>${d.lastSentAt?`Sent ${new Date(d.lastSentAt).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}`:'Not sent yet'}</span></div><div class="demo-card-actions"><a class="btn small ghost" href="${esc(link)}" target="_blank" rel="noreferrer">Open demo ${arrowIcon}</a><button type="button" class="btn small ghost" data-edit-demo="${esc(d.id)}">Edit</button><button type="button" class="btn small dark" data-email-demo="${esc(d.id)}">Email</button><button type="button" class="icon-btn subtle" title="More" data-more-demo="${esc(d.id)}">•••</button></div></div></article>`}).join('');}
-function renderDemos({state,api,refresh,initialTab='demos'}){ window.__JVO_RESTAURANT_STUDIO_TAB__=initialTab||'demos'; const demos=state.restaurantDemos||[]; document.querySelector('#viewRoot').innerHTML=`<section class="studio-hero"><div><p class="eyebrow">JVO / Restaurant demos</p><h2>Build once.<br><em>Personalise fast.</em></h2><p>One restaurant template, one private generator and as many tailored demos as you need. Keep the design consistent, swap the details and send a fresh link.</p></div><div class="studio-hero-actions"><button type="button" class="btn dark" id="newRestaurantDemo"><span>New restaurant</span><span>+</span></button><span class="studio-counter"><strong>${demos.length}</strong> demos saved</span></div></section><div class="studio-tabs"><button type="button" class="active" data-studio-tab="demos">Your demos</button><button type="button" data-studio-tab="email">Outreach email</button><button type="button" data-studio-tab="sent">Sent</button></div><div id="studioTabRoot"></div>`; const tabRoot=document.querySelector('#studioTabRoot'); const showTab=tab=>{window.__JVO_RESTAURANT_STUDIO_TAB__=tab;document.querySelectorAll('[data-studio-tab]').forEach(b=>b.classList.toggle('active',b.dataset.studioTab===tab)); if(tab==='email')renderEmailTab({state,api,refresh,root:tabRoot}); else if(tab==='sent')renderSentTab({state,api,refresh,root:tabRoot}); else renderDemoList({state,api,refresh,root:tabRoot});}; document.querySelector('#newRestaurantDemo').onclick=()=>bindEditor(defaultTemplate(),true,api,refresh);document.querySelectorAll('[data-studio-tab]').forEach(b=>b.onclick=()=>showTab(b.dataset.studioTab));showTab(initialTab); }
-function renderDemoList({state,api,refresh,root}){ const demos=state.restaurantDemos||[]; root.innerHTML=demos.length?`<div class="demo-grid">${cards(demos)}</div><div class="studio-tip"><strong>Fast workflow</strong><span>Open a demo, replace the hero image if you have one, tweak the copy, save it and send the link. The template stays untouched.</span></div>`:`<div class="studio-empty"><div><span>1</span><strong>No restaurant demos yet.</strong><p>Start with the template. You can be ready to send a first link in a few minutes.</p><button type="button" class="btn dark" id="emptyNewDemo">Build first demo</button></div></div>`; root.querySelector('#emptyNewDemo')?.addEventListener('click',()=>bindEditor(defaultTemplate(),true,api,refresh)); root.querySelectorAll('[data-edit-demo]').forEach(b=>b.onclick=()=>{const d=demos.find(x=>x.id===b.dataset.editDemo); if(d)bindEditor(normalizeDemo(d),false,api,refresh)}); root.querySelectorAll('[data-email-demo]').forEach(b=>b.onclick=()=>{const d=demos.find(x=>x.id===b.dataset.emailDemo); if(d)renderEmailModal(d,state,api,refresh)}); root.querySelectorAll('[data-more-demo]').forEach(b=>b.onclick=()=>openDemoActions(demos.find(x=>x.id===b.dataset.moreDemo),api,refresh));}
-function openDemoActions(d,api,refresh){ if(!d)return; openModal(`<div class="quick-actions"><p class="eyebrow">${esc(d.name)}</p><h2>What do you want to do?</h2><a class="btn dark" href="${esc(siteDemoUrl(d.slug))}" target="_blank" rel="noreferrer">Open demo ${arrowIcon}</a><button type="button" class="btn ghost" id="duplicateDemo">Duplicate demo</button><button type="button" class="btn ghost" id="archiveDemo">Archive demo</button><button type="button" class="btn ghost" data-close-modal>Close</button></div>`);document.querySelector('#duplicateDemo').onclick=async()=>{busy(document.querySelector('#duplicateDemo'),true,'Duplicating');try{const res=await api('duplicateRestaurantDemo',{demoId:d.id});closeModal();toast('Demo duplicated.');await refresh();}catch(err){notifyError(err)}finally{busy(document.querySelector('#duplicateDemo'),false)}};document.querySelector('#archiveDemo').onclick=async()=>{if(!confirm(`Archive ${d.name}?`))return;try{await api('archiveRestaurantDemo',{demoId:d.id});closeModal();toast('Demo archived.');await refresh();}catch(err){notifyError(err)}};}
-function renderEmailTab({state,api,refresh,root}){
+function bindEditor(d,isNew,api,renderTab,state){
+  openModal(editorHtml(d,isNew));
+  const form=document.querySelector('#demoForm');
+  if(!form) return;
+  form._studioApi=api;
+  bindRepeater(form);
+  bindImageFields(form,api);
+  form.querySelectorAll('[data-reset-copy]').forEach(b=>b.onclick=()=>{
+    const starter=defaultTemplate();
+    if(b.dataset.resetCopy==='hero'){
+      form.elements.tagline.value=starter.tagline;
+      form.elements.intro.value=starter.intro;
+      form.elements.eyebrow.value=starter.eyebrow;
+    }
+    if(b.dataset.resetCopy==='story'){
+      form.elements.storyTitle.value=starter.storyTitle;
+      form.elements.storyText.value=starter.storyText;
+    }
+    if(b.dataset.resetCopy==='experience'){
+      form.elements.experienceTitle.value=starter.experienceTitle;
+      form.elements.experienceText.value=starter.experienceText;
+    }
+  });
+  const previewLink=document.querySelector('#editorPreviewLink');
+  const nameInput=form.elements.name;
+  const updatePreview=()=>{ if(previewLink && nameInput) previewLink.href=siteDemoUrl(slugPreview(nameInput.value)); };
+  nameInput?.addEventListener('input',updatePreview);
+  updatePreview();
+  form.onsubmit=async e=>{
+    e.preventDefault();
+    e.stopPropagation();
+    const btn=form.querySelector('[type="submit"]');
+    busy(btn,true,isNew?'Creating':'Saving');
+    try{
+      const payload=collectForm(form);
+      const res=await api(isNew?'createRestaurantDemo':'updateRestaurantDemo',{demoId:d.id,...payload});
+      const savedDemo=res?.demo;
+      if(!savedDemo?.id) throw new Error('The server did not return the saved restaurant demo.');
+      if(isNew) state.restaurantDemos=[savedDemo,...(state.restaurantDemos||[])];
+      else state.restaurantDemos=(state.restaurantDemos||[]).map(x=>x.id===savedDemo.id?savedDemo:x);
+      closeModal();
+      toast(isNew?'Demo created.':'Demo saved.');
+      if(res.link){
+        try{ await navigator.clipboard.writeText(res.link); toast(`${isNew?'Demo created.':'Saved.'} Link copied.`); }catch{}
+      }
+      renderTab('demos');
+    }catch(err){ notifyError(err); }
+    finally{ busy(btn,false); }
+  };
+}
+
+function cards(demos){return demos.map(d=>{
+  const status=d.leadStatus||'New';
+  const link=siteDemoUrl(d.slug);
+  return `<article class="demo-card"><div class="demo-card-media">${getImageSrc(d.heroImage)?`<img src="${esc(getImageSrc(d.heroImage))}" alt="" loading="lazy">`:''}<span class="demo-status" data-state="${esc(status)}">${esc(status)}</span></div><div class="demo-card-body"><div><p class="eyebrow">${esc(d.city||'Restaurant concept')}</p><h3>${esc(d.name||'Untitled restaurant')}</h3><p>${esc(d.tagline||'No main line yet.')}</p></div><div class="demo-card-meta"><span>${esc(d.recipientEmail||'No email yet')}</span><span>${d.lastSentAt?`Sent ${new Date(d.lastSentAt).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}`:'Not sent yet'}</span></div><div class="demo-card-actions"><a class="btn small ghost" href="${esc(link)}" target="_blank" rel="noreferrer">Open demo ${arrowIcon}</a><button type="button" class="btn small ghost" data-edit-demo="${esc(d.id)}">Edit</button><button type="button" class="btn small dark" data-email-demo="${esc(d.id)}">Email</button><button type="button" class="icon-btn subtle" title="More" data-more-demo="${esc(d.id)}">•••</button></div></div></article>`;
+}).join('');}
+
+function renderDemos({state,api,refresh}){
+  document.querySelector('#viewRoot').innerHTML=`<section class="studio-hero"><div><p class="eyebrow">JVO / Restaurant demos</p><h2>Build once.<br><em>Personalise fast.</em></h2><p>One restaurant template, one private generator and as many tailored demos as you need. Keep the design consistent, swap the details and send a fresh link.</p></div><div class="studio-hero-actions"><button type="button" class="btn dark" id="newRestaurantDemo"><span>New restaurant</span><span>+</span></button><span class="studio-counter"><strong id="restaurantDemoCount">${(state.restaurantDemos||[]).length}</strong> demos saved</span></div></section><div class="studio-tabs"><button type="button" class="active" data-studio-tab="demos">Your demos</button><button type="button" data-studio-tab="email">Outreach email</button><button type="button" data-studio-tab="sent">Sent</button></div><div id="studioTabRoot"></div>`;
+  const tabRoot=document.querySelector('#studioTabRoot');
+  let activeTab='demos';
+  const showTab=tab=>{
+    activeTab=tab;
+    const count=document.querySelector('#restaurantDemoCount');
+    if(count) count.textContent=String((state.restaurantDemos||[]).length);
+    document.querySelectorAll('[data-studio-tab]').forEach(b=>b.classList.toggle('active',b.dataset.studioTab===tab));
+    if(tab==='email') renderEmailTab({state,api,refresh,root:tabRoot,renderTab:showTab});
+    else if(tab==='sent') renderSentTab({state,root:tabRoot});
+    else renderDemoList({state,api,refresh,root:tabRoot,renderTab:showTab});
+  };
+  document.querySelector('#newRestaurantDemo').onclick=()=>bindEditor(defaultTemplate(),true,api,showTab,state);
+  document.querySelectorAll('[data-studio-tab]').forEach(b=>b.onclick=()=>showTab(b.dataset.studioTab));
+  showTab(activeTab);
+}
+
+function renderDemoList({state,api,refresh,root,renderTab}){
+  const demos=state.restaurantDemos||[];
+  root.innerHTML=demos.length?`<div class="demo-grid">${cards(demos)}</div><div class="studio-tip"><strong>Fast workflow</strong><span>Open a demo, replace the hero image if you have one, tweak the copy, save it and send the link. The template stays untouched.</span></div>`:`<div class="studio-empty"><div><span>1</span><strong>No restaurant demos yet.</strong><p>Start with the template. You can be ready to send a first link in a few minutes.</p><button type="button" class="btn dark" id="emptyNewDemo">Build first demo</button></div></div>`;
+  root.querySelector('#emptyNewDemo')?.addEventListener('click',()=>bindEditor(defaultTemplate(),true,api,renderTab,state));
+  root.querySelectorAll('[data-edit-demo]').forEach(b=>b.onclick=()=>{
+    const d=demos.find(x=>x.id===b.dataset.editDemo);
+    if(d) bindEditor(normalizeDemo(d),false,api,renderTab,state);
+  });
+  root.querySelectorAll('[data-email-demo]').forEach(b=>b.onclick=()=>{
+    const d=demos.find(x=>x.id===b.dataset.emailDemo);
+    if(d) renderEmailModal(d,state,api,refresh,renderTab);
+  });
+  root.querySelectorAll('[data-more-demo]').forEach(b=>b.onclick=()=>openDemoActions(demos.find(x=>x.id===b.dataset.moreDemo),api,renderTab,state));
+}
+
+function openDemoActions(d,api,renderTab,state){
+  if(!d)return;
+  openModal(`<div class="quick-actions"><p class="eyebrow">${esc(d.name)}</p><h2>What do you want to do?</h2><a class="btn dark" href="${esc(siteDemoUrl(d.slug))}" target="_blank" rel="noreferrer">Open demo ${arrowIcon}</a><button type="button" class="btn ghost" id="duplicateDemo">Duplicate demo</button><button type="button" class="btn ghost" id="archiveDemo">Archive demo</button><button type="button" class="btn ghost" data-close-modal>Close</button></div>`);
+  document.querySelector('#duplicateDemo').onclick=async()=>{
+    const btn=document.querySelector('#duplicateDemo');
+    busy(btn,true,'Duplicating');
+    try{
+      const res=await api('duplicateRestaurantDemo',{demoId:d.id});
+      const copy=res?.demo;
+      if(!copy?.id) throw new Error('The server did not return the duplicated demo.');
+      state.restaurantDemos=[copy,...(state.restaurantDemos||[])];
+      closeModal(); toast('Demo duplicated.'); renderTab('demos');
+    }catch(err){notifyError(err)}finally{busy(btn,false)}
+  };
+  document.querySelector('#archiveDemo').onclick=async()=>{
+    if(!confirm(`Archive ${d.name}?`))return;
+    const btn=document.querySelector('#archiveDemo');
+    busy(btn,true,'Archiving');
+    try{
+      await api('archiveRestaurantDemo',{demoId:d.id});
+      state.restaurantDemos=(state.restaurantDemos||[]).filter(x=>x.id!==d.id);
+      closeModal(); toast('Demo archived.'); renderTab('demos');
+    }catch(err){notifyError(err)}finally{busy(btn,false)}
+  };
+}
+
+function renderEmailTab({state,api,refresh,root,renderTab}){
   const demos=state.restaurantDemos||[];
   const saved=state.settings?.restaurantOutreachTemplate||defaultEmail();
   root.innerHTML=`<div class="email-studio">
@@ -172,9 +283,9 @@ function renderEmailTab({state,api,refresh,root}){
   demoSelect.onchange=loadDemo;
   form.addEventListener('input',renderPreview);
   root.querySelectorAll('[data-var]').forEach(b=>b.onclick=()=>{const token=b.dataset.var,start=message.selectionStart||message.value.length;message.setRangeText(token,start,start,'end');message.focus();renderPreview();});
-  root.querySelector('#saveOutreachTemplate').onclick=async()=>{try{await api('saveRestaurantEmailTemplate',{subject:form.elements.subject.value,body:message.value});toast('Default email template saved.');}catch(err){notifyError(err);}};
+  root.querySelector('#saveOutreachTemplate').onclick=async()=>{try{const subject=form.elements.subject.value;const body=message.value;await api('saveRestaurantEmailTemplate',{subject,body});state.settings={...(state.settings||{}),restaurantOutreachTemplate:{subject,body,updatedAt:new Date().toISOString()}};toast('Default email template saved.');}catch(err){notifyError(err);}};
   root.querySelector('#previewOutreach').onclick=()=>emailPreviewHtml(fill(message.value),fill(form.elements.subject.value),currentDemo,vars(),true);
-  form.onsubmit=async event=>{event.preventDefault();const btn=form.querySelector('[type=submit]');if(!currentDemo){toast('Choose a restaurant demo first.');return;}busy(btn,true,'Sending');try{await api('sendDemoEmail',{demoId:currentDemo.id,to:form.elements.to.value,recipientName:form.elements.recipientName.value,subject:form.elements.subject.value,message:message.value,idempotencyKey:uid()});toast('Email sent.');await refresh();}catch(err){notifyError(err);}finally{busy(btn,false);}};
+  form.onsubmit=async event=>{event.preventDefault();event.stopPropagation();const btn=form.querySelector('[type=submit]');if(!currentDemo){toast('Choose a restaurant demo first.');return;}busy(btn,true,'Sending');try{const to=form.elements.to.value.trim();const recipientName=form.elements.recipientName.value.trim();const subject=form.elements.subject.value;const body=message.value;const res=await api('sendDemoEmail',{demoId:currentDemo.id,to,recipientName,subject,message:body,idempotencyKey:uid()});const stamp=new Date().toISOString();currentDemo.recipientName=recipientName;currentDemo.recipientEmail=to;currentDemo.lastSentAt=stamp;currentDemo.lastSentTo=to;currentDemo.leadStatus=currentDemo.leadStatus==='New'?'Contacted':currentDemo.leadStatus;state.restaurantDemos=(state.restaurantDemos||[]).map(x=>x.id===currentDemo.id?currentDemo:x);state.emails=[{id:`local-${uid()}`,createdAt:stamp,template:'restaurant_outreach',demoId:currentDemo.id,restaurantName:currentDemo.name,to,subject,demoLink:res?.link||siteDemoUrl(currentDemo.slug)},...(state.emails||[])];toast('Email sent.');renderTab('sent');}catch(err){notifyError(err);}finally{busy(btn,false);}};
   if(demos[0]){demoSelect.value=demos[0].id;loadDemo();}else{message.value=defaultEmail().body;form.elements.subject.value=defaultEmail().subject;renderPreview();}
 }
 function emailPreviewHtml(body,subject,demo,vars,log=false){
@@ -185,7 +296,24 @@ function emailPreviewHtml(body,subject,demo,vars,log=false){
   if(log){openModal(`<div class="email-preview-modal"><p class="eyebrow">Email preview</p><h2>${esc(subject)}</h2><div>${html}</div><button type="button" class="btn ghost" data-close-modal>Close</button></div>`);return;}
   return html;
 }
-function renderEmailModal(d,state,api,refresh){const saved=state.settings?.restaurantOutreachTemplate||defaultEmail();openModal(`<div class="quick-email"><div class="quick-email-top"><div><p class="eyebrow">Outreach email</p><h2>${esc(d.name)}</h2><p>${esc(d.city||'')}</p></div><a href="${esc(siteDemoUrl(d.slug))}" target="_blank" rel="noreferrer">Open demo ${arrowIcon}</a></div><form id="quickEmailForm"><div class="form-grid"><label class="field"><span>Contact name</span><input name="recipientName" value="${esc(d.recipientName||'')}"></label><label class="field"><span>Email address *</span><input name="to" type="email" required value="${esc(d.recipientEmail||'')}" placeholder="owner@restaurant.com"></label><label class="field wide"><span>Subject</span><input name="subject" value="${esc(fillVars(saved.subject||defaultEmail().subject,d,state))}"></label><label class="field wide"><span>Body</span><textarea name="message" class="quick-email-body">${esc(fillVars(saved.body||defaultEmail().body,d,state))}</textarea></label></div><div class="email-actions"><button type="button" class="btn ghost" data-close-modal>Cancel</button><button class="btn dark" type="submit"><span class="button-label">Send email</span></button></div></form></div>`);const form=document.querySelector('#quickEmailForm');form.onsubmit=async e=>{e.preventDefault();const btn=form.querySelector('[type=submit]');busy(btn,true,'Sending');try{await api('sendDemoEmail',{demoId:d.id,to:form.elements.to.value,recipientName:form.elements.recipientName.value,subject:form.elements.subject.value,message:form.elements.message.value,idempotencyKey:uid()});closeModal();toast('Email sent.');await refresh();}catch(err){notifyError(err)}finally{busy(btn,false)}};}
+function renderEmailModal(d,state,api,refresh,renderTab){
+  const saved=state.settings?.restaurantOutreachTemplate||defaultEmail();
+  openModal(`<div class="quick-email"><div class="quick-email-top"><div><p class="eyebrow">Outreach email</p><h2>${esc(d.name)}</h2><p>${esc(d.city||'')}</p></div><a href="${esc(siteDemoUrl(d.slug))}" target="_blank" rel="noreferrer">Open demo ${arrowIcon}</a></div><form id="quickEmailForm"><div class="form-grid"><label class="field"><span>Contact name</span><input name="recipientName" value="${esc(d.recipientName||'')}"></label><label class="field"><span>Email address *</span><input name="to" type="email" required value="${esc(d.recipientEmail||'')}" placeholder="owner@restaurant.com"></label><label class="field wide"><span>Subject</span><input name="subject" value="${esc(fillVars(saved.subject||defaultEmail().subject,d,state))}"></label><label class="field wide"><span>Body</span><textarea name="message" class="quick-email-body">${esc(fillVars(saved.body||defaultEmail().body,d,state))}</textarea></label></div><div class="email-actions"><button type="button" class="btn ghost" data-close-modal>Cancel</button><button class="btn dark" type="submit"><span class="button-label">Send email</span></button></div></form></div>`);
+  const form=document.querySelector('#quickEmailForm');
+  if(!form)return;
+  form.onsubmit=async e=>{
+    e.preventDefault(); e.stopPropagation();
+    const btn=form.querySelector('[type=submit]'); busy(btn,true,'Sending');
+    try{
+      const to=form.elements.to.value.trim(); const recipientName=form.elements.recipientName.value.trim(); const subject=form.elements.subject.value; const message=form.elements.message.value;
+      const res=await api('sendDemoEmail',{demoId:d.id,to,recipientName,subject,message,idempotencyKey:uid()});
+      const stamp=new Date().toISOString(); d.recipientName=recipientName; d.recipientEmail=to; d.lastSentAt=stamp; d.lastSentTo=to; d.leadStatus=d.leadStatus==='New'?'Contacted':d.leadStatus;
+      state.restaurantDemos=(state.restaurantDemos||[]).map(x=>x.id===d.id?d:x);
+      state.emails=[{id:`local-${uid()}`,createdAt:stamp,template:'restaurant_outreach',demoId:d.id,restaurantName:d.name,to,subject,demoLink:res?.link||siteDemoUrl(d.slug)},...(state.emails||[])];
+      closeModal(); toast('Email sent.'); renderTab('sent');
+    }catch(err){notifyError(err)}finally{busy(btn,false)}
+  };
+}
 function fillVars(template,d,state){const map={recipientName:d.recipientName||'there',restaurantName:d.name||'the restaurant',intro:d.intro||'',email:d.email||'',logoText:d.logoText||'',city:d.city||'',address:d.address||'',phone:d.phone||'',hours:d.hours||'',tagline:d.tagline||'',eyebrow:d.eyebrow||'',primaryCta:d.primaryCta||'',secondaryCta:d.secondaryCta||'',storyTitle:d.storyTitle||'',experienceTitle:d.experienceTitle||'',reservationUrl:d.reservationUrl||'',orderUrl:d.orderUrl||'',instagramUrl:d.instagramUrl||'',demoLink:siteDemoUrl(d.slug||slugPreview(d.name)),menuLink:siteDemoUrl(d.slug||slugPreview(d.name))+'/menu',bookingLink:siteDemoUrl(d.slug||slugPreview(d.name))+'/booking',yourName:'James Senu',businessName:'JVO WEB',whatsappNumber:'0594121246',whatsappUrl:'https://wa.me/233594121246'};let out=template;Object.entries(map).forEach(([k,v])=>out=out.replaceAll(`{{${k}}}`,v));return out;}
 function renderSentTab({state,root}){const rows=(state.emails||[]).filter(e=>e.template==='restaurant_outreach'||e.demoId);root.innerHTML=rows.length?`<section class="panel"><div class="panel-head"><div><p class="eyebrow">Outreach history</p><h2>Sent from the studio.</h2></div><span class="panel-sub">${rows.length} saved</span></div><div class="studio-email-log">${rows.map(e=>`<article><div><span class="eyebrow">${new Date(e.createdAt).toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}</span><h3>${esc(e.subject)}</h3><p>To ${esc(e.to)}${e.restaurantName?` · ${esc(e.restaurantName)}`:''}</p></div><a href="${esc(e.demoLink||'#')}" target="_blank" rel="noreferrer">Open demo ${arrowIcon}</a></article>`).join('')}</div></section>`:`<div class="studio-empty"><div><span>1</span><strong>No outreach emails yet.</strong><p>Send from the Outreach email tab and the record will stay here.</p></div></div>`;}
 window.JVO_RESTAURANT_STUDIO = { renderDemos };
