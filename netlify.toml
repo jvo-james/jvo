@@ -33,6 +33,30 @@
 
 # Clean public links for saved restaurant demos. The static page reads the slug from the query string.
 [[redirects]]
+  from = "/restaurant/:slug/menu"
+  to = "/restaurant-menu.html?slug=:slug"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/restaurant/:slug/private"
+  to = "/restaurant-private.html?slug=:slug"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/restaurant/:slug/gallery"
+  to = "/restaurant-gallery.html?slug=:slug"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/restaurant/:slug/contact"
+  to = "/restaurant-contact.html?slug=:slug"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/restaurant/*"
   to = "/restaurant-demo.html?slug=:splat"
   status = 200

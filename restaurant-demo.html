@@ -2,161 +2,106 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta name="theme-color" content="#14130f">
+  <meta name="theme-color" content="#181713">
   <meta name="description" content="Restaurant website concept.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600;0,700;1,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/restaurant-demo.css?v=20261004-assetfix-1">
-  <script src="/images.js?v=20261004-assetfix-1"></script>
+  
+  <link rel="stylesheet" href="/restaurant-demo.css?v=20261004-public-4">
+  <script src="/images.js?v=20261004-public-4"></script>
   <title>Restaurant</title>
 </head>
-<body>
+<body data-page="home">
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header" id="top">
-    <a class="brand" id="brand" href="#top" aria-label="Restaurant home">
-      <span class="brand-mark">CT</span>
-      <span id="brandText">Common Table</span>
-    </a>
-    <nav class="desktop-nav" aria-label="Main navigation">
-      <a href="#menu">Menu</a>
-      <a href="#story">Our story</a>
-      <a href="#visit">Visit</a>
-    </nav>
-    <div class="header-actions">
-      <a class="header-link" id="headerOrder" href="#visit" hidden>Order online</a>
+    <div class="header-inner">
+      <button class="nav-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileNav" aria-label="Open navigation"><span></span><span></span></button>
+      <nav class="desktop-nav" aria-label="Primary navigation"></nav>
+      <a class="brand" id="brand" href="#top" aria-label="Restaurant home"><span class="brand-mark" id="brandMark">CT</span><span id="brandText">Common Table</span></a>
       <a class="header-cta" id="headerCta" href="#visit">Book a table</a>
-      <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileNav" aria-label="Open menu"><span></span><span></span></button>
     </div>
+    <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation" aria-hidden="true"></nav>
   </header>
-  <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation" aria-hidden="true">
-    <a href="#menu">Menu</a>
-    <a href="#story">Our story</a>
-    <a href="#visit">Visit</a>
-    <a class="mobile-nav-cta" id="mobileCta" href="#visit">Book a table</a>
-  </nav>
 
   <main id="main">
-    <section class="hero" aria-labelledby="heroTitle">
-      <div class="hero-media">
-        <img id="heroImage" alt="" fetchpriority="high" decoding="async">
-      </div>
-      <div class="hero-overlay"></div>
-      <div class="hero-content page-width">
-        <p class="kicker" id="heroEyebrow">Kitchen · Bar · Table</p>
-        <h1 id="heroTitle">Good food, warm light and nowhere to rush.</h1>
-        <p class="hero-copy" id="heroIntro"></p>
-        <div class="hero-actions">
-          <a class="button button-light" id="heroPrimary" href="#visit">Book a table</a>
-          <a class="text-button" id="heroSecondary" href="#menu">See the menu <svg class="arrow-icon arrow-down" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 3.5 12.5 12.5M6.5 12.5h6v-6"/></svg></a>
+    <section class="hero-home" aria-labelledby="heroTitle">
+      <div class="hero-home-media"><img id="heroImage" alt="" fetchpriority="high" decoding="async"></div>
+      <div class="hero-home-shade"></div>
+      <div class="hero-home-top page-width"><span id="heroEyebrow">Kitchen · Bar · Table</span><span id="heroCity">Accra, Ghana</span></div>
+      <div class="hero-home-content page-width">
+        <p class="hero-mini" id="heroMini">A neighbourhood restaurant for long lunches, proper dinners and everything in between.</p>
+        <h1 id="heroTitle">Supper, <em>properly done.</em></h1>
+        <div class="hero-home-bottom">
+          <p id="heroIntro">Good food and a room that makes you want to stay.</p>
+          <div class="hero-actions"><a class="button button-light" id="heroPrimary" href="#visit">Book a table</a><a class="line-link line-link-light" id="heroSecondary" href="/restaurant-menu.html">See the menu <span class="arrow-icon" aria-hidden="true"></span></a></div>
         </div>
       </div>
-      <div class="hero-meta page-width" aria-label="Restaurant details">
-        <span id="heroCity">Accra, Ghana</span>
-        <span id="heroHours">Mon–Thu 12:00–22:00</span>
-        <span>Walk-ins welcome</span>
+      <span class="hero-scroll" aria-hidden="true">Scroll to explore</span>
+    </section>
+
+    <section class="intro-home section-shell page-width">
+      <div class="intro-art">
+        <a class="image-link intro-main" id="introMainLink" href="/restaurant-gallery.html"><img id="introMainImage" alt="" loading="lazy"></a>
+        <a class="image-link intro-detail" id="introDetailLink" href="/restaurant-gallery.html"><img id="introDetailImage" alt="" loading="lazy"></a>
+        <span class="intro-stamp"><strong id="stampCity">Accra, Ghana</strong><em>the place for a<br>proper evening</em></span>
+      </div>
+      <div class="intro-copy">
+        <span class="eyebrow" id="introEyebrow">The restaurant</span>
+        <h2 class="display" id="experienceTitle">Not just dinner.<br><em>A whole evening.</em></h2>
+        <p class="lead" id="experienceText">Good food, a proper drink and enough room to talk. That is really the whole point.</p>
+        <p class="body-copy" id="storyPreview">We cook food that feels familiar but never flat. The menu moves with the season and the room stays easy.</p>
+        <a class="text-link" id="storyLink" href="/restaurant-gallery.html">Our story <span class="arrow-icon" aria-hidden="true"></span></a>
+        <div class="microfacts"><div><strong>Dining</strong><span id="factHours">Mon–Sat · evenings</span></div><div><strong>Reservations</strong><span id="factReservations">Recommended</span></div><div><strong>Arrival</strong><span id="factArrival">Come as you are</span></div></div>
       </div>
     </section>
 
-    <section class="intro-section page-width section-pad">
-      <div class="section-kicker"><span>01</span><span>The table</span></div>
-      <div class="intro-grid">
-        <h2 id="experienceTitle">Come hungry. <em>Leave happy.</em></h2>
-        <div>
-          <p class="intro-large" id="experienceText">Good food, a proper drink and enough room to talk. That is really the whole point.</p>
-          <a class="text-link" href="#visit">Make a reservation <svg class="arrow-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 12.5 12.5 3.5M6.5 3.5h6v6"/></svg></a>
+    <section class="feature-spread section-shell-wide" id="story">
+      <div class="feature-main">
+        <div class="feature-image"><img id="storyImage" alt="" loading="lazy"></div>
+        <div class="feature-copy">
+          <span class="feature-tag">The house</span>
+          <h2 class="display" id="storyTitle">A table worth coming back to.</h2>
+          <p class="body-copy" id="storyText">Come for dinner, stay because the night got good.</p>
+          <a class="text-link" href="/restaurant-contact.html">Plan your visit <span class="arrow-icon" aria-hidden="true"></span></a>
         </div>
+      </div>
+      <div class="feature-side">
+        <div class="feature-side-image"><img id="barImage" alt="" loading="lazy"></div>
+        <div class="feature-side-copy"><span class="feature-tag">After supper</span><h3>One more pour.<br><em>One more story.</em></h3><p>Drinks, conversation and a room that knows how to keep the night moving.</p><a class="text-link" href="/restaurant-contact.html">Come by <span class="arrow-icon" aria-hidden="true"></span></a></div>
       </div>
     </section>
 
-    <section class="menu-section" id="menu">
-      <div class="page-width section-pad-small">
-        <div class="section-head">
-          <div>
-            <div class="section-kicker"><span>02</span><span>The menu</span></div>
-            <h2>Something for <em>everyone.</em></h2>
-          </div>
-          <p>Simple food with a little bit of edge. The menu can change, but the good stuff stays.</p>
-        </div>
-        <div class="menu-tabs" id="menuTabs" role="tablist" aria-label="Menu categories"></div>
-        <div class="menu-grid" id="menuGrid"></div>
+    <section class="popular-section section-shell page-width" id="popular">
+      <div class="section-head"><div><span class="eyebrow">From the kitchen</span><h2 class="display">A few favourites.</h2></div><a class="text-link" id="menuLinkTop" href="/restaurant-menu.html">View the full menu <span class="arrow-icon" aria-hidden="true"></span></a></div>
+      <p class="section-deck" id="popularIntro">A few plates to give you a feel for the table. The full menu has more.</p>
+      <div class="popular-grid" id="popularGrid"></div>
+    </section>
+
+    <section class="evening-section section-shell-wide">
+      <div class="evening-media"><img id="eveningImage" alt="" loading="lazy"><span class="evening-time" id="eveningTime">04:30</span></div>
+      <div class="evening-copy">
+        <span class="eyebrow">Choose your kind of night</span>
+        <h2 class="display">Make a night<br><em>of it.</em></h2>
+        <p class="body-copy" id="eveningIntro">There is no correct way to do dinner. Start at the bar, take your time and let the evening decide what happens next.</p>
+        <div class="evening-list"><a href="/restaurant-menu.html"><span>1</span><strong>Come hungry</strong><small>Start with something to share.</small><span class="row-arrow arrow-icon" aria-hidden="true"></span></a><a href="/restaurant-menu.html"><span>2</span><strong>Stay for supper</strong><small>Order the plate you came for.</small><span class="row-arrow arrow-icon" aria-hidden="true"></span></a><a href="/restaurant-contact.html"><span>3</span><strong>Lose track of time</strong><small>One more pour. One more story.</small><span class="row-arrow arrow-icon" aria-hidden="true"></span></a></div>
+        <a class="button button-dark" id="eveningCta" href="/restaurant-menu.html">Plan the evening</a>
       </div>
     </section>
 
-    <section class="story-section" id="story">
-      <div class="story-image-wrap"><img id="storyImage" alt="" loading="lazy" decoding="async"></div>
-      <div class="story-copy">
-        <div class="section-kicker"><span>03</span><span>Our story</span></div>
-        <h2 id="storyTitle">A table worth coming back to.</h2>
-        <p id="storyText"></p>
-        <div class="story-signoff"><span id="storyLocation">Accra, Ghana</span><span>Good food · good people</span></div>
-      </div>
+    <section class="arrival-section section-shell page-width">
+      <div class="section-head"><div><span class="eyebrow">Before you pull in</span><h2 class="display">A few useful notes.</h2></div><p class="section-deck">The little details that make arriving easier.</p></div>
+      <a class="arrival-card" id="arrivalCard" href="/restaurant-contact.html"><span class="arrival-kicker">Good to know</span><div class="arrival-grid"><div><strong>Dress</strong><p id="dressCode">Smart casual.</p></div><div><strong>Parking</strong><p id="parkingNote">Street parking nearby.</p></div><div><strong>Reservations</strong><p id="reservationNote">Reservations are recommended.</p></div><div class="arrival-link">View hours, directions and visit details <span class="arrow-icon" aria-hidden="true"></span></div></div></a>
     </section>
 
-    <section class="gallery-section page-width section-pad-small" aria-labelledby="galleryTitle">
-      <div class="section-head gallery-head">
-        <div>
-          <div class="section-kicker"><span>04</span><span>Inside</span></div>
-          <h2 id="galleryTitle">A good room <em>matters.</em></h2>
-        </div>
-        <p id="galleryIntro">A little warm light goes a long way.</p>
-      </div>
-      <div class="gallery-grid" id="galleryGrid"></div>
-    </section>
-
-    <section class="visit-section" id="visit">
-      <div class="page-width visit-grid">
-        <div>
-          <div class="section-kicker light"><span>05</span><span>Come by</span></div>
-          <h2>Save a little <em>room.</em></h2>
-          <p id="visitText">We’d love to have you. Book ahead when you can, or come by and we’ll see what we can do.</p>
-        </div>
-        <div class="visit-card">
-          <div>
-            <span>Where</span>
-            <strong id="visitAddress">18 Olive Street, Osu</strong>
-          </div>
-          <div>
-            <span>Hours</span>
-            <strong id="visitHours">Mon–Thu 12:00–22:00 · Fri–Sat 12:00–23:00 · Sun 13:00–21:00</strong>
-          </div>
-          <div>
-            <span>Call</span>
-            <a id="visitPhone" href="tel:+233201234567">+233 20 123 4567</a>
-          </div>
-          <div class="visit-buttons">
-            <a class="button button-light" id="visitPrimary" href="#">Book a table</a>
-            <a class="text-button light-text" id="visitOrder" href="#" hidden>Order online <svg class="arrow-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 12.5 12.5 3.5M6.5 3.5h6v6"/></svg></a>
-          </div>
-        </div>
-      </div>
+    <section class="visit-band" id="visit">
+      <div class="page-width visit-band-grid"><div><span class="eyebrow eyebrow-light">Your table is waiting</span><h2 class="display">Make a night<br><em>of it.</em></h2></div><div class="visit-info"><div><span>Find us</span><p id="visitAddress">18 Olive Street<br>Osu, Accra</p></div><div><span>Call</span><p><a id="visitPhone" href="tel:+233201234567">+233 20 123 4567</a><br><span id="visitHours">Mon–Sat · evenings</span></p></div><a class="button button-light" id="visitPrimary" href="#">Book a table</a><a class="line-link line-link-light" id="visitSecondary" href="/restaurant-menu.html">See the menu <span class="arrow-icon" aria-hidden="true"></span></a></div></div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="page-width footer-top">
-      <div>
-        <a class="footer-brand" href="#top" id="footerBrand">Common Table</a>
-        <p>Good food. Good people. Come as you are.</p>
-      </div>
-      <div class="footer-links">
-        <a href="#menu">Menu</a><a href="#story">Our story</a><a href="#visit">Visit</a><a id="footerInstagram" href="#" hidden>Instagram</a>
-      </div>
-    </div>
-    <div class="page-width footer-bottom"><span>Website concept</span><span id="footerCity">Accra, Ghana</span></div>
-  </footer>
+  <footer class="site-footer"><div class="page-width footer-grid"><div><a class="footer-brand" href="/" id="footerBrand">Common Table</a><p id="footerPitch">Good food. Good people. Come as you are.</p></div><nav id="footerNav" aria-label="Footer navigation"></nav><div class="footer-contact"><span id="footerCity">Accra, Ghana</span><a id="footerInstagram" href="#" hidden>Instagram</a></div></div><div class="page-width footer-bottom"><span>Website concept</span><span id="footerName">Common Table</span></div></footer>
 
-  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true">
-    <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close image">×</button>
-    <img id="lightboxImage" alt="">
-  </div>
-  <div class="mobile-action-bar" id="mobileActionBar">
-    <a id="mobileBottomSecondary" href="#menu">See the menu</a>
-    <a id="mobileBottomPrimary" href="#visit">Book a table</a>
-  </div>
-
-  <script src="/restaurant-demo.js?v=20261004-assetfix-1" defer></script>
+  <script src="/restaurant-demo.js?v=20261004-public-4" defer></script>
 </body>
 </html>
