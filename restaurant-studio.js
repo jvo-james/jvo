@@ -75,7 +75,7 @@ function galleryRow(item,i){return `<article class="demo-repeater-row" data-gall
 function editorHtml(d,isNew){
   return `<div class="studio-modal">
     <div class="studio-modal-head"><div><p class="eyebrow">Restaurant demo studio</p><h2>${isNew?'Build a new restaurant demo.':`Edit ${esc(d.name || 'restaurant')}.`}</h2><p>Fill the real details, choose the photos and save. The public site and all its pages update from the same record.</p></div></div>
-    <form id="demoForm">
+    <form id="demoForm" novalidate>
       <section class="editor-section"><div class="editor-kicker">1 / Basic details</div>
         <div class="editor-toolbar-line"><span>Most demos can be finished from these fields in a few minutes.</span><button type="button" class="btn small ghost" data-reset-copy="hero">Use starter hero copy</button><button type="button" class="btn small ghost" data-reset-copy="story">Use starter story</button></div>
         <div class="form-grid">
@@ -110,7 +110,7 @@ function collectForm(form){
   return d;
 }
 async function cloudinaryUpload(file, statusEl, api){ if(!file) return null; if(!file.type.startsWith('image/')) throw new Error('Please use an image file.'); if(file.size>12*1024*1024) throw new Error('That image is over 12 MB. Please use a smaller file.'); statusEl.textContent='Preparing upload…'; const sig=await api('cloudinarySignature',{}); const endpoint=`https://api.cloudinary.com/v1_1/${sig.cloudName}/image/upload`; return await new Promise((resolve,reject)=>{ const xhr=new XMLHttpRequest(); xhr.open('POST',endpoint); xhr.onload=()=>{ if(xhr.status>=200&&xhr.status<300){try{const d=JSON.parse(xhr.responseText); statusEl.textContent='Uploaded'; resolve({source:'cloudinary',url:d.secure_url,publicId:d.public_id,assetId:d.asset_id,alt:file.name.replace(/\.[^.]+$/,'')});}catch(e){reject(e)}} else { let msg='Cloudinary upload failed.'; try{msg=JSON.parse(xhr.responseText)?.error?.message||msg}catch{} reject(new Error(msg)); } }; xhr.onerror=()=>reject(new Error('The image upload failed. Check your connection and Cloudinary settings.')); xhr.upload.onprogress=e=>{if(e.lengthComputable) statusEl.textContent=`Uploading ${Math.round(e.loaded/e.total*100)}%`;}; const fd=new FormData(); fd.append('file',file); fd.append('api_key',sig.apiKey); fd.append('timestamp',sig.timestamp); fd.append('signature',sig.signature); fd.append('folder',sig.folder); xhr.send(fd); }); }
-function bindImageFields(form,api){
+function bindImageFields(form,api,acceptUpload=true){
   qsa2('.demo-media-field',form).forEach(fieldEl=>{
     if(fieldEl.dataset.mediaReady==='true') return;
     fieldEl.dataset.mediaReady='true';
@@ -164,10 +164,15 @@ function bindEditor(d,isNew,api,renderTab,state){
   const updatePreview=()=>{ if(previewLink && nameInput) previewLink.href=siteDemoUrl(slugPreview(nameInput.value)); };
   nameInput?.addEventListener('input',updatePreview);
   updatePreview();
-  form.onsubmit=async e=>{
-    e.preventDefault();
-    e.stopPropagation();
-    const btn=form.querySelector('[type="submit"]');
+  const saveBtn=form.querySelector('[type="submit"]');
+  const handleSave=async event=>{
+    event?.preventDefault();
+    event?.stopPropagation();
+    if(form.dataset.saving==='true') return;
+    const name=(form.elements.name?.value||'').trim();
+    if(!name){ toast('Restaurant name is required.'); form.elements.name?.focus(); return; }
+    const btn=saveBtn;
+    form.dataset.saving='true';
     busy(btn,true,isNew?'Creating':'Saving');
     try{
       const payload=collectForm(form);
@@ -178,13 +183,13 @@ function bindEditor(d,isNew,api,renderTab,state){
       else state.restaurantDemos=(state.restaurantDemos||[]).map(x=>x.id===savedDemo.id?savedDemo:x);
       closeModal();
       toast(isNew?'Demo created.':'Demo saved.');
-      if(res.link){
-        try{ await navigator.clipboard.writeText(res.link); toast(`${isNew?'Demo created.':'Saved.'} Link copied.`); }catch{}
-      }
+      if(res.link){ try{ await navigator.clipboard.writeText(res.link); }catch{} }
       renderTab('demos');
     }catch(err){ notifyError(err); }
-    finally{ busy(btn,false); }
+    finally{ busy(btn,false); delete form.dataset.saving; }
   };
+  form.addEventListener('submit',handleSave);
+  saveBtn?.addEventListener('click',event=>{ event.preventDefault(); handleSave(event); });
 }
 
 function cards(demos){return demos.map(d=>{
