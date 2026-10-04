@@ -20,36 +20,40 @@ const AGREEMENT_VERSION = '2.0';
 const RESTAURANT_LEAD_STATUSES = ['New', 'Contacted', 'Replied', 'Interested', 'Won', 'Not now'];
 const RESTAURANT_CATEGORIES = ['Small plates', 'Mains', 'Dessert', 'Drinks', 'Lunch', 'Sides'];
 const DEFAULT_RESTAURANT_TEMPLATE = {
-  name: 'The Common Table', eyebrow: 'Kitchen · Bar · Table', tagline: 'Good food, warm light and nowhere to rush.',
-  intro: 'A neighbourhood restaurant built around honest cooking, generous plates and the kind of evenings you want to stretch out a little longer.',
-  city: 'Accra, Ghana', address: '18 Olive Street, Osu', phone: '+233 20 123 4567', email: 'hello@restaurant.com',
-  hours: 'Mon–Thu 12:00–22:00 · Fri–Sat 12:00–23:00 · Sun 13:00–21:00', reservationUrl: '', orderUrl: '', instagramUrl: '',
-  logoText: 'Common Table', primaryCta: 'Book a table', secondaryCta: 'See the menu',
-  heroImage: { source: 'repo', id: 'warmTerrace', alt: 'A warmly lit restaurant terrace at night' },
-  storyTitle: 'A table worth coming back to.',
-  storyText: 'We cook food that feels familiar but never flat. The menu moves with the season, the room stays easy and the bar is always ready for one more round. Come for dinner, stay because the night got good.',
-  storyImage: { source: 'repo', id: 'kitchenHands', alt: 'Hands plating a dish in the kitchen' },
-  experienceTitle: 'Come hungry. Leave happy.', experienceText: 'Good food, a proper drink and enough room to talk. That is really the whole point.',
-  menu: [
-    { name: 'Charred prawns', category: 'Small plates', description: 'Garlic, chilli, lime and warm flatbread.', price: '95', currency: 'GHS', image: { source: 'repo', id: 'platedDish', alt: 'A beautifully plated dish' } },
-    { name: 'Market salad', category: 'Small plates', description: 'Crisp greens, roasted vegetables, herbs and citrus dressing.', price: '65', currency: 'GHS', image: { source: 'repo', id: 'diningTable', alt: 'Fresh food shared around a table' } },
-    { name: 'Ember chicken', category: 'Mains', description: 'Slow-roasted chicken, smoky jus and crispy potatoes.', price: '140', currency: 'GHS', image: { source: 'repo', id: 'kitchenHands', alt: 'Chef preparing a dish' } },
-    { name: 'Coconut fish', category: 'Mains', description: 'Market fish, coconut sauce, herbs and steamed rice.', price: '155', currency: 'GHS', image: { source: 'repo', id: 'serviceWarm', alt: 'A warm restaurant scene' } },
-    { name: 'House burger', category: 'Mains', description: 'Dry-aged beef, smoked cheddar, pickles and house fries.', price: '125', currency: 'GHS', image: { source: 'repo', id: 'warmTerrace', alt: 'Warmly lit restaurant dining room' } },
-    { name: 'Burnt cheesecake', category: 'Dessert', description: 'Soft centre, caramelised top and a little sea salt.', price: '55', currency: 'GHS', image: { source: 'repo', id: 'baker', alt: 'Freshly baked food from the kitchen' } }
+  name:'The Common Table', eyebrow:'Kitchen · Bar · Table', tagline:'Supper, properly done.',
+  intro:'A neighbourhood restaurant for long lunches, proper dinners and evenings that deserve a little more time.',
+  city:'Accra, Ghana', address:'18 Olive Street, Osu', phone:'+233 20 123 4567', email:'hello@restaurant.com',
+  hours:'Mon–Thu 12:00–22:00 · Fri–Sat 12:00–23:00 · Sun 13:00–21:00', reservationUrl:'', orderUrl:'', instagramUrl:'',
+  logoText:'Common Table', primaryCta:'Book a table', secondaryCta:'See the menu',
+  heroImage:{source:'repo',id:'diningRoom',alt:'Warm restaurant dining room'},
+  storyTitle:'Old rooms. New rituals.', storyText:'Good food, a proper drink and enough room to talk. We cook familiar things with a little edge and keep the room easy so the evening can take its own shape.',
+  storyImage:{source:'repo',id:'diningRoomWide',alt:'Warm dining room before service'},
+  experienceTitle:'Not just dinner. A whole evening.', experienceText:'Come early for a drink, stay for supper and leave when you are ready. The best nights usually take longer than planned.',
+  popularIntro:'A few plates to give you a feel for the table. The full menu has more.', menuIntro:'A generous menu of small plates, mains, sides and something sweet to finish.',
+  menuNote:'Prices and dishes are sample content for this concept.', menuFooterNote:'The menu can change with the season. Update dishes, descriptions and prices in the dashboard in a few minutes.',
+  galleryTitle:'Take a little look inside.', galleryIntro:'A mix of the room, the kitchen, the bar and the plates that set the tone.',
+  privateDiningTitle:'Private dinners, done properly.', privateDiningText:'A more personal way to use the room, with space for the people you actually want around the table.', privateDiningDetails:'Tell us what you are planning, how many people you have in mind and when you would like to come. We can take it from there.', privateDiningCapacity:'Up to 30 guests',
+  contactIntro:'Everything you need before you arrive, from hours and directions to the little house notes.', dressCode:'Smart casual.', parking:'Street parking nearby.', reservationNote:'Reservations are recommended.',
+  menu:[
+    {name:'Charred prawns',category:'Small plates',description:'Garlic, chilli, lime and warm flatbread.',price:'95',currency:'GHS',featured:true,image:{source:'repo',id:'shrimp',alt:'Charred prawns on a plate'}},
+    {name:'House salad',category:'Small plates',description:'Crisp greens, roasted vegetables, herbs and a sharp citrus dressing.',price:'65',currency:'GHS',featured:true,image:{source:'repo',id:'salad',alt:'Fresh restaurant salad'}},
+    {name:'Carolina tomahawk',category:'Mains',description:'Charred steak, herb tallow and a rich house sauce.',price:'240',currency:'GHS',featured:true,image:{source:'repo',id:'tomahawk',alt:'Tomahawk steak'}},
+    {name:'Market fish',category:'Mains',description:'Fresh catch, bright sauce, seasonal vegetables and steamed rice.',price:'165',currency:'GHS',image:{source:'repo',id:'salmon',alt:'Fresh fish plate'}},
+    {name:'Filet & greens',category:'Mains',description:'Tender beef, pan jus, greens and a simple side.',price:'215',currency:'GHS',image:{source:'repo',id:'filet',alt:'Filet steak plate'}},
+    {name:'Creamy scallops',category:'Mains',description:'Seared scallops, parmesan risotto and house vegetables.',price:'175',currency:'GHS',image:{source:'repo',id:'scallops',alt:'Seared scallops'}},
+    {name:'Crispy bacon bites',category:'Sides',description:'Sweet heat glaze, fresh herbs and a little crunch.',price:'55',currency:'GHS',image:{source:'repo',id:'baconBites',alt:'Crispy bacon bites'}},
+    {name:'Burnt cheesecake',category:'Dessert',description:'Soft centre, caramelised top and a little sea salt.',price:'55',currency:'GHS',image:{source:'repo',id:'dessert',alt:'Dessert plate'}},
+    {name:'House old fashioned',category:'Drinks',description:'Whiskey, orange, bitters and a long finish.',price:'75',currency:'GHS',image:{source:'repo',id:'whiskey',alt:'Whiskey cocktail'}},
+    {name:'Espresso martini',category:'Drinks',description:'Fresh espresso, vodka and a clean bitter finish.',price:'75',currency:'GHS',image:{source:'repo',id:'cocktail',alt:'Signature cocktail'}}
   ],
-  gallery: [
-    { image: { source: 'repo', id: 'warmTerrace', alt: 'Warmly lit restaurant terrace' } },
-    { image: { source: 'repo', id: 'kitchenHands', alt: 'Chef plating a dish' } },
-    { image: { source: 'repo', id: 'diningTable', alt: 'Shared dining table' } },
-    { image: { source: 'repo', id: 'platedDish', alt: 'Plated dish' } },
-    { image: { source: 'repo', id: 'serviceWarm', alt: 'Restaurant service scene' } }
+  gallery:[
+    {image:{source:'repo',id:'diningRoomWide',alt:'Warm dining room'}},{image:{source:'repo',id:'barInterior',alt:'Restaurant bar'}},{image:{source:'repo',id:'platedSteak',alt:'Steak from the kitchen'}},{image:{source:'repo',id:'candlelight',alt:'Candlelit table'}},{image:{source:'repo',id:'cocktail',alt:'Signature cocktail'}},{image:{source:'repo',id:'privateRoom',alt:'Private dining room'}},{image:{source:'repo',id:'tableConversation',alt:'Guests around a table'}},{image:{source:'repo',id:'wine',alt:'Wine at the table'}},{image:{source:'repo',id:'exterior',alt:'Restaurant exterior'}}
   ],
-  leadStatus: 'New', notes: '', recipientName: '', recipientEmail: ''
+  leadStatus:'New', notes:'', recipientName:'', recipientEmail:''
 };
 const DEFAULT_RESTAURANT_EMAIL = {
-  subject: 'I made a quick website idea for {{restaurantName}}',
-  body: 'Hi {{recipientName}},\n\nI came across {{restaurantName}} and liked what you’re doing in {{city}}.\n\nThe restaurant already has the part that is hardest to fake, the food and the atmosphere. I wanted to see what it would look like if that came through online just as clearly.\n\nSo I put together a quick website concept for {{restaurantName}}:\n{{demoLink}}\n\nIt’s built around your restaurant, not a generic portfolio link. The menu, story, location and booking flow are all there.\n\nThere’s no pressure at all. I just thought you might want to see it.\n\nIf you like the direction, I can turn it into the full site and connect the real menu, photos and booking or ordering setup.\n\nThanks,\n{{yourName}}\n{{businessName}}'
+  subject:'A quick website idea for {{restaurantName}}',
+  body:'Hi {{recipientName}},\n\nI came across {{restaurantName}} and liked what you are doing in {{city}}.\n\nYou already have the part that matters most, the food and the atmosphere. I put together a quick website concept to show how that could come across online with a cleaner menu, stronger photography and a simpler booking path.\n\nI made it around {{restaurantName}} rather than sending you a generic portfolio link:\n{{demoLink}}\n\nHave a look when you have a minute. There is no pressure at all.\n\nIf you like the direction, I can build the full site around your real menu, photos and booking or ordering setup.\n\nBest,\n{{yourName}}\n{{businessName}}'
 };
 function slugify(value) {
   return text(value).toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 70) || 'restaurant';
@@ -74,8 +78,8 @@ function cleanRestaurantDemoPayload(body, old = {}) {
   const menu = Array.isArray(body.menu) ? body.menu.slice(0, 30).map((item, i) => ({
     name: text(item?.name).slice(0, 100) || `Menu item ${i + 1}`,
     category: RESTAURANT_CATEGORIES.includes(item?.category) ? item.category : (text(item?.category).slice(0, 40) || 'Mains'),
-    description: text(item?.description).slice(0, 300), price: text(item?.price).slice(0, 32), currency: text(item?.currency).slice(0, 8),
-    image: cleanImageObject(item?.image, { id: 'platedDish' })
+    description: text(item?.description).slice(0, 300), price: text(item?.price).slice(0, 32), currency: text(item?.currency).slice(0, 8), featured: Boolean(item?.featured),
+    image: cleanImageObject(item?.image, { id: 'platedSteak' })
   })) : (old.menu || DEFAULT_RESTAURANT_TEMPLATE.menu);
   const gallery = Array.isArray(body.gallery) ? body.gallery.slice(0, 12).map(entry => ({ image: cleanImageObject(entry?.image, { id: 'warmTerrace' }) })).filter(entry => entry.image.id || entry.image.url) : (old.gallery || DEFAULT_RESTAURANT_TEMPLATE.gallery);
   const allowedStatus = RESTAURANT_LEAD_STATUSES.includes(body.leadStatus) ? body.leadStatus : (old.leadStatus || 'New');
@@ -85,38 +89,40 @@ function cleanRestaurantDemoPayload(body, old = {}) {
     hours: text(body.hours).slice(0, 260), reservationUrl: safeUrl(body.reservationUrl), orderUrl: safeUrl(body.orderUrl), instagramUrl: safeUrl(body.instagramUrl), logoText: text(body.logoText).slice(0, 80),
     primaryCta: text(body.primaryCta).slice(0, 40) || 'Book a table', secondaryCta: text(body.secondaryCta).slice(0, 40) || 'See the menu',
     heroImage: cleanImageObject(body.heroImage, { id: 'warmTerrace' }), storyTitle: text(body.storyTitle).slice(0, 120), storyText: text(body.storyText).slice(0, 1000), storyImage: cleanImageObject(body.storyImage, { id: 'kitchenHands' }),
-    experienceTitle: text(body.experienceTitle).slice(0, 120), experienceText: text(body.experienceText).slice(0, 500), menu, gallery, leadStatus: allowedStatus, notes: text(body.notes).slice(0, 1200),
+    experienceTitle: text(body.experienceTitle).slice(0, 120), experienceText: text(body.experienceText).slice(0, 500),
+    popularIntro: text(body.popularIntro).slice(0, 320), menuIntro: text(body.menuIntro).slice(0, 500), menuNote: text(body.menuNote).slice(0, 320), menuFooterNote: text(body.menuFooterNote).slice(0, 500),
+    galleryTitle: text(body.galleryTitle).slice(0, 140), galleryIntro: text(body.galleryIntro).slice(0, 320),
+    privateDiningTitle: text(body.privateDiningTitle).slice(0, 140), privateDiningText: text(body.privateDiningText).slice(0, 700), privateDiningDetails: text(body.privateDiningDetails).slice(0, 900), privateDiningCapacity: text(body.privateDiningCapacity).slice(0, 80),
+    contactIntro: text(body.contactIntro).slice(0, 400), dressCode: text(body.dressCode).slice(0, 160), parking: text(body.parking).slice(0, 200), reservationNote: text(body.reservationNote).slice(0, 240),
+    menu, gallery, leadStatus: allowedStatus, notes: text(body.notes).slice(0, 1200),
     recipientName: text(body.recipientName).slice(0, 100), recipientEmail: text(body.recipientEmail).toLowerCase().slice(0, 140)
   };
 }
 function publicRestaurantDemo(d) {
-  return { id: d.id, slug: d.slug, name: d.name, eyebrow: d.eyebrow, tagline: d.tagline, intro: d.intro, city: d.city, address: d.address, phone: d.phone, email: d.email, hours: d.hours,
-    reservationUrl: d.reservationUrl || '', orderUrl: d.orderUrl || '', instagramUrl: d.instagramUrl || '', logoText: d.logoText || d.name, primaryCta: d.primaryCta || 'Book a table', secondaryCta: d.secondaryCta || 'See the menu',
-    heroImage: d.heroImage || {}, storyTitle: d.storyTitle, storyText: d.storyText, storyImage: d.storyImage || {}, experienceTitle: d.experienceTitle, experienceText: d.experienceText, menu: Array.isArray(d.menu) ? d.menu : [], gallery: Array.isArray(d.gallery) ? d.gallery : [],
-    createdAt: d.createdAt, updatedAt: d.updatedAt, leadStatus: d.leadStatus || 'New' };
+  return { id:d.id, slug:d.slug, name:d.name, eyebrow:d.eyebrow, tagline:d.tagline, intro:d.intro, city:d.city, address:d.address, phone:d.phone, email:d.email, hours:d.hours,
+    reservationUrl:d.reservationUrl||'', orderUrl:d.orderUrl||'', instagramUrl:d.instagramUrl||'', logoText:d.logoText||d.name, primaryCta:d.primaryCta||'Book a table', secondaryCta:d.secondaryCta||'See the menu',
+    heroImage:d.heroImage||{}, storyTitle:d.storyTitle, storyText:d.storyText, storyImage:d.storyImage||{}, experienceTitle:d.experienceTitle, experienceText:d.experienceText,
+    popularIntro:d.popularIntro||'', menuIntro:d.menuIntro||'', menuNote:d.menuNote||'', menuFooterNote:d.menuFooterNote||'', galleryTitle:d.galleryTitle||'', galleryIntro:d.galleryIntro||'',
+    privateDiningTitle:d.privateDiningTitle||'', privateDiningText:d.privateDiningText||'', privateDiningDetails:d.privateDiningDetails||'', privateDiningCapacity:d.privateDiningCapacity||'', contactIntro:d.contactIntro||'', dressCode:d.dressCode||'', parking:d.parking||'', reservationNote:d.reservationNote||'',
+    menu:Array.isArray(d.menu)?d.menu:[], gallery:Array.isArray(d.gallery)?d.gallery:[], createdAt:d.createdAt, updatedAt:d.updatedAt, leadStatus:d.leadStatus||'New' };
 }
 function restaurantDemoLink(slug) { return `${SITE}/restaurant/${encodeURIComponent(slug)}`; }
 function resolveRestaurantImageUrl(image) {
   if (image?.source === 'cloudinary' && image.url) return image.url;
-  const map = { diningTable:'images/a11.webp', warmTerrace:'images/a2.webp', kitchenHands:'images/a10.webp', baker:'images/a4.webp', platedDish:'images/a8.webp', serviceWarm:'images/a3.webp', nightStreet:'images/a12.webp' };
+  const map = {
+    diningRoom:'images/restaurant-hero.jpg', diningRoomWide:'images/restaurant-sunshine.jpg', barInterior:'images/restaurant-interior.jpg', exterior:'images/restaurant-exterior.jpg', candlelight:'images/restaurant-blacklit.jpg',
+    platedSteak:'images/restaurant-ribeye.jpg', tomahawk:'images/restaurant-tomahawk.jpg', filet:'images/restaurant-filet.jpg', salmon:'images/restaurant-salmon.jpg', scallops:'images/restaurant-risotto.jpg', shrimp:'images/restaurant-shrimp.jpg', salad:'images/restaurant-salad.jpg',
+    baconBites:'images/restaurant-bacon.jpg', dessert:'images/restaurant-gallery4.jpg', platedDetail:'images/restaurant-gallery3.jpg', tableSetting:'images/restaurant-plate.jpg', kitchenDetail:'images/restaurant-gallery6.jpg', cocktail:'images/restaurant-cocktail1.jpg', cocktails:'images/restaurant-cocktail3.jpg', champagne:'images/restaurant-champagne.jpg', wine:'images/restaurant-wine1.jpg', bourbon:'images/restaurant-bourbon1.jpg', whiskey:'images/restaurant-whiskey.jpg', barShelf:'images/restaurant-bourbon4.jpg', privateRoom:'images/restaurant-reserve2.jpg', tableConversation:'images/restaurant-c2.jpg', gathering:'images/restaurant-c.jpg', wineWall:'images/restaurant-wine2.jpg', barTable:'images/restaurant-gallery7.jpg',
+    // Legacy IDs from the first restaurant studio build.
+    diningTable:'images/restaurant-plate.jpg', warmTerrace:'images/restaurant-sunshine.jpg', kitchenHands:'images/restaurant-gallery6.jpg', baker:'images/restaurant-gallery4.jpg', platedDish:'images/restaurant-ribeye.jpg', serviceWarm:'images/restaurant-gallery7.jpg', nightStreet:'images/restaurant-exterior.jpg'
+  };
   return image?.source === 'repo' && map[image.id] ? `${SITE}/${map[image.id]}` : '';
 }
 function renderOutreachEmailHtml({ demo, recipientName, body, subject, link, settings }) {
-  const brand = esc(settings.businessName || 'JVO');
-  const owner = esc(settings.ownerName || 'James Senu');
-  const reply = esc(settings.email || '');
-  const recipient = esc(recipientName || 'there');
-  const cleanName = esc(demo.name || 'your restaurant');
-  const city = esc(demo.city || '');
-  const image = resolveRestaurantImageUrl(demo.heroImage);
-  const preheader = esc(`A quick website idea for ${demo.name || 'your restaurant'}`);
-  const paragraphs = String(body || '')
-    .split(/\n\s*\n/)
-    .filter(p => p.trim())
-    .map(p => `<p style="margin:0 0 17px;font:400 15px/1.75,Arial,sans-serif;color:#4f4a43">${esc(p).replace(/\n/g,'<br>')}</p>`)
-    .join('');
-  const button = `<a href="${esc(link)}" style="display:inline-block;background:#171512;color:#ffffff;text-decoration:none;padding:14px 20px;font:600 12px/1,Arial,sans-serif;border:1px solid #171512">View the website concept</a>`;
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="x-apple-disable-message-reformatting"><title>${esc(subject || `A website idea for ${demo.name || ''}`)}</title></head><body style="margin:0;padding:0;background:#ebe6de;color:#171512;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%"><div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent">${preheader}</div><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;background:#ebe6de"><tr><td align="center" style="padding:28px 12px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:620px;background:#fffdf8;border:1px solid #d8d0c4"><tr><td style="padding:20px 24px;border-bottom:1px solid #ddd6ca"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="font:700 23px/1,Georgia,serif;color:#171512">${brand}</td><td align="right" style="font:500 9px/1.3,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#7c756b">A quick idea</td></tr></table></td></tr>${image ? `<tr><td><img src="${esc(image)}" alt="${cleanName}" width="620" style="display:block;width:100%;max-width:620px;height:auto;max-height:300px;object-fit:cover;border:0"></td></tr>` : ''}<tr><td style="padding:32px 28px 14px"><div style="font:600 9px/1.4,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#b64d36;margin:0 0 12px">${esc(city || 'Restaurant website concept')}</div><p style="margin:0 0 10px;font:500 11px/1.4,Arial,sans-serif;color:#777066">For ${recipient}</p><h1 style="margin:0 0 24px;font:600 37px/1.05,Georgia,serif;letter-spacing:-.02em;color:#171512">A website idea for ${cleanName}.</h1>${paragraphs}<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:6px"><tr><td>${button}</td></tr></table><p style="margin:19px 0 0;font:400 11px/1.6,Arial,sans-serif;color:#827b72">This is a private concept prepared specifically for ${cleanName}.${city ? ` Based in ${city}.` : ''}</p></td></tr><tr><td style="padding:22px 28px 28px;background:#171512;color:#ebe4da"><p style="margin:0;font:400 12px/1.65,Arial,sans-serif;color:#ebe4da">Best,<br><strong>${owner}</strong><br>${brand}${reply ? ` · ${reply}` : ''}</p></td></tr></table></td></tr></table></body></html>`;
+  const brand = esc(settings.businessName || 'JVO'), owner = esc(settings.ownerName || 'James Senu'), reply = esc(settings.email || '');
+  const image = resolveRestaurantImageUrl(demo.heroImage), cleanName = esc(demo.name || 'your restaurant'), city = esc(demo.city || '');
+  const paragraphs = String(body || '').split(/\n\s*\n/).filter(p => p.trim()).map(p => `<p style="margin:0 0 18px;font:400 15px/1.78 Arial,sans-serif;color:#4f4b44">${esc(p).replace(/\n/g,'<br>')}</p>`).join('');
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head><body style="margin:0;background:#eee9e0;color:#171511"><div style="display:none;max-height:0;overflow:hidden;opacity:0">A quick website idea for ${cleanName}</div><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eee9e0;padding:24px 10px"><tr><td align="center"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:650px;background:#fbf8f1;border:1px solid #d8d0c2"><tr><td style="padding:19px 23px;border-bottom:1px solid #ddd6ca"><table width="100%" role="presentation"><tr><td style="font:700 22px Georgia,serif">${brand}</td><td align="right" style="font:500 9px monospace;letter-spacing:.16em;text-transform:uppercase;color:#81796e">A QUICK IDEA</td></tr></table></td></tr>${image ? `<tr><td><img src="${esc(image)}" alt="${cleanName}" width="650" style="display:block;width:100%;height:auto;max-height:310px;object-fit:cover"></td></tr>` : ''}<tr><td style="padding:33px 28px 17px"><div style="font:500 9px monospace;letter-spacing:.14em;text-transform:uppercase;color:#b44a34;margin-bottom:12px">${esc(city || 'Restaurant website concept')}</div><h1 style="margin:0 0 24px;font:600 36px/1.04 Georgia,serif;letter-spacing:-.03em">A cleaner online home for ${cleanName}.</h1>${paragraphs}<table role="presentation" cellpadding="0" cellspacing="0"><tr><td><a href="${esc(link)}" style="display:inline-block;background:#171511;color:#fff;text-decoration:none;padding:14px 20px;font:600 12px Arial,sans-serif">View the restaurant concept</a></td></tr></table><p style="margin:19px 0 0;font:400 11px/1.6 Arial,sans-serif;color:#827a70">Private concept prepared for ${cleanName}. ${city ? `Based in ${city}.` : ''}</p></td></tr><tr><td style="padding:23px 28px 28px;background:#171511;color:#eee7dc"><p style="margin:0;font:400 12px/1.6 Arial,sans-serif">Thanks,<br><strong>${owner}</strong><br>${brand}${reply ? ` · ${reply}` : ''}</p></td></tr></table></td></tr></table></body></html>`;
 }
 const ALLOWED_CURRENCIES = ['GHS', 'USD', 'GBP', 'EUR'];
 const STATUSES = ['Draft', 'Agreement Sent', 'Agreement Signed', 'Awaiting Deposit', 'Deposit Received', 'Development', 'Client Review', 'Approved', 'Awaiting Final Payment', 'Fully Paid', 'Launched', 'Completed', 'On Hold', 'Cancelled'];
@@ -252,13 +258,10 @@ async function sendMail({ to, subject, textMessage, html, projectId = '', projec
   const from = process.env.RESEND_FROM_EMAIL || process.env.RESEND_FROM || `${settings.emailSenderName || settings.businessName || 'JVO'} <projects@jvo.me>`;
   const replyTo = process.env.RESEND_REPLY_TO || process.env.REPLY_TO || settings.email || 'senujames23@gmail.com';
   const payload = { from, to: [to], subject, html, text: textMessage, reply_to: replyTo };
-  if (idempotencyKey) payload.headers = { 'X-Entity-Ref-ID': `jvo-${demoId || projectId || 'email'}-${idempotencyKey.slice(0, 18)}` };
-  const requestHeaders = { authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'content-type': 'application/json' };
-  if (idempotencyKey) requestHeaders['Idempotency-Key'] = idempotencyKey;
-  const r = await fetch('https://api.resend.com/emails', { method: 'POST', headers: requestHeaders, body: JSON.stringify(payload) });
+  const r = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'content-type': 'application/json' }, body: JSON.stringify(payload) });
   const d = await r.json();
   if (!r.ok) throw new Error(d.message || 'Email could not be sent.');
-  const emailRecord = { to, subject, message: textMessage, html, template, projectId, projectName, demoId, restaurantName, demoLink, resendId: d.id || '', messageId: d.message_id || d.messageId || '', createdAt: now() };
+  const emailRecord = { to, subject, message: textMessage, html, template, projectId, projectName, demoId, restaurantName, demoLink, resendId: d.id || '', createdAt: now() };
   await db.collection('emails').add(emailRecord);
   if (idempotencyKey) await db.collection('emailKeys').doc(idempotencyKey).set({ resendId: d.id || '', createdAt: now() });
   return d;
@@ -550,8 +553,7 @@ exports.handler = async event => {
       const vars = { recipientName, restaurantName: demo.name, intro: demo.intro || '', email: demo.email || '', logoText: demo.logoText || '', city: demo.city, address: demo.address || '', phone: demo.phone || '', email: demo.email || '', hours: demo.hours || '', tagline: demo.tagline || '', eyebrow: demo.eyebrow || '', primaryCta: demo.primaryCta || '', secondaryCta: demo.secondaryCta || '', storyTitle: demo.storyTitle || '', experienceTitle: demo.experienceTitle || '', reservationUrl: demo.reservationUrl || '', orderUrl: demo.orderUrl || '', instagramUrl: demo.instagramUrl || '', logoText: demo.logoText || '', demoLink: link, yourName: settings.ownerName || 'James Senu', businessName: settings.businessName || 'JVO' };
       const interpolate = template => Object.entries(vars).reduce((out, [key, value]) => out.replaceAll(`{{${key}}}`, value), template);
       const subject = interpolate(subjectTemplate); const message = interpolate(messageTemplate); const html = renderOutreachEmailHtml({ demo, recipientName, body: message, subject, link, settings });
-      const textMessage = message.includes(link) ? message : `${message}\n\n${link}`;
-      const sent = await sendMail({ to, subject, textMessage, html, projectId: '', projectName: demo.name, template: 'restaurant_outreach', idempotencyKey: text(body.idempotencyKey), demoId: demo.id, restaurantName: demo.name, demoLink: link });
+      const sent = await sendMail({ to, subject, textMessage: `${message}\n\n${link}`, html, projectId: '', projectName: demo.name, template: 'restaurant_outreach', idempotencyKey: text(body.idempotencyKey), demoId: demo.id, restaurantName: demo.name, demoLink: link });
       const stamp = now(); await db.collection('restaurantDemos').doc(demo.id).update({ recipientName, recipientEmail: to, leadStatus: demo.leadStatus === 'New' ? 'Contacted' : demo.leadStatus, lastSentAt: stamp, lastSentTo: to, updatedAt: stamp });
       await db.collection('activities').add({ projectId: `restaurant:${demo.id}`, text: `Outreach email sent to ${to}`, kind: 'restaurantEmail', meta: { demoId: demo.id, subject }, createdAt: stamp });
       return json(200, { ok: true, resendId: sent.id || '', link });
