@@ -2,7 +2,7 @@
 
 JVO is James Senu's portfolio and private project desk.
 
-The public site stays at `index.html`. The project system adds a private admin area at `admin.html` and a private client project page at `form.html?id=...`.
+The public site stays at `index.html`. The project system adds a private admin area at `admin.html`, a private client project page at `form.html?id=...` and a restaurant demo studio that generates reusable, personalised restaurant sites at `/restaurant/<slug>`.
 
 ## What is included
 
@@ -26,6 +26,11 @@ The public site stays at `index.html`. The project system adds a private admin a
 - Client project updates
 - Privacy note
 - Manual JSON desk backup
+- Reusable restaurant demo studio with saved restaurant records
+- Personalised restaurant demo links with a shared responsive template
+- Cloudinary signed image uploads with file picker, drag and drop and clipboard paste
+- Editable restaurant menu, gallery, hero, story and contact details
+- Restaurant outreach email composer with saved templates, live preview and Resend history
 - Security headers and server-side validation
 - Rate limiting on public project actions
 - Idempotency protection for payments and emails
@@ -155,6 +160,9 @@ RESEND_API_KEY
 RESEND_FROM_EMAIL
 RESEND_REPLY_TO
 SITE_URL
+CLOUDINARY_CLOUD_NAME
+CLOUDINARY_API_KEY
+CLOUDINARY_API_SECRET
 ```
 
 Then redeploy the site.
@@ -293,3 +301,17 @@ The project agreement is a practical plain-language business agreement. It is st
 The login is intentionally isolated in `admin-auth.js`. Firebase authentication starts before the larger dashboard script is imported. This keeps a dashboard JavaScript regression from breaking the login button itself. After Firebase signs the admin in, `admin.js` is loaded and the dashboard takes over.
 
 The login button has a visible loading state while authentication is in progress. Errors show the Firebase error code under the form instead of falling back to a normal browser form submission.
+
+## Restaurant demo studio
+
+Open `admin.html` and choose **Restaurant demos**. The studio stores every demo in the `restaurantDemos` Firestore collection. A saved demo gets a clean link such as `https://jvo.me/restaurant/example-restaurant`. The public page is rendered by `restaurant-demo.html` and loads the saved record by slug.
+
+`images.js` is the single place to maintain repo image references. Saved demos store repo-image IDs instead of copying the file path into every record. Change the URL for a repo image in `images.js` later and existing demos that reference that image ID will use the new asset.
+
+For Cloudinary, add the three environment variables above. No upload preset is required. The browser never receives `CLOUDINARY_API_SECRET`. The Netlify function creates a short-lived signed upload request and the browser uploads the selected image directly to Cloudinary. The studio accepts the normal file picker, drag and drop and clipboard paste. Images are stored as Cloudinary URLs in the demo record, while repo assets stay as easy-to-edit IDs in `images.js`.
+
+Restaurant outreach uses the existing Resend connection. Choose **Outreach email** inside the Restaurant demos tab, pick a saved restaurant and the subject, body and preview are filled from that record. You can edit the body, insert variables and save the version as the default template. Sending stores the final message, HTML, recipient, restaurant, demo link and Resend ID in the existing `emails` collection.
+
+Available email variables include `{{recipientName}}`, `{{restaurantName}}`, `{{city}}`, `{{address}}`, `{{phone}}`, `{{email}}`, `{{hours}}`, `{{tagline}}`, `{{eyebrow}}`, `{{intro}}`, `{{storyTitle}}`, `{{experienceTitle}}`, `{{reservationUrl}}`, `{{orderUrl}}`, `{{instagramUrl}}`, `{{demoLink}}`, `{{yourName}}`, `{{businessName}}` and `{{logoText}}`.
+
+The restaurant demo studio does not replace the existing project workflow. Its records are separate from `projects` so prospect demos do not get mixed into paid client work.

@@ -30,3 +30,10 @@
   for = "/.netlify/functions/*"
   [headers.values]
     Cache-Control = "no-store"
+
+# Clean public links for saved restaurant demos. The static page reads the slug from the query string.
+[[redirects]]
+  from = "/restaurant/*"
+  to = "/restaurant-demo.html?slug=:splat"
+  status = 200
+  force = true
