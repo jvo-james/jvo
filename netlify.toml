@@ -5,6 +5,10 @@
 [functions]
   node_bundler = "esbuild"
 
+[[edge_functions]]
+  path = "/restaurant/*"
+  function = "restaurant-meta"
+
 [[headers]]
   for = "/*"
   [headers.values]
