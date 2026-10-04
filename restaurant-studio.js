@@ -1,4 +1,4 @@
-import { JVO_RESTAURANT_TEMPLATE, JVO_RESTAURANT_EMAIL_TEMPLATE } from './restaurant-studio-data.js?v=20261004-restaurant-fix-3';
+import { JVO_RESTAURANT_TEMPLATE, JVO_RESTAURANT_EMAIL_TEMPLATE } from './restaurant-studio-data.js?v=20261004-final9';
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
 const arrowIcon = '<svg class="studio-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 12.5 12.5 3.5M6.5 3.5h6v6"/></svg>';
@@ -6,7 +6,7 @@ const uid = () => crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Mat
 const repoImages = () => Object.values(window.JVO_REPO_IMAGES || {});
 const defaultTemplate = () => JSON.parse(JSON.stringify(window.JVO_RESTAURANT_TEMPLATE || JVO_RESTAURANT_TEMPLATE));
 const defaultEmail = () => JSON.parse(JSON.stringify(window.JVO_RESTAURANT_EMAIL_TEMPLATE || JVO_RESTAURANT_EMAIL_TEMPLATE));
-const getImageSrc = img => img?.source === 'cloudinary' ? img.url : img?.source === 'url' ? img.url : img?.source === 'repo' ? window.JVO_REPO_IMAGES?.[img.id]?.url || '' : '';
+const getImageSrc = img => img?.source === 'cloudinary' ? img.url : img?.source === 'url' ? img.url : img?.source === 'repo' ? window.JVO_REPO_IMAGES?.[img.id]?.url || window.JVO_REPO_IMAGES?.[window.JVO_LEGACY_IMAGE_ALIASES?.[img.id]]?.url || '' : '';
 const slugPreview = name => String(name || 'restaurant').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'').slice(0,65) || 'restaurant';
 const siteDemoUrl = slug => `${location.origin}${location.hostname === 'localhost' || location.hostname === '127.0.0.1' ? `/restaurant-demo.html?slug=${encodeURIComponent(slug)}` : `/restaurant/${encodeURIComponent(slug)}`}`;
 const modal = () => document.querySelector('#modal');
