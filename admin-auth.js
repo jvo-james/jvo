@@ -62,7 +62,7 @@ async function loadAdminCode() {
   if (window.__JVO_ADMIN_CODE_LOADED__) return;
   window.__JVO_ADMIN_CODE_LOADING__ = true;
   try {
-    await import('./admin.js?v=20261004-dashboard-refresh-fix-1');
+    await import('./admin.js?v=20261004-dashboard-buttons-fix-2');
     window.__JVO_ADMIN_CODE_LOADED__ = true;
   } catch (err) {
     console.error('JVO Desk admin dashboard failed to load:', err);

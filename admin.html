@@ -78,13 +78,6 @@
   <script src="firebase-config.js"></script>
   <script src="images.js?v=20261004-final9"></script>
   <script>
-
-    // Dashboard forms are handled by JavaScript. Cancel any native submit default
-    // at the document level so a missing/late handler can never navigate or reload
-    // the admin page. The form's own submit handler still runs normally.
-    document.addEventListener('submit', event => {
-      if (event.target?.id !== 'loginForm') event.preventDefault();
-    }, true);
     // Keep a missing module from turning the login into a native form reload.
     // The real login handler lives in admin-auth.js and sets __JVO_AUTH_BOOTED__.
     window.__JVO_AUTH_BOOTED__ = false;
@@ -111,6 +104,6 @@
       }
     }, 8000);
   </script>
-  <script type="module" src="admin-auth.js?v=20261004-dashboard-refresh-fix-1"></script>
+  <script type="module" src="admin-auth.js?v=20261004-dashboard-buttons-fix-2"></script>
 </body>
 </html>
