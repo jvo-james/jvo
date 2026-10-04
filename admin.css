@@ -37,3 +37,8 @@
 .ep-button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 20px;background:#171512;color:#fff!important;text-decoration:none!important;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 /* Ensure the WhatsApp artwork in the email preview stays a real icon, not a text badge. */
 .email-wa-icon,.ep-wa-icon{background:transparent!important;border-radius:0!important;color:inherit!important;object-fit:contain;}
+
+
+/* Restaurant image source switch */
+.source-switch{gap:2px;overflow:auto}.source-switch button{white-space:nowrap}.url-panel{padding:2px 0}.url-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px;align-items:center}.url-row input{width:100%;min-height:40px;border:1px solid var(--line);padding:0 11px;background:#fffdf8;color:var(--ink);font-size:11px}.url-panel .mini-note{margin-top:9px}.repo-picker{background:#fffdf8}
+@media(max-width:620px){.url-row{grid-template-columns:1fr}.url-row .btn{width:100%}.source-switch{width:100%}.source-switch button{flex:1;padding-inline:6px}}

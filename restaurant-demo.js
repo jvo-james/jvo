@@ -45,6 +45,11 @@
     return CATEGORY_ALIASES[raw.toLowerCase()] || raw || 'Main dishes';
   };
 
+  const safeRemoteImage = value => {
+    const raw = clean(value);
+    return /^https:\/\//i.test(raw) ? raw : '';
+  };
+
   const resolveImage = image => {
     if (!image) return '';
     if (typeof image === 'string') {
@@ -53,6 +58,7 @@
       return raw ? (raw.startsWith('/') ? raw : `/${raw.replace(/^\/+/, '')}`) : '';
     }
     if (image.source === 'cloudinary' && image.url) return image.url;
+    if (image.source === 'url' && image.url) return safeRemoteImage(image.url);
     if (image.source === 'repo') {
       const mapped = window.JVO_REPO_IMAGES?.[image.id]?.url || image.url || '';
       if (!mapped) return '';
@@ -121,7 +127,16 @@
     el.src = src;
     el.alt = image?.alt || alt || '';
     el.parentElement?.classList.remove('image-missing');
-    el.addEventListener('error', () => el.parentElement?.classList.add('image-missing'), {once:true});
+    el.onerror = () => {
+      const fallback = resolveImage({source:'repo',id:'diningRoomWide',alt:alt || 'Restaurant image'});
+      if (fallback && el.dataset.fallbackUsed !== '1' && fallback !== el.src) {
+        el.dataset.fallbackUsed = '1';
+        el.src = fallback;
+        el.parentElement?.classList.remove('image-missing');
+        return;
+      }
+      el.parentElement?.classList.add('image-missing');
+    };
   };
   const setTitle = (selector, value) => {
     const el = $(selector);
@@ -171,13 +186,14 @@
     const headerBook = pageUrl(demo.slug,'booking');
     setHref('#headerCta', headerBook);
     if (mobile) {
-      mobile.innerHTML = `<a href="${esc(pageUrl(demo.slug,'home'))}">Home</a>${nav.map(([label,href]) => `<a href="${esc(href)}">${esc(label)}</a>`).join('')}<a href="${esc(headerBook)}" class="mobile-cta">Book a table</a><div class="mobile-meta">${esc(demo.hours || '')}</div>`;
+      mobile.innerHTML = `<div class="mobile-nav-head"><span>${esc(demo.name || 'Restaurant')}</span><button class="mobile-nav-close" id="mobileNavClose" type="button" aria-label="Close navigation">Close</button></div><div class="mobile-nav-links"><a href="${esc(pageUrl(demo.slug,'home'))}">Home</a>${nav.map(([label,href]) => `<a href="${esc(href)}">${esc(label)}</a>`).join('')}<a href="${esc(headerBook)}" class="mobile-cta">Book a table</a></div><div class="mobile-meta">${esc(demo.hours || '')}</div>`;
     }
     setHref('#brand', pageUrl(demo.slug,'home'));
     setText('#brandText', demo.name || 'Restaurant');
 
     const toggle = $('#menuToggle');
     if (!toggle || !mobile) return;
+    const navCloseButton = $('#mobileNavClose');
     const close = () => {
       mobile.classList.remove('is-open');
       mobile.setAttribute('aria-hidden','true');
@@ -190,6 +206,7 @@
       toggle.setAttribute('aria-expanded','true');
       document.body.classList.add('nav-open');
     };
+    navCloseButton?.addEventListener('click', close);
     toggle.addEventListener('click', () => mobile.classList.contains('is-open') ? close() : open());
     mobile.addEventListener('click', e => { if (e.target.closest('a')) close(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
@@ -220,6 +237,8 @@
     setText('#heroName', demo.name || 'Restaurant');
     setText('#heroTagline', demo.tagline || 'Dinner worth lingering over.');
     setText('#heroIntro', demo.intro || 'Good food, proper drinks and an evening worth taking your time with.');
+    setText('#popularIntro', demo.popularIntro || 'Five ways to start, share and finish the meal.');
+    setHref('#menuLinkTop', pageUrl(demo.slug,'menu'));
     setHref('#heroPrimary', pageUrl(demo.slug,'booking'));
     setText('#heroPrimary', demo.primaryCta || 'Book a table');
     setHref('#heroSecondary', pageUrl(demo.slug,'menu'));
@@ -290,6 +309,18 @@
       if (card) carousel.scrollTo({left:index*(card.getBoundingClientRect().width + 12),behavior:'smooth'});
     }));
     carousel.addEventListener('scroll', updateDots, {passive:true});
+    const jump = direction => {
+      const card = $('.category-card', carousel);
+      if (!card) return;
+      const stepWidth = card.getBoundingClientRect().width + 12;
+      const max = Math.max(0, carousel.scrollWidth - carousel.clientWidth);
+      let next = carousel.scrollLeft + direction * stepWidth;
+      if (next > max - 2) next = 0;
+      if (next < 0) next = max;
+      carousel.scrollTo({left:next,behavior:'smooth'});
+    };
+    $('#categoryPrev')?.addEventListener('click', () => jump(-1));
+    $('#categoryNext')?.addEventListener('click', () => jump(1));
     updateDots();
 
     let timer = null;

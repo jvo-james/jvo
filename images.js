@@ -8,6 +8,10 @@ const JVO_IMAGE_FILE = file => `/images/${file}`;
 
 window.JVO_REPO_IMAGES = {
   diningRoom: { id:'diningRoom', label:'Warm dining room', url:JVO_IMAGE_FILE('restaurant-hero.jpg') },
+  heroUnsplash: { id:'heroUnsplash', label:'Unsplash · elegant dining room', url:'https://images.unsplash.com/photo-1766832255363-c9f060ade8b0?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=88&w=3200', external:true, credit:'Unsplash' },
+  heroUnsplashWarm: { id:'heroUnsplashWarm', label:'Unsplash · warm restaurant interior', url:'https://images.unsplash.com/photo-1743793056164-67c6ce029d34?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=88&w=2600', external:true, credit:'Unsplash' },
+  eveningUnsplash: { id:'eveningUnsplash', label:'Unsplash · table for two', url:'https://images.unsplash.com/photo-1774509619298-5ee42287b75b?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=88&w=2400', external:true, credit:'Unsplash' },
+  platedUnsplash: { id:'platedUnsplash', label:'Unsplash · plated dinner', url:'https://images.unsplash.com/photo-1753722421529-478a04442baf?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=88&w=2200', external:true, credit:'Unsplash' },
   diningRoomWide: { id:'diningRoomWide', label:'Dining room wide', url:JVO_IMAGE_FILE('restaurant-sunshine.jpg') },
   diningRoomBlue: { id:'diningRoomBlue', label:'Dining room evening', url:JVO_IMAGE_FILE('restaurant-reserve.jpg') },
   barInterior: { id:'barInterior', label:'Bar interior', url:JVO_IMAGE_FILE('restaurant-interior.jpg') },
@@ -66,7 +70,7 @@ window.JVO_RESTAURANT_TEMPLATE = {
   logoText:'Common Table',
   primaryCta:'Book a table',
   secondaryCta:'See the menu',
-  heroImage:{source:'repo',id:'diningRoomWide',alt:'Warm restaurant dining room'},
+  heroImage:{source:'repo',id:'heroUnsplash',alt:'Elegant restaurant dining room'},
   storyTitle:'Good food. Properly served.',
   storyText:'We cook familiar things with a little edge, pour good drinks and keep the room easy so the evening can take its own shape.',
   storyImage:{source:'repo',id:'diningRoom',alt:'Warm dining room before service'},
@@ -93,7 +97,7 @@ window.JVO_RESTAURANT_TEMPLATE = {
     {name:'Chicken supreme',category:'Main dishes',description:'Crisp skin, roast jus, greens and potatoes.',price:'145',currency:'GHS',image:{source:'repo',id:'filet',alt:'Chicken-style plated main'}},
     {name:'Creamy scallops',category:'Main dishes',description:'Seared scallops, parmesan risotto and house vegetables.',price:'175',currency:'GHS',image:{source:'repo',id:'scallops',alt:'Seared scallops'}},
     {name:'Cedar salmon',category:'Main dishes',description:'Roasted salmon, citrus butter and charred greens.',price:'155',currency:'GHS',image:{source:'repo',id:'seafood',alt:'Seafood plate'}},
-    {name:'Mushroom risotto',category:'Main dishes',description:'Wild mushrooms, parmesan, herbs and a little truffle oil.',price:'125',currency:'GHS',image:{source:'repo',id:'kitchenDetail',alt:'Mushroom risotto'}},
+    {name:'Mushroom risotto',category:'Main dishes',description:'Wild mushrooms, parmesan, herbs and a little truffle oil.',price:'125',currency:'GHS',image:{source:'repo',id:'platedDetail',alt:'Mushroom risotto'}},
     {name:'Tomahawk for two',category:'Main dishes',description:'A shareable cut with grilled onions, jus and house potatoes.',price:'420',currency:'GHS',image:{source:'repo',id:'tomahawk',alt:'Tomahawk steak'}},
     {name:'Crispy potatoes',category:'Sides',description:'Roasted garlic, parsley and a light dusting of sea salt.',price:'45',currency:'GHS',image:{source:'repo',id:'baconBites',alt:'Crispy potatoes'}},
     {name:'Charred broccolini',category:'Sides',description:'Lemon, toasted almonds and parmesan.',price:'42',currency:'GHS',image:{source:'repo',id:'smallBites',alt:'Vegetable side'}},
@@ -127,26 +131,28 @@ window.JVO_RESTAURANT_TEMPLATE = {
     {image:{source:'repo',id:'privateRoom',alt:'Private dining room'}},
     {image:{source:'repo',id:'tableConversation',alt:'Dinner with friends'}},
     {image:{source:'repo',id:'wine',alt:'Wine at the table'}},
-    {image:{source:'repo',id:'exterior',alt:'Restaurant exterior'}}
+    {image:{source:'repo',id:'exterior',alt:'Restaurant exterior'}},{image:{source:'repo',id:'eveningUnsplash',alt:'Candlelit dinner table'}}
   ],
   leadStatus:'New',notes:'',recipientName:'',recipientEmail:''
 };
 
 // A polished, editable starting point for restaurant outreach.
 window.JVO_RESTAURANT_EMAIL_TEMPLATE = {
-  subject:'A website idea for {{restaurantName}}',
+  subject:'I put together an idea for {{restaurantName}}',
   body:`Hi {{recipientName}},
 
-I came across {{restaurantName}} and spent a few minutes looking at how the restaurant comes across online.
+I came across {{restaurantName}} and liked what you are building.
 
-I put together a short website concept using your restaurant as the starting point. It is not a generic mockup, I shaped the direction around your food, the atmosphere and the way someone would actually decide to visit:
+I had a quick idea for how the restaurant could come across online, so I put together a private concept around {{restaurantName}}. I used your food and the kind of experience a guest is looking for as the starting point.
+
+You can take a look here:
 {{demoLink}}
 
-There is no obligation at all. I just thought it might be useful to see the idea before deciding whether it is something worth exploring.
+It is only a concept, so there is nothing you need to commit to. I just thought it would be more useful to show you the idea than send a generic portfolio link.
 
-If you like the direction, I can build the full site around your real menu, photography, reservations or ordering flow.
+If you like the direction, I would be happy to build the full site around your real menu, photography, reservations and ordering flow.
 
-You can reply to this email, or reach me on WhatsApp at {{whatsappNumber}}.
+You can reply to this email or reach me on WhatsApp at {{whatsappNumber}}.
 
 Thanks,
 {{yourName}}
