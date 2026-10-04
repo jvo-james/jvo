@@ -12,10 +12,20 @@
   const resolveImage = image => {
     const item = image || {};
     if (item.source === 'cloudinary' && item.url) return item.url;
-    if (item.source === 'repo') return window.JVO_REPO_IMAGES?.[item.id]?.url || '';
-    if (typeof item === 'string') return item.startsWith('http') || item.startsWith('/') ? item : `/${item}`;
+    if (item.source === 'repo') {
+      const raw = window.JVO_REPO_IMAGES?.[item.id]?.url || '';
+      if (!raw) return '';
+      try { return new URL(raw, location.origin).href; } catch { return raw.startsWith('/') ? raw : `/${raw}`; }
+    }
+    if (typeof item === 'string') {
+      if (/^https?:\/\//i.test(item) || item.startsWith('/')) return item;
+      try { return new URL(item, location.origin).href; } catch { return `/${item}`; }
+    }
     return '';
   };
+  const arrowIcon = direction => direction === 'down'
+    ? '<svg class="arrow-icon arrow-down" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 3.5 12.5 12.5M6.5 12.5h6v-6"/></svg>'
+    : '<svg class="arrow-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 12.5 12.5 3.5M6.5 3.5h6v6"/></svg>';
   const safeUrl = value => {
     try { const u = new URL(String(value || ''), location.origin); return ['http:', 'https:'].includes(u.protocol) ? u.href : ''; } catch { return ''; }
   };
@@ -68,7 +78,7 @@
     const order = safeUrl(demo.orderUrl);
     setLink(qs('#headerOrder'), order, true);
     setLink(qs('#visitOrder'), order, true);
-    qs('#heroSecondary').textContent = `${demo.secondaryCta || 'See the menu'} ↘`;
+    qs('#heroSecondary').innerHTML = `${esc(demo.secondaryCta || 'See the menu')} ${arrowIcon('down')}`;
     qs('#mobileBottomSecondary').textContent = demo.secondaryCta || 'See the menu';
     const ig = safeUrl(demo.instagramUrl); setLink(qs('#footerInstagram'), ig, true);
     renderMenu(demo.menu || []);

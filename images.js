@@ -53,23 +53,23 @@ window.JVO_RESTAURANT_TEMPLATE = {
 };
 
 window.JVO_RESTAURANT_EMAIL_TEMPLATE = {
-  subject: 'I made a quick website idea for {{restaurantName}}',
+  subject: 'A website idea for {{restaurantName}}',
   body: `Hi {{recipientName}},
 
 I came across {{restaurantName}} and liked what you’re doing in {{city}}.
 
-The restaurant already has the part that is hardest to fake, the food and the atmosphere. I wanted to see what it would look like if that came through online just as clearly.
+I spent a little time thinking about how the restaurant could come across online, especially the menu, atmosphere and booking experience.
 
-So I put together a quick website concept for {{restaurantName}}:
+So I put together a quick website concept using {{restaurantName}} as the starting point:
 {{demoLink}}
 
-It’s built around your restaurant, not a generic portfolio link. The menu, story, location and booking flow are all there.
+It is only a concept for now, but the page is built around your restaurant rather than a generic portfolio.
 
-There’s no pressure at all. I just thought you might want to see it.
+If you like the direction, I can build the full site around your real photos, menu and booking or ordering setup.
 
-If you like the direction, I can turn it into the full site and connect the real menu, photos and booking or ordering setup.
+No pressure either way. I just thought it was worth showing you.
 
-Thanks,
+Best,
 {{yourName}}
 {{businessName}}`
 };
