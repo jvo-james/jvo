@@ -1,5 +1,5 @@
 import { signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import { renderDemos as renderRestaurantDemos } from './restaurant-studio.js?v=20261004-authfix-1';
+import { renderDemos as renderRestaurantDemos } from './restaurant-studio.js?v=20261004-forcefix-2';
 
 const $ = s => document.querySelector(s);
 const auth = window.__JVO_AUTH__;
