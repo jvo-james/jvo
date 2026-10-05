@@ -57,23 +57,49 @@ export default async function handler(request, context) {
       `<meta name="description" content="${esc(description)}">`
     );
 
+    // WhatsApp is much more reliable when the OG image is an absolute, same-site
+    // JPEG with a predictable size. Netlify Image CDN will fetch the current hero
+    // image, crop it to 1200x630 and serve it from this domain.
+    const imageUrl = (() => {
+      if (!image) return '';
+      try {
+        const parsed = new URL(image, url.origin);
+        const sameSite = parsed.origin === url.origin;
+        const allowedRemote = /^https:\/\/(?:images\.unsplash\.com|res\.cloudinary\.com)\//i.test(parsed.href);
+        if (sameSite || allowedRemote) {
+          return `${url.origin}/.netlify/images?url=${encodeURIComponent(parsed.href)}&w=1200&h=630&fit=cover&fm=jpg&q=80`;
+        }
+        return /^https:\/\//i.test(parsed.href) ? parsed.href : '';
+      } catch {
+        return '';
+      }
+    })();
+
     const meta = [
       metaTag('og:title', name),
       metaTag('og:description', description),
       metaTag('og:url', canonical),
       metaTag('og:type', 'website'),
-      metaTag('twitter:card', image ? 'summary_large_image' : 'summary'),
+      metaTag('og:locale', 'en_GB'),
+      metaTag('twitter:card', imageUrl ? 'summary_large_image' : 'summary'),
       metaTag('twitter:title', name),
       metaTag('twitter:description', description)
     ];
-    if (image) {
-      meta.push(metaTag('og:image', image));
+    if (imageUrl) {
+      meta.push(metaTag('og:image', imageUrl));
+      meta.push(metaTag('og:image:secure_url', imageUrl));
+      meta.push(metaTag('og:image:type', 'image/jpeg'));
+      meta.push(metaTag('og:image:width', '1200'));
+      meta.push(metaTag('og:image:height', '630'));
       meta.push(metaTag('og:image:alt', name));
-      meta.push(metaTag('twitter:image', image));
+      meta.push(metaTag('twitter:image', imageUrl));
       meta.push(metaTag('twitter:image:alt', name));
     }
 
-    html = html.replace(/<\/head>/i, `${meta.join('')}\n</head>`);
+    // A few WhatsApp clients still look for image_src in addition to og:image.
+    const imageLink = imageUrl ? `<link rel=\"image_src\" href=\"${esc(imageUrl)}\">` : '';
+    const canonicalLink = `<link rel=\"canonical\" href=\"${esc(canonical)}\">`;
+    html = html.replace(/<\/head>/i, `${canonicalLink}${imageLink}${meta.join('')}\n</head>`);
 
     const headers = new Headers(pageResponse.headers);
     headers.set('content-type', 'text/html; charset=UTF-8');
