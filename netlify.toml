@@ -5,6 +5,12 @@
 [functions]
   node_bundler = "esbuild"
 
+[images]
+  remote_images = [
+    'https://images\.unsplash\.com/.*',
+    'https://res\.cloudinary\.com/.*'
+  ]
+
 [[edge_functions]]
   path = "/restaurant/*"
   function = "restaurant-meta"
