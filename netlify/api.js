@@ -415,188 +415,299 @@ function pdfSection(doc, heading, body) {
 }
 async function agreementPdf(project, agreement, settings) {
   return pdfBuffer(doc => {
-    const pageLeft = 54;
-    const pageRight = doc.page.width - 54;
+    const pageLeft = 50;
+    const pageRight = doc.page.width - 50;
     const contentWidth = pageRight - pageLeft;
-    const footerY = doc.page.height - 38;
+    const pageBottom = doc.page.height - 58;
     const ink = '#171512';
-    const muted = '#746d64';
-    const line = '#ddd5ca';
-    const paper = '#fbf8f3';
-    const warm = '#f1ebe2';
-    const accent = '#a94d35';
-    const ref = agreement.ref || project.ref;
+    const body = '#4f4a43';
+    const muted = '#787169';
+    const line = '#d9d1c6';
+    const paper = '#fffdf8';
+    const warm = '#f4ede4';
+    const accent = '#c64f35';
+    const green = '#476b4b';
+    const projectName = text(agreement.projectName || project.projectName) || 'Project agreement';
+    const ref = text(agreement.ref || project.ref);
+    const terms = Array.isArray(agreement.terms) ? agreement.terms : [];
+    const milestones = Array.isArray(agreement.paymentPlan?.milestones) ? agreement.paymentPlan.milestones : [];
+    const features = Array.isArray(agreement.features) ? agreement.features.filter(Boolean) : [];
+    const projectCurrency = agreement.currency || project.currency || 'GHS';
+    const brand = text(settings.businessName) || 'JVO WEB';
+    const owner = text(settings.ownerName) || 'Senu James';
+    let pageNumber = 1;
 
-    const footer = () => {
+    const pageFooter = () => {
+      const y = doc.page.height - 34;
       doc.save();
-      doc.strokeColor(line).lineWidth(.7).moveTo(pageLeft, footerY - 10).lineTo(pageRight, footerY - 10).stroke();
+      doc.strokeColor(line).lineWidth(.7).moveTo(pageLeft, y - 9).lineTo(pageRight, y - 9).stroke();
       doc.font('Helvetica').fontSize(7.5).fillColor(muted)
-        .text(settings.businessName || 'JVO WEB', pageLeft, footerY, { width: 180 })
-        .text(`Project agreement  |  ${ref}`, pageLeft + 180, footerY, { width: contentWidth - 180, align: 'right' });
+        .text(brand, pageLeft, y, { width: 170 })
+        .text(`${ref}  |  Page ${pageNumber}`, pageLeft + 170, y, { width: contentWidth - 170, align: 'right' });
       doc.restore();
     };
 
-    const ensureSpace = (needed = 90) => {
-      if (doc.y + needed > footerY - 18) {
-        doc.addPage();
-        footer();
-      }
+    const addContinuationPage = (title = 'Signed agreement') => {
+      pageFooter();
+      doc.addPage();
+      pageNumber += 1;
+      doc.y = 50;
+      doc.font('Helvetica-Bold').fontSize(10).fillColor(ink).text(brand, pageLeft, doc.y, { width: 190 });
+      doc.font('Helvetica-Bold').fontSize(7.5).fillColor(muted).text(title.toUpperCase(), pageLeft + 190, doc.y + 2, { width: contentWidth - 190, align: 'right', characterSpacing: .9 });
+      doc.moveTo(pageLeft, 73).lineTo(pageRight, 73).strokeColor(line).lineWidth(.7).stroke();
+      doc.y = 96;
     };
 
-    const sectionHeading = (number, title, subtitle = '') => {
-      ensureSpace(52);
+    const ensureSpace = (needed, title = 'Signed agreement') => {
+      if (doc.y + needed > pageBottom) addContinuationPage(title);
+    };
+
+    const sectionTitle = (number, title, subtitle = '') => {
+      const base = subtitle ? 43 : 31;
+      ensureSpace(base, title);
       const y = doc.y;
       doc.save();
-      doc.fillColor(accent).rect(pageLeft, y + 2, 4, 24).fill();
-      doc.font('Helvetica-Bold').fontSize(8).fillColor(accent).text(String(number), pageLeft + 13, y + 2, { width: 20 });
-      doc.font('Helvetica-Bold').fontSize(12).fillColor(ink).text(title, pageLeft + 34, y, { width: contentWidth - 34 });
+      doc.fillColor(accent).rect(pageLeft, y + 2, 3, 23).fill();
+      doc.font('Helvetica-Bold').fontSize(8).fillColor(accent).text(String(number), pageLeft + 12, y + 2, { width: 18 });
+      doc.font('Helvetica-Bold').fontSize(12.5).fillColor(ink).text(title, pageLeft + 30, y, { width: contentWidth - 30 });
+      if (subtitle) doc.font('Helvetica').fontSize(8.5).fillColor(muted).text(subtitle, pageLeft + 30, y + 18, { width: contentWidth - 30 });
       doc.restore();
-      if (subtitle) {
-        doc.font('Helvetica').fontSize(8).fillColor(muted).text(subtitle, pageLeft + 34, y + 18, { width: contentWidth - 34 });
-      }
-      doc.y = y + (subtitle ? 40 : 30);
+      doc.y = y + base;
     };
 
-    const paragraph = body => {
-      if (!body) return;
-      const clean = String(body).trim();
-      const estimated = Math.max(54, doc.heightOfString(clean, { width: contentWidth - 4, font: 'Helvetica', fontSize: 9.5, lineGap: 3 }));
-      ensureSpace(estimated + 20);
-      doc.font('Helvetica').fontSize(9.5).fillColor('#49433d').text(clean, pageLeft, doc.y, { width: contentWidth, lineGap: 3 });
-      doc.moveDown(.65);
+    const drawText = (value, opts = {}) => {
+      const clean = text(value);
+      if (!clean) return;
+      const width = opts.width || contentWidth;
+      doc.font(opts.font || 'Helvetica').fontSize(opts.size || 9.5).fillColor(opts.color || body);
+      const lineGap = opts.lineGap == null ? 3 : opts.lineGap;
+      const h = doc.heightOfString(clean, { width, lineGap });
+      ensureSpace(h + (opts.bottom || 11), opts.title || 'Signed agreement');
+      const x = opts.x == null ? pageLeft : opts.x;
+      doc.text(clean, x, doc.y, { width, lineGap });
+      doc.y += (opts.bottom == null ? 11 : opts.bottom);
     };
 
-    const infoCard = (label, value, width, x, y, strong = false) => {
-      doc.save();
-      doc.roundedRect(x, y, width, 62, 7).fillAndStroke(paper, line);
-      doc.font('Helvetica-Bold').fontSize(7).fillColor(muted).text(String(label).toUpperCase(), x + 12, y + 11, { width: width - 24 });
-      doc.font(strong ? 'Helvetica-Bold' : 'Helvetica').fontSize(strong ? 15 : 9.5).fillColor(ink)
-        .text(String(value || '-'), x + 12, y + 28, { width: width - 24, lineGap: 2 });
-      doc.restore();
-    };
-
-    const paymentCard = (milestone, x, y, width) => {
-      doc.save();
-      doc.roundedRect(x, y, width, 76, 8).fillAndStroke(paper, line);
-      doc.font('Helvetica-Bold').fontSize(9.5).fillColor(ink).text(String(milestone.label || 'Payment'), x + 12, y + 12, { width: width - 24 });
-      doc.font('Helvetica-Bold').fontSize(16).fillColor(accent).text(money(milestone.amount, agreement.currency), x + 12, y + 30, { width: width - 24 });
-      doc.font('Helvetica').fontSize(7.5).fillColor(muted).text(`${Number(milestone.percent || 0)}% of project value`, x + 12, y + 55, { width: width - 24 });
-      doc.restore();
-    };
-
-    const terms = agreement.terms || [];
-    const milestones = agreement.paymentPlan?.milestones || [];
-    const projectValue = money(agreement.total, agreement.currency);
-
-    // Page 1: agreement overview.
-    doc.rect(0, 0, doc.page.width, 112).fill(ink);
-    doc.font('Helvetica-Bold').fontSize(20).fillColor('#ffffff').text(settings.businessName || 'JVO WEB', pageLeft, 26);
-    doc.font('Helvetica').fontSize(8).fillColor('#c9c1b8').text('WEB DESIGN AND DEVELOPMENT', pageLeft, 53, { characterSpacing: 1.2 });
-    doc.font('Helvetica-Bold').fontSize(8).fillColor('#ffffff').text('SIGNED PROJECT AGREEMENT', pageLeft, 78, { characterSpacing: 1.05 });
-    doc.font('Helvetica').fontSize(8).fillColor('#c9c1b8').text(ref, pageLeft, 91, { width: contentWidth, align: 'right' });
-    footer();
-
-    doc.y = 143;
-    doc.font('Helvetica-Bold').fontSize(26).fillColor(ink).text(agreement.projectName || project.projectName, pageLeft, doc.y, { width: contentWidth - 120, lineGap: 2 });
-    doc.moveDown(.3);
-    doc.font('Helvetica').fontSize(9).fillColor(muted).text('This document records the terms accepted by the client for the project below.', pageLeft, doc.y, { width: contentWidth - 90 });
-
-    const badgeX = pageRight - 86;
-    doc.save();
-    doc.roundedRect(badgeX, 143, 86, 28, 14).fill(accent);
-    doc.font('Helvetica-Bold').fontSize(8).fillColor('#ffffff').text('SIGNED', badgeX, 153, { width: 86, align: 'center' });
-    doc.restore();
-
-    doc.moveDown(1.15);
-    const cardGap = 10;
-    const cardW = (contentWidth - cardGap * 2) / 3;
-    const cardY = doc.y;
-    infoCard('Client', agreement.clientName, cardW, pageLeft, cardY);
-    infoCard('Signed', formatDate(agreement.serverSignedAt), cardW, pageLeft + cardW + cardGap, cardY);
-    infoCard('Project value', projectValue, cardW, pageLeft + (cardW + cardGap) * 2, cardY, true);
-    doc.y = cardY + 78;
-
-    infoCard('Email', agreement.clientEmail || 'Not provided', cardW, pageLeft, doc.y);
-    infoCard('Phone', agreement.clientPhone || 'Not provided', cardW, pageLeft + cardW + cardGap, doc.y);
-    infoCard('Company', agreement.clientCompany || 'Not provided', cardW, pageLeft + (cardW + cardGap) * 2, doc.y);
-    doc.y += 88;
-
-    sectionHeading(1, 'Project scope');
-    paragraph(agreement.scope || 'No additional scope notes were provided.');
-
-    if (agreement.features?.length) {
-      sectionHeading(2, 'Included features');
-      const featureText = agreement.features.map((feature, index) => `${index + 1}. ${feature}`).join('\n');
-      paragraph(featureText);
-    }
-
-    sectionHeading(agreement.features?.length ? 3 : 2, 'Payment plan', 'The agreed project value is allocated below.');
-    if (milestones.length) {
-      const cols = Math.min(2, milestones.length);
-      const gap = 10;
-      const w = (contentWidth - gap * (cols - 1)) / cols;
-      const startY = doc.y;
-      milestones.forEach((m, index) => {
-        const row = Math.floor(index / cols);
-        const col = index % cols;
-        const y = startY + row * 88;
-        paymentCard(m, pageLeft + col * (w + gap), y, w);
+    const drawFacts = () => {
+      const gap = 8;
+      const cols = 3;
+      const width = (contentWidth - gap * (cols - 1)) / cols;
+      const height = 74;
+      ensureSpace(height + 10, 'Project overview');
+      const y = doc.y;
+      const facts = [
+        ['Client', agreement.clientName || 'Not provided'],
+        ['Project value', money(agreement.total, projectCurrency)],
+        ['Signed', formatDate(agreement.serverSignedAt) || 'Not provided']
+      ];
+      facts.forEach((item, i) => {
+        const x = pageLeft + i * (width + gap);
+        doc.save();
+        doc.rect(x, y, width, height).fillAndStroke(paper, line);
+        doc.font('Helvetica-Bold').fontSize(7).fillColor(muted).text(item[0].toUpperCase(), x + 12, y + 12, { width: width - 24, characterSpacing: .4 });
+        doc.font(item[0] === 'Project value' ? 'Helvetica-Bold' : 'Helvetica').fontSize(item[0] === 'Project value' ? 15 : 10).fillColor(ink)
+          .text(String(item[1]), x + 12, y + 31, { width: width - 24, lineGap: 2 });
+        doc.restore();
       });
-      doc.y = startY + Math.ceil(milestones.length / cols) * 88;
+      doc.y = y + height + 12;
+    };
+
+    const drawContacts = () => {
+      const gap = 8;
+      const cols = 3;
+      const width = (contentWidth - gap * (cols - 1)) / cols;
+      const height = 64;
+      ensureSpace(height + 10, 'Project overview');
+      const y = doc.y;
+      const facts = [
+        ['Email', agreement.clientEmail || 'Not provided'],
+        ['Phone / WhatsApp', agreement.clientPhone || 'Not provided'],
+        ['Company', agreement.clientCompany || 'Not provided']
+      ];
+      facts.forEach((item, i) => {
+        const x = pageLeft + i * (width + gap);
+        doc.save();
+        doc.rect(x, y, width, height).fillAndStroke(warm, line);
+        doc.font('Helvetica-Bold').fontSize(7).fillColor(muted).text(item[0].toUpperCase(), x + 12, y + 11, { width: width - 24, characterSpacing: .35 });
+        doc.font('Helvetica').fontSize(9).fillColor(ink).text(String(item[1]), x + 12, y + 29, { width: width - 24, lineGap: 2 });
+        doc.restore();
+      });
+      doc.y = y + height + 18;
+    };
+
+    const drawFeatureList = () => {
+      const gap = 10;
+      const cols = 2;
+      const width = (contentWidth - gap) / cols;
+      for (let i = 0; i < features.length; i += cols) {
+        const rowItems = features.slice(i, i + cols);
+        doc.font('Helvetica').fontSize(8.8).fillColor(body);
+        const rowHeights = rowItems.map(feature => Math.max(25, doc.heightOfString(String(feature), { width: width - 34, lineGap: 2 }) + 6));
+        const rowHeight = Math.max(...rowHeights);
+        ensureSpace(rowHeight + 14, 'Included features');
+        const y = doc.y;
+        rowItems.forEach((feature, offset) => {
+          const x = pageLeft + offset * (width + gap);
+          doc.save();
+          doc.rect(x, y, 25, 25).fillAndStroke(paper, line);
+          doc.font('Helvetica-Bold').fontSize(8).fillColor(accent).text(String(i + offset + 1), x, y + 8, { width: 25, align: 'center' });
+          doc.font('Helvetica').fontSize(8.8).fillColor(body).text(String(feature), x + 34, y + 3, { width: width - 34, lineGap: 2 });
+          doc.restore();
+        });
+        doc.y = y + rowHeight + 14;
+      }
+    };
+
+    const drawPaymentPlan = () => {
+      if (!milestones.length) {
+        drawText('No payment milestones were recorded.', { size: 9.5, color: muted, bottom: 12, title: 'Payment plan' });
+        return;
+      }
+      const gap = 9;
+      const cols = milestones.length === 1 ? 1 : 2;
+      const width = (contentWidth - gap * (cols - 1)) / cols;
+      const height = 72;
+      for (let i = 0; i < milestones.length; i += cols) {
+        const rowItems = milestones.slice(i, i + cols);
+        ensureSpace(height + 12, 'Payment plan');
+        const y = doc.y;
+        rowItems.forEach((m, offset) => {
+          const x = pageLeft + offset * (width + gap);
+          doc.save();
+          doc.rect(x, y, width, height).fillAndStroke(paper, line);
+          doc.font('Helvetica-Bold').fontSize(7.5).fillColor(muted).text(String(m.label || 'Payment').toUpperCase(), x + 12, y + 10, { width: width - 24, characterSpacing: .3 });
+          doc.font('Helvetica-Bold').fontSize(15).fillColor(accent).text(money(m.amount, projectCurrency), x + 12, y + 28, { width: width - 24 });
+          doc.font('Helvetica').fontSize(8).fillColor(muted).text(`${Number(m.percent || 0)}% of project value`, x + 12, y + 52, { width: width - 24 });
+          doc.restore();
+        });
+        doc.y = y + height + 10;
+      }
+    };
+
+    const paymentInstructions = text(settings.paymentInstructions) || 'Payment instructions will be shared directly by JVO.';
+    const drawPaymentDetails = () => {
+      const detailCol = contentWidth * .48;
+      const instructionsWidth = contentWidth - detailCol - 30;
+      const instructionsHeight = Math.max(58, doc.heightOfString(paymentInstructions, { width: instructionsWidth - 24, font: 'Helvetica', fontSize: 8.5, lineGap: 3 }));
+      const height = Math.max(118, 72 + instructionsHeight + 18);
+      ensureSpace(height + 12, 'Payment details');
+      const y = doc.y;
+      doc.save();
+      doc.rect(pageLeft, y, contentWidth, height).fill(warm);
+      doc.fillColor(accent).rect(pageLeft, y, 4, height).fill();
+      doc.font('Helvetica-Bold').fontSize(13).fillColor(ink).text('Payment details', pageLeft + 18, y + 16, { width: contentWidth - 36 });
+      doc.font('Helvetica-Bold').fontSize(7).fillColor(muted).text('PAY TO', pageLeft + 18, y + 41, { width: detailCol - 25, characterSpacing: .4 });
+      doc.font('Helvetica-Bold').fontSize(15).fillColor(ink).text(owner, pageLeft + 18, y + 54, { width: detailCol - 30 });
+      if (settings.phone) {
+        doc.font('Helvetica-Bold').fontSize(7).fillColor(muted).text('PHONE / WHATSAPP', pageLeft + 18, y + 80, { width: detailCol - 25, characterSpacing: .3 });
+        doc.font('Helvetica').fontSize(9).fillColor(ink).text(String(settings.phone), pageLeft + 18, y + 93, { width: detailCol - 30 });
+      }
+      const rightX = pageLeft + detailCol + 12;
+      doc.font('Helvetica-Bold').fontSize(7).fillColor(muted).text('PAYMENT INSTRUCTIONS', rightX, y + 41, { width: instructionsWidth, characterSpacing: .3 });
+      doc.font('Helvetica').fontSize(8.5).fillColor(body).text(paymentInstructions, rightX, y + 57, { width: instructionsWidth - 12, lineGap: 3 });
+      if (settings.email) {
+        doc.font('Helvetica-Bold').fontSize(7).fillColor(muted).text('EMAIL', rightX, y + height - 26, { width: instructionsWidth, characterSpacing: .3 });
+        doc.font('Helvetica').fontSize(8.5).fillColor(ink).text(String(settings.email), rightX + 42, y + height - 27, { width: instructionsWidth - 42 });
+      }
+      doc.restore();
+      doc.y = y + height + 15;
+    };
+
+    const drawTerm = (term, index) => {
+      const title = text(term?.title) || `Term ${index + 1}`;
+      const bodyText = text(term?.body) || '';
+      doc.font('Helvetica-Bold').fontSize(12).fillColor(ink);
+      const titleHeight = doc.heightOfString(title, { width: contentWidth - 50, lineGap: 2 });
+      doc.font('Helvetica').fontSize(9.4).fillColor(body);
+      const bodyHeight = Math.max(1, doc.heightOfString(bodyText, { width: contentWidth - 50, lineGap: 3 }));
+      const height = Math.max(64, titleHeight + bodyHeight + 31);
+      ensureSpace(height + 5, 'Agreement terms');
+      const y = doc.y;
+      doc.save();
+      doc.strokeColor(line).lineWidth(.7).moveTo(pageLeft, y).lineTo(pageRight, y).stroke();
+      doc.fillColor(accent).rect(pageLeft, y + 16, 26, 26).fill();
+      doc.font('Helvetica-Bold').fontSize(9).fillColor('#ffffff').text(String(index + 1), pageLeft, y + 24, { width: 26, align: 'center' });
+      doc.font('Helvetica-Bold').fontSize(12).fillColor(ink).text(title, pageLeft + 40, y + 13, { width: contentWidth - 40, lineGap: 2 });
+      if (bodyText) doc.font('Helvetica').fontSize(9.4).fillColor(body).text(bodyText, pageLeft + 40, y + 34 + titleHeight, { width: contentWidth - 40, lineGap: 3 });
+      doc.restore();
+      doc.y = y + height;
+    };
+
+    const drawSignature = () => {
+      const signedName = text(agreement.signature || agreement.clientName) || 'Client';
+      const signedEmail = text(agreement.clientEmail);
+      const signedPhone = text(agreement.clientPhone);
+      const height = 112;
+      ensureSpace(height + 12, 'Agreement terms');
+      const y = doc.y;
+      const half = (contentWidth - 14) / 2;
+      doc.save();
+      doc.rect(pageLeft, y, half, height).fillAndStroke(paper, line);
+      doc.rect(pageLeft + half + 14, y, half, height).fillAndStroke(warm, line);
+      doc.font('Helvetica-Bold').fontSize(7).fillColor(muted).text('ELECTRONIC ACCEPTANCE', pageLeft + 16, y + 14, { width: half - 32, characterSpacing: .4 });
+      doc.font('Helvetica-Bold').fontSize(15).fillColor(ink).text(signedName, pageLeft + 16, y + 31, { width: half - 32 });
+      doc.font('Helvetica').fontSize(8.5).fillColor(muted).text(`Signed ${formatDate(agreement.serverSignedAt) || ''}`, pageLeft + 16, y + 55, { width: half - 32 });
+      if (signedEmail) doc.font('Helvetica').fontSize(8).fillColor(body).text(signedEmail, pageLeft + 16, y + 74, { width: half - 32 });
+      if (signedPhone) doc.font('Helvetica').fontSize(8).fillColor(body).text(signedPhone, pageLeft + 16, y + 89, { width: half - 32 });
+      const rightX = pageLeft + half + 30;
+      doc.font('Helvetica-Bold').fontSize(7).fillColor(muted).text('AGREEMENT RECORD', rightX, y + 14, { width: half - 32, characterSpacing: .4 });
+      doc.font('Helvetica-Bold').fontSize(12).fillColor(green).text('SIGNED AND LOCKED', rightX, y + 31, { width: half - 32 });
+      doc.font('Helvetica-Bold').fontSize(7).fillColor(muted).text('REFERENCE', rightX, y + 57, { width: half - 32, characterSpacing: .3 });
+      doc.font('Helvetica').fontSize(8.5).fillColor(ink).text(ref, rightX, y + 70, { width: half - 32 });
+      doc.font('Helvetica-Bold').fontSize(7).fillColor(muted).text('TERMS VERSION', rightX, y + 87, { width: half - 32, characterSpacing: .3 });
+      doc.font('Helvetica').fontSize(8.5).fillColor(ink).text(text(agreement.termsVersion) || '-', rightX, y + 100, { width: half - 32 });
+      doc.restore();
+      doc.y = y + height;
+    };
+
+    // First page: compact, structured overview.
+    doc.rect(0, 0, doc.page.width, 106).fill(ink);
+    doc.font('Helvetica-Bold').fontSize(21).fillColor('#ffffff').text(brand, pageLeft, 25, { width: 260 });
+    doc.font('Helvetica').fontSize(7.5).fillColor('#bcb3a8').text('WEB DESIGN · DEVELOPMENT', pageLeft, 53, { width: 260, characterSpacing: 1.1 });
+    doc.font('Helvetica-Bold').fontSize(7.5).fillColor('#ffffff').text('SIGNED PROJECT AGREEMENT', pageLeft, 76, { width: 200, characterSpacing: 1 });
+    doc.font('Helvetica').fontSize(7.5).fillColor('#bcb3a8').text(ref, pageLeft + 200, 76, { width: contentWidth - 200, align: 'right' });
+    pageFooter();
+
+    doc.y = 134;
+    doc.font('Helvetica-Bold').fontSize(27).fillColor(ink).text(projectName, pageLeft, doc.y, { width: contentWidth, lineGap: 2 });
+    doc.moveDown(.35);
+    doc.font('Helvetica').fontSize(9.5).fillColor(muted).text('This document records the project details and terms accepted by the client.', pageLeft, doc.y, { width: contentWidth, lineGap: 3 });
+    doc.moveDown(.65);
+    doc.save();
+    doc.roundedRect(pageLeft, doc.y, 82, 22, 11).fill(green);
+    doc.font('Helvetica-Bold').fontSize(7.5).fillColor('#ffffff').text('SIGNED', pageLeft, doc.y + 7, { width: 82, align: 'center', characterSpacing: .6 });
+    doc.restore();
+    doc.y += 37;
+
+    drawFacts();
+    drawContacts();
+
+    sectionTitle(1, 'Project scope');
+    drawText(agreement.scope || 'No additional scope notes were provided.', { size: 9.6, color: body, lineGap: 3.2, bottom: 11, title: 'Project scope' });
+
+    if (features.length) {
+      sectionTitle(2, 'Included features');
+      drawFeatureList();
+      doc.y += 2;
+      sectionTitle(3, 'Payment plan', 'The project value is allocated according to the agreed milestones.');
     } else {
-      paragraph('No payment milestones were recorded.');
+      sectionTitle(2, 'Payment plan', 'The project value is allocated according to the agreed milestones.');
     }
+    drawPaymentPlan();
 
-    ensureSpace(128);
-    doc.moveDown(.4);
-    doc.save();
-    const paymentY = doc.y;
-    doc.roundedRect(pageLeft, paymentY, contentWidth, 116, 8).fill(warm);
-    doc.fillColor(accent).rect(pageLeft, paymentY, 4, 116).fill();
-    doc.font('Helvetica-Bold').fontSize(12).fillColor(ink).text('Payment details', pageLeft + 18, paymentY + 16);
-    doc.font('Helvetica-Bold').fontSize(9).fillColor(muted).text('PAY TO', pageLeft + 18, paymentY + 40);
-    doc.font('Helvetica-Bold').fontSize(12).fillColor(ink).text(settings.ownerName || 'Senu James', pageLeft + 18, paymentY + 53);
-    const detailX = pageLeft + contentWidth * .52;
-    if (settings.phone) {
-      doc.font('Helvetica-Bold').fontSize(8).fillColor(muted).text('PHONE / WHATSAPP', detailX, paymentY + 40);
-      doc.font('Helvetica').fontSize(9).fillColor(ink).text(settings.phone, detailX, paymentY + 53);
-    }
-    if (settings.email) {
-      doc.font('Helvetica-Bold').fontSize(8).fillColor(muted).text('EMAIL', detailX, paymentY + 72);
-      doc.font('Helvetica').fontSize(9).fillColor(ink).text(settings.email, detailX, paymentY + 85);
-    }
-    if (settings.paymentInstructions) {
-      doc.font('Helvetica').fontSize(8).fillColor('#5b544d').text(settings.paymentInstructions, pageLeft + 18, paymentY + 86, { width: contentWidth * .45, lineGap: 2 });
-    }
-    doc.restore();
-
-    // Page 2+: signed terms.
-    doc.addPage();
-    footer();
-    doc.y = 62;
-    doc.font('Helvetica-Bold').fontSize(23).fillColor(ink).text('Agreement terms');
+    // New page is intentional: it keeps the legal terms and payment details together instead of forcing them into a crowded first page.
+    addContinuationPage('Agreement terms');
+    doc.font('Helvetica-Bold').fontSize(24).fillColor(ink).text('Agreement terms', pageLeft, doc.y);
     doc.moveDown(.25);
-    doc.font('Helvetica').fontSize(9).fillColor(muted).text(`Accepted for ${agreement.projectName || project.projectName}  |  ${ref}`);
-    doc.moveDown(1.2);
+    doc.font('Helvetica').fontSize(9).fillColor(muted).text(`Accepted for ${projectName}  ·  ${ref}`, pageLeft, doc.y, { width: contentWidth });
+    doc.moveDown(.9);
 
-    terms.forEach((term, index) => {
-      sectionHeading(index + 1, term.title);
-      paragraph(term.body);
-      doc.moveDown(.15);
-    });
+    terms.forEach((term, index) => drawTerm(term, index));
+    doc.y += 7;
+    drawPaymentDetails();
+    drawSignature();
 
-    ensureSpace(118);
-    const signY = doc.y + 5;
-    doc.save();
-    doc.roundedRect(pageLeft, signY, contentWidth, 92, 8).fillAndStroke(paper, line);
-    doc.font('Helvetica-Bold').fontSize(8).fillColor(muted).text('ACCEPTED BY', pageLeft + 16, signY + 14);
-    doc.font('Helvetica-Bold').fontSize(15).fillColor(ink).text(agreement.signature || agreement.clientName || 'Client', pageLeft + 16, signY + 33, { width: contentWidth * .6 });
-    doc.font('Helvetica').fontSize(8.5).fillColor(muted).text(`Signed ${agreement.serverSignedAt || ''}`, pageLeft + 16, signY + 57);
-    doc.font('Helvetica-Bold').fontSize(8).fillColor(muted).text('TERMS VERSION', pageRight - 112, signY + 14, { width: 96, align: 'right' });
-    doc.font('Helvetica').fontSize(8.5).fillColor(ink).text(agreement.termsVersion || '-', pageRight - 112, signY + 33, { width: 96, align: 'right' });
-    doc.restore();
-
-    footer();
+    pageFooter();
   });
 }
 async function receiptPdf(project, payment, totals, settings) {
