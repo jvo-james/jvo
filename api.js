@@ -15,8 +15,8 @@ if (!admin.apps.length) {
 const db = admin.firestore();
 const SITE = process.env.SITE_URL || 'https://jvo.me';
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || 'senujames23@gmail.com').toLowerCase();
-const TERMS_VERSION = '2026-09-v2';
-const AGREEMENT_VERSION = '2.0';
+const TERMS_VERSION = '2026-10-v1';
+const AGREEMENT_VERSION = '2.1';
 const RESTAURANT_LEAD_STATUSES = ['New', 'Contacted', 'Replied', 'Interested', 'Won', 'Not now'];
 const RESTAURANT_CATEGORIES = ['Small plates', 'Mains', 'Dessert', 'Drinks', 'Lunch', 'Sides'];
 const DEFAULT_RESTAURANT_TEMPLATE = {
@@ -180,21 +180,13 @@ async function getSettings() {
     ...(d.exists ? d.data() : {})
   };
 }
-function agreementTerms(supportDays) {
-  const days = Number(supportDays || 30);
+function agreementTerms() {
   return [
-    { id: 'payment', title: 'Payment', body: 'The agreed upfront payment must be received before work starts. Any remaining balance is due after the client approves the finished website.' },
+    { id: 'payment', title: 'Payment', body: 'The agreed project price is paid according to the payment plan shown above. The remaining balance is due after the client approves the finished website.' },
     { id: 'start', title: 'When work starts', body: 'Work officially starts only after this agreement is signed and the required upfront payment is received.' },
     { id: 'deposit', title: 'Upfront payment', body: 'The upfront payment is not refundable once development has officially started.' },
     { id: 'scope', title: 'Extra work', body: 'The price covers the scope written in this agreement. New pages, features, integrations or other additions may be priced separately before they are added.' },
-    { id: 'support', title: 'Bug support', body: `For ${days} days after launch, JVO will fix broken layouts or broken code caused by the original setup at no extra cost.` },
-    { id: 'thirdparty', title: 'Third-party issues', body: 'Free support does not cover hosting problems, external APIs, payment gateway changes, plugin updates or expired domains.' },
-    { id: 'handover', title: 'Final payment and handover', body: 'The site will only be launched, transferred or handed over after all agreed payments have been received.' },
-    { id: 'ownership', title: 'Ownership', body: 'Ownership of the finished work moves to the client after full payment. JVO may show the finished website in its portfolio and promotional work.' },
-    { id: 'content', title: 'Client content', body: 'The client is responsible for the text, images, logos and other content they provide and confirms that they have permission to use it.' },
-    { id: 'delays', title: 'Delays', body: 'If content, access details, feedback or approvals are delayed, delivery dates may also move.' },
-    { id: 'late', title: 'Late final payment', body: 'A final payment that remains unpaid for more than 7 days may cause JVO-managed access or services to be paused until payment is made.' },
-    { id: 'cancel', title: 'Cancellation', body: 'If the client cancels after work starts, the upfront payment is kept. Any completed work above that value must also be paid before files are handed over. If JVO cancels, unearned fees are refunded.' }
+    { id: 'ownership', title: 'Ownership', body: 'Ownership of the finished work moves to the client after full payment. JVO may show the finished website in its portfolio and promotional work.' }
   ];
 }
 function paymentPlanFromBody(body, totalValue) {
@@ -348,6 +340,10 @@ async function agreementPdf(project, agreement, settings) {
     doc.moveDown(.5); pdfSection(doc, 'Project scope', agreement.scope || '');
     if (agreement.features?.length) pdfSection(doc, 'Included features', agreement.features.join(' • '));
     pdfSection(doc, 'Payment plan', (agreement.paymentPlan?.milestones || []).map(m => `${m.label}: ${m.percent}% (${money(m.amount, agreement.currency)})`).join('\n'));
+    pdfSection(doc, 'Payment details', `Pay to: ${settings.ownerName || 'Senu James'}
+${settings.phone ? `Phone / WhatsApp: ${settings.phone}
+` : ''}${settings.email ? `Email: ${settings.email}
+` : ''}${settings.paymentInstructions || 'Payment instructions will be shared directly by JVO.'}`);
     doc.addPage(); pdfHeader(doc, settings, 'Terms');
     (agreement.terms || []).forEach(t => pdfSection(doc, t.title, t.body));
     doc.moveDown(.7).strokeColor('#d6cec1').moveTo(54, doc.y).lineTo(541, doc.y).stroke().moveDown(1);
@@ -396,7 +392,7 @@ exports.handler = async event => {
           id: project.id, ref: signed ? agreement.ref : project.ref, projectName: signed ? agreement.projectName : project.projectName, total: signed ? agreement.total : project.total, currency: signed ? agreement.currency : project.currency, timeline: signed ? agreement.timeline : project.timeline, supportDays: signed ? agreement.supportDays : project.supportDays,
           scope: signed ? agreement.scope : project.scope, features: signed ? agreement.features : (project.features || []), paymentPlan: signed ? agreement.paymentPlan : project.paymentPlan,
           status: project.status, signedAt: agreement?.serverSignedAt || null, liveUrl: project.liveUrl || '', dates: project.dates || {}, clientName: signed ? agreement.clientName : '', clientCompany: signed ? agreement.clientCompany : '',
-          terms: signed ? agreement.terms : agreementTerms(project.supportDays), termsVersion: signed ? agreement.termsVersion : TERMS_VERSION,
+          terms: signed ? agreement.terms : agreementTerms(), termsVersion: signed ? agreement.termsVersion : TERMS_VERSION,
           depositDue: firstMilestone?.amount || 0, financials: totals,
           payments: signed ? payments.filter(x => x.status !== 'Voided').map(x => ({ id: x.id, receiptNo: x.receiptNo, type: x.type, amount: x.amount, currency: x.currency, method: x.method, date: x.date, direction: x.direction })) : [],
           changeOrders: signed ? changes.map(x => ({ id: x.id, description: x.description, amount: x.amount, currency: x.currency, status: x.status, decidedAt: x.decidedAt || null })) : [],
@@ -415,7 +411,7 @@ exports.handler = async event => {
         const signedAt = now();
         const snapshot = {
           agreementVersion: AGREEMENT_VERSION, termsVersion: TERMS_VERSION, ref: project.ref, projectId: project.id, projectName: project.projectName, total: project.total, currency: project.currency,
-          paymentPlan: project.paymentPlan, timeline: project.timeline, supportDays: project.supportDays, scope: project.scope, features: project.features || [], terms: agreementTerms(project.supportDays),
+          paymentPlan: project.paymentPlan, timeline: project.timeline, supportDays: project.supportDays, scope: project.scope, features: project.features || [], terms: agreementTerms(),
           clientName: text(body.fullName), clientEmail: text(body.email).toLowerCase(), clientPhone: text(body.phone), clientCompany: text(body.company), signature: text(body.signature), acceptedCheckboxes: accepted,
           serverSignedAt: signedAt, createdAt: signedAt
         };
@@ -473,7 +469,7 @@ exports.handler = async event => {
       const agreement = await db.collection('agreements').doc(project.id).get();
       if (!agreement.exists) return json(404, { error: 'This agreement has not been signed yet.' });
       const buffer = await agreementPdf(project, agreement.data(), await getSettings());
-      return { statusCode: 200, isBase64Encoded: true, headers: { 'content-type': 'application/pdf', 'content-disposition': `attachment; filename="${project.ref}-agreement.pdf"`, 'cache-control': 'private, no-store' }, body: buffer.toString('base64') };
+      return { statusCode: 200, isBase64Encoded: true, headers: { 'content-type': 'application/pdf', 'content-disposition': `attachment; filename="${project.ref}-agreement.pdf"`, 'content-length': String(buffer.length), 'cache-control': 'private, no-store' }, body: buffer.toString('base64') };
     }
     if (action === 'receiptPdf') {
       const token = event.queryStringParameters?.id || ''; const paymentId = event.queryStringParameters?.payment || '';
@@ -576,6 +572,26 @@ exports.handler = async event => {
       };
       const doc = await db.collection('projects').add(p); await activity(doc.id, 'Project created as draft', 'project');
       return json(200, { project: cleanProject(doc.id, p), link: clientLink(p) });
+    }
+
+    if (action === 'deleteProject') {
+      const projectId = text(body.projectId);
+      if (!projectId) return json(400, { error: 'Project ID is required.' });
+      const projectRef = db.collection('projects').doc(projectId);
+      const projectDoc = await projectRef.get();
+      if (!projectDoc.exists) return json(404, { error: 'Project not found.' });
+      const collections = ['payments', 'changeRequests', 'activities', 'clientUpdates', 'reviews', 'emails'];
+      const snapshots = await Promise.all(collections.map(name => db.collection(name).where('projectId', '==', projectId).get()));
+      const agreementRef = db.collection('agreements').doc(projectId);
+      const agreementDoc = await agreementRef.get();
+      const refs = [projectRef, ...(agreementDoc.exists ? [agreementRef] : [])];
+      snapshots.forEach(q => q.docs.forEach(d => refs.push(d.ref)));
+      for (let i = 0; i < refs.length; i += 450) {
+        const batch = db.batch();
+        refs.slice(i, i + 450).forEach(ref => batch.delete(ref));
+        await batch.commit();
+      }
+      return json(200, { ok: true });
     }
 
     if (action === 'editProject') {

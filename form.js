@@ -23,9 +23,24 @@ function renderAgreement(){
 }
 function renderPortal(){
   const signed=!!project.signedAt;if(!signed)return;
-  $('#signSection').classList.add('hidden');$('#portalProgress').classList.remove('hidden');$('#portalProgress').innerHTML=statusProgress(project.status);
+  $('#introSection').classList.add('hidden');$('#projectStrip').classList.add('hidden');$('#scopeSection').classList.add('hidden');$('#paymentPlanSection').classList.add('hidden');$('#termsSection').classList.add('hidden');$('#signSection').classList.add('hidden');
   $('#introTitle').innerHTML='Your project,<br><em>all in one place.</em>';$('#introCopy').textContent='Your signed agreement, payments, updates and next steps stay on this page.';
-  $('#signedPanel').classList.remove('hidden');$('#signedBy').textContent=`Signed by ${project.clientName||'client'}`;$('#signedMeta').textContent=`Signed ${date(project.signedAt)}. This signed version does not change if the project is edited later.`;$('#agreementPdf').href=`/.netlify/functions/api?action=agreementPdf&id=${encodeURIComponent(token)}`;
+  $('#portalProgress').classList.remove('hidden');$('#portalProgress').innerHTML=statusProgress(project.status);
+  $('#signedView').classList.remove('hidden');
+  $('#confirmationProjectName').textContent=project.projectName||'your project';
+  $('#confirmationIntro').textContent=`Your agreement was signed on ${date(project.signedAt)}. Your signed terms, payment plan and payment details are below.`;
+  $('#confirmationClient').textContent=project.clientName||'Client';
+  $('#confirmationSignedDate').textContent=date(project.signedAt);
+  $('#confirmationTotal').textContent=money(project.total,project.currency);
+  $('#confirmationDeposit').textContent=money(project.paymentPlan?.milestones?.[0]?.amount||project.depositDue||0,project.currency);
+  $('#confirmationTerms').innerHTML=(project.terms||[]).map((t,i)=>`<div class="confirmation-term"><span>${i+1}</span><div><strong>${esc(t.title)}</strong><p>${esc(t.body)}</p></div></div>`).join('');
+  $('#confirmationPlan').innerHTML=(project.paymentPlan?.milestones||[]).map(m=>`<div class="plan-row"><strong>${esc(m.label)}</strong><p>${m.percent}% · ${money(m.amount,project.currency)}</p></div>`).join('')||'<p class="muted">Payment plan will be confirmed by JVO.</p>';
+  const firstLabel=project.paymentPlan?.milestones?.[0]?.label||'Upfront payment';
+  $('#confirmationPaymentIntro').textContent=project.financials?.outstanding>0?`${firstLabel} is the next payment due before work starts.`:'Your project balance is currently paid.';
+  $('#paymentOwner').textContent=business?.ownerName||'Senu James';
+  $('#paymentContactDetails').innerHTML=[business?.phone?`<span>Phone / WhatsApp</span><strong>${esc(business.phone)}</strong>`:'',business?.email?`<span>Email</span><strong>${esc(business.email)}</strong>`:''].filter(Boolean).join('');
+  $('#confirmationPaymentInstructions').textContent=project.paymentInstructions||'Payment instructions will be shared directly by JVO.';
+  const payLink=$('#confirmationPaymentLink');if(project.paymentLink){payLink.href=project.paymentLink;payLink.classList.remove('hidden')}else{payLink.classList.add('hidden')}
   $('#paymentSection').classList.remove('hidden');const f=project.financials||{};$('#outstandingAmount').textContent=f.outstanding>0?`${money(f.outstanding,project.currency)} due`:'Paid';
   $('#financialGrid').innerHTML=[['Contract',f.contract],['Approved extras',f.extras],['Paid',f.paid],['Outstanding',f.outstanding]].map(([l,v])=>`<div><span>${l}</span><strong>${money(v,project.currency)}</strong></div>`).join('');
   if(f.outstanding>0 && (project.paymentInstructions||project.paymentLink)){ $('#paymentInstructionsWrap').classList.remove('hidden');$('#paymentInstructions').textContent=project.paymentInstructions||'';if(project.paymentLink){$('#paymentLink').href=project.paymentLink;$('#paymentLink').classList.remove('hidden')} }
@@ -35,10 +50,23 @@ function renderPortal(){
   const updates=project.updates||[];if(updates.length){$('#updatesSection').classList.remove('hidden');$('#updates').innerHTML=updates.map(u=>`<div class="update"><time>${esc(date(u.createdAt))}</time><p>${esc(u.message)}</p></div>`).join('')}
   if(project.liveUrl && ['Launched','Completed'].includes(project.status)){ $('#liveSection').classList.remove('hidden');$('#liveUrl').href=project.liveUrl; }
 }
+async function downloadAgreement(){
+  const button=$('#agreementPdf');if(!button)return;
+  button.disabled=true;button.classList.add('loading');const label=button.querySelector('span');if(label){button.dataset.oldLabel=label.textContent;label.textContent='Preparing agreement'}
+  try{
+    const r=await fetch(`/.netlify/functions/api?action=agreementPdf&id=${encodeURIComponent(token)}`,{headers:{'x-project-token':token}});
+    if(!r.ok){const d=await r.json().catch(()=>({}));throw new Error(d.error||'The signed agreement could not be downloaded.');}
+    const blob=await r.blob();
+    const bytes=new Uint8Array(await blob.arrayBuffer());const signature=new TextDecoder().decode(bytes.slice(0,5));
+    if(bytes.length<5 || signature!=='%PDF-')throw new Error('The signed agreement returned an invalid file.');
+    const pdfBlob=new Blob([bytes],{type:'application/pdf'});const url=URL.createObjectURL(pdfBlob);const a=document.createElement('a');a.href=url;a.download=`${project.ref||'JVO'}-agreement.pdf`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('Signed agreement downloaded.');
+  }catch(e){toast(e.message)}finally{button.disabled=false;button.classList.remove('loading');if(label)label.textContent=button.dataset.oldLabel||'Download agreement'}
+}
 async function changeDecision(button){button.disabled=true;try{await api('changeOrderDecision',{changeId:button.dataset.change,decision:button.dataset.decision});toast(`Additional work ${button.dataset.decision.toLowerCase()}.`);await load()}catch(e){toast(e.message)}finally{button.disabled=false}}
 function fieldError(input,msg){const f=input.closest('.field');f?.classList.toggle('invalid',!!msg);const s=f?.querySelector('.field-error');if(s)s.textContent=msg||''}
 function validate(form){let ok=true;['fullName','email','phone','signature'].forEach(n=>{const i=form.elements[n];let msg='';if(!i.value.trim())msg='This field is required.';if(n==='email'&&i.value&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(i.value))msg='Enter a valid email address.';fieldError(i,msg);if(msg)ok=false});if(form.elements.signature.value.trim().toLowerCase()!==form.elements.fullName.value.trim().toLowerCase()){fieldError(form.elements.signature,'Signature must match the full name above.');ok=false}form.querySelectorAll('input[type=checkbox]').forEach(i=>{if(!i.checked)ok=false});if(!ok&&!form.querySelector('input[type=checkbox]:not(:checked)'))return ok;if(form.querySelector('input[type=checkbox]:not(:checked)'))toast('Please accept all four confirmations.');return ok}
-$('#agreementForm').addEventListener('submit',async e=>{e.preventDefault();const form=e.currentTarget;if(!validate(form))return;const btn=$('#signButton');btn.disabled=true;btn.classList.add('loading');const fd=new FormData(form);const accepted=['confirm_scope','confirm_extra','confirm_payment','confirm_terms'].filter(k=>fd.get(k));const body={fullName:fd.get('fullName'),email:fd.get('email'),phone:fd.get('phone'),company:fd.get('company'),signature:fd.get('signature'),acceptedCheckboxes:accepted};try{await api('sign',body);toast('Agreement signed.');await load();$('#signedPanel').scrollIntoView({behavior:'smooth',block:'center'})}catch(err){toast(err.message)}finally{btn.disabled=false;btn.classList.remove('loading')}});
+$('#agreementForm').addEventListener('submit',async e=>{e.preventDefault();const form=e.currentTarget;if(!validate(form))return;const btn=$('#signButton');btn.disabled=true;btn.classList.add('loading');const fd=new FormData(form);const accepted=['confirm_scope','confirm_extra','confirm_payment','confirm_terms'].filter(k=>fd.get(k));const body={fullName:fd.get('fullName'),email:fd.get('email'),phone:fd.get('phone'),company:fd.get('company'),signature:fd.get('signature'),acceptedCheckboxes:accepted};try{await api('sign',body);toast('Agreement signed.');await load();$('#signedView').scrollIntoView({behavior:'smooth',block:'start'})}catch(err){toast(err.message)}finally{btn.disabled=false;btn.classList.remove('loading')}});
+$('#agreementPdf').addEventListener('click',downloadAgreement);
 $('#reviewForm').addEventListener('submit',async e=>{e.preventDefault();const submitter=e.submitter;const decision=submitter?.value;if(!decision)return;submitter.disabled=true;try{await api('clientDecision',{decision,message:new FormData(e.currentTarget).get('message')});toast(decision==='approve'?'Website approved.':'Changes sent to JVO.');await load()}catch(err){toast(err.message)}finally{submitter.disabled=false}});
-async function load(){if(!token){showError('This project link is missing its ID.');return}try{const d=await api('publicProject',null,'GET');project=d.project;business=d.business;setBusiness();renderAgreement();renderPortal();$('#loadingState').classList.add('hidden');$('#errorState').classList.add('hidden');$('#app').classList.remove('hidden')}catch(e){showError(e.message)}}
+async function load(){if(!token){showError('This project link is missing its ID.');return}try{const d=await api('publicProject',null,'GET');project=d.project;business=d.business;document.title=`${project.projectName||'Project'} | JVO`;setBusiness();renderAgreement();renderPortal();$('#loadingState').classList.add('hidden');$('#errorState').classList.add('hidden');$('#app').classList.remove('hidden')}catch(e){showError(e.message)}}
 load();

@@ -33,7 +33,7 @@
     </section>
 
     <div id="app" class="hidden">
-      <section class="intro">
+      <section class="intro" id="introSection">
         <div>
           <p class="eyebrow">Project <span id="projectRef"></span></p>
           <h1 id="introTitle">Let’s make this <em>official.</em></h1>
@@ -41,7 +41,7 @@
         <p id="introCopy" class="intro-copy">Everything we agreed on is below. Check it, add your details and sign.</p>
       </section>
 
-      <section class="project-strip" aria-label="Project summary">
+      <section class="project-strip" id="projectStrip" aria-label="Project summary">
         <div><span>Project</span><strong id="projectName"></strong></div>
         <div><span>Project value</span><strong id="projectTotal"></strong></div>
         <div><span>Status</span><strong id="projectStatus"></strong></div>
@@ -51,7 +51,7 @@
       <section id="portalProgress" class="portal-progress hidden"></section>
 
       <section class="paper-section" id="scopeSection">
-        <div class="section-label">01</div>
+        <div class="section-label">1</div>
         <div>
           <h2>What JVO is building</h2>
           <p id="projectScope" class="scope-copy"></p>
@@ -60,7 +60,7 @@
       </section>
 
       <section class="paper-section" id="paymentPlanSection">
-        <div class="section-label">02</div>
+        <div class="section-label">2</div>
         <div>
           <h2>Payment plan</h2>
           <div id="paymentPlan" class="plan-list"></div>
@@ -68,15 +68,15 @@
       </section>
 
       <section class="paper-section" id="termsSection">
-        <div class="section-label">03</div>
+        <div class="section-label">3</div>
         <div>
-          <div class="section-title-row"><h2>The simple terms</h2><span id="termsVersion" class="micro"></span></div>
+          <div class="section-title-row"><h2>The terms</h2><span id="termsVersion" class="micro"></span></div>
           <div id="termsList" class="terms-list"></div>
         </div>
       </section>
 
       <section class="paper-section client-section" id="signSection">
-        <div class="section-label">04</div>
+        <div class="section-label">4</div>
         <div>
           <h2>Your details</h2>
           <p class="muted">Fill this part yourself. These details will be saved with the agreement.</p>
@@ -103,15 +103,59 @@
         </div>
       </section>
 
-      <section id="signedPanel" class="signed-panel hidden">
-        <div class="signed-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></div>
-        <div>
-          <p class="eyebrow">Signed agreement</p>
-          <h2 id="signedBy">Agreement signed</h2>
-          <p id="signedMeta" class="muted"></p>
-          <div class="button-row">
-            <a id="agreementPdf" class="secondary-btn" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 20h14"/></svg> Download agreement</a>
+      <section id="signedView" class="confirmation-page hidden" aria-live="polite">
+        <div class="confirmation-hero">
+          <div class="confirmation-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></div>
+          <div>
+            <p class="eyebrow">Agreement confirmed</p>
+            <h1>You're all set,<br><em id="confirmationProjectName">project confirmed.</em></h1>
+            <p id="confirmationIntro" class="confirmation-copy"></p>
           </div>
+          <div class="confirmation-meta">
+            <div><span>Signed by</span><strong id="confirmationClient"></strong></div>
+            <div><span>Signed</span><strong id="confirmationSignedDate"></strong></div>
+            <div><span>Project value</span><strong id="confirmationTotal"></strong></div>
+          </div>
+        </div>
+
+        <div class="confirmation-grid">
+          <section class="confirmation-card">
+            <p class="eyebrow">Your agreement</p>
+            <h2>What you agreed to.</h2>
+            <div id="confirmationTerms" class="confirmation-terms"></div>
+          </section>
+
+          <section class="confirmation-card payment-card">
+            <p class="eyebrow">Payment</p>
+            <h2>What happens next.</h2>
+            <div class="confirmation-payment-summary">
+              <span>Upfront payment</span>
+              <strong id="confirmationDeposit"></strong>
+            </div>
+            <p class="muted" id="confirmationPaymentIntro"></p>
+            <div class="payment-contact">
+              <span>Payment to</span>
+              <strong id="paymentOwner"></strong>
+              <div id="paymentContactDetails"></div>
+            </div>
+            <div id="confirmationPaymentInstructions" class="confirmation-instructions"></div>
+            <a id="confirmationPaymentLink" class="primary-btn compact hidden" target="_blank" rel="noreferrer"><span>Open payment link</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 16 16 8M10 8h6v6"/></svg></a>
+          </section>
+
+          <section class="confirmation-card confirmation-plan-card">
+            <p class="eyebrow">Payment plan</p>
+            <h2>How the payment is split.</h2>
+            <div id="confirmationPlan" class="plan-list"></div>
+          </section>
+
+          <section class="confirmation-card confirmation-download-card">
+            <div>
+              <p class="eyebrow">Signed copy</p>
+              <h2>Keep your copy.</h2>
+              <p class="muted">Download the signed agreement for your records. The signed version stays locked even if project details are updated later.</p>
+            </div>
+            <button id="agreementPdf" class="secondary-btn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 20h14"/></svg><span>Download agreement</span></button>
+          </section>
         </div>
       </section>
 
