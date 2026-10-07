@@ -3,7 +3,7 @@ const token = new URLSearchParams(location.search).get('id');
 let project = null;
 let business = null;
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const money = (n,c='GHS') => { try { return new Intl.NumberFormat('en-GH',{style:'currency',currency:c,maximumFractionDigits:2}).format(Number(n||0)); } catch { return `${c} ${Number(n||0).toFixed(2)}`; } };
+const money = (n,c='GHS') => { const value=Number(n||0); if(c==='GHS') return `GHS ${value.toLocaleString('en-GH',{minimumFractionDigits:2,maximumFractionDigits:2})}`; try { return new Intl.NumberFormat('en-GH',{style:'currency',currency:c,maximumFractionDigits:2}).format(value); } catch { return `${c} ${value.toFixed(2)}`; } };
 const date = x => x ? new Date(x).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) : '';
 async function api(action, body, method='POST'){
   const options={method:body?method:'GET',headers:{'x-project-token':token}};
@@ -38,7 +38,8 @@ function renderPortal(){
   const firstLabel=project.paymentPlan?.milestones?.[0]?.label||'Upfront payment';
   $('#confirmationPaymentIntro').textContent=project.financials?.outstanding>0?`${firstLabel} is the next payment due before work starts.`:'Your project balance is currently paid.';
   $('#paymentOwner').textContent=business?.ownerName||'Senu James';
-  $('#paymentContactDetails').innerHTML=[business?.phone?`<span>Phone / WhatsApp</span><strong>${esc(business.phone)}</strong>`:'',business?.email?`<span>Email</span><strong>${esc(business.email)}</strong>`:''].filter(Boolean).join('');
+  const paymentContacts=[]; if(business?.phone) paymentContacts.push(['Phone / WhatsApp',business.phone]); if(business?.email) paymentContacts.push(['Email',business.email]);
+  $('#paymentContactDetails').innerHTML=paymentContacts.map(([label,value])=>`<div><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('');
   $('#confirmationPaymentInstructions').textContent=project.paymentInstructions||'Payment instructions will be shared directly by JVO.';
   const payLink=$('#confirmationPaymentLink');if(project.paymentLink){payLink.href=project.paymentLink;payLink.classList.remove('hidden')}else{payLink.classList.add('hidden')}
   $('#paymentSection').classList.remove('hidden');const f=project.financials||{};$('#outstandingAmount').textContent=f.outstanding>0?`${money(f.outstanding,project.currency)} due`:'Paid';

@@ -5,6 +5,89 @@
 @media(max-width:560px){.shell{width:min(100% - 24px,1080px);padding-top:38px}.topbar{min-height:60px}.secure-note{font-size:7px}.intro h1{font-size:clamp(48px,15vw,72px)}.project-strip{grid-template-columns:1fr}.project-strip>div{border-right:0;border-bottom:1px solid var(--line)}.project-strip>div:last-child{border-bottom:0}.paper-section{grid-template-columns:1fr;gap:12px;padding:34px 0}.section-label{font-size:8px}.field-grid{grid-template-columns:1fr}.plan-row,.term{grid-template-columns:1fr;gap:6px}.portal-card-head{align-items:start;flex-direction:column}.financial-grid{grid-template-columns:1fr}.financial-grid>div{border-right:0;border-bottom:1px solid var(--line)}.financial-grid>div:last-child{border-bottom:0}.record{grid-template-columns:1fr}.record-side{text-align:left}.record-actions{justify-content:flex-start}.signed-panel{grid-template-columns:1fr}.toast{left:12px;right:12px}.primary-btn,.secondary-btn{min-height:48px}.button-row>*{width:100%}footer{flex-direction:column}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 
-.confirmation-page{padding:10px 0 24px}.confirmation-hero{display:grid;grid-template-columns:54px minmax(0,1fr);gap:18px;align-items:start;padding:42px 0 30px;border-bottom:1px solid var(--ink)}.confirmation-mark{width:48px;height:48px;display:grid;place-items:center;background:#eef5ec;color:var(--success);border:1px solid #a8c0aa}.confirmation-mark svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.confirmation-hero h1{font:600 clamp(46px,8vw,88px)/.88 var(--serif);letter-spacing:-.05em;margin:8px 0 15px}.confirmation-hero h1 em{color:var(--accent);font-style:normal}.confirmation-copy{max-width:680px;color:var(--muted);font-size:14px;line-height:1.8;margin:0}.confirmation-meta{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);background:var(--card);margin-top:18px}.confirmation-meta>div{padding:16px 18px;border-right:1px solid var(--line)}.confirmation-meta>div:last-child{border-right:0}.confirmation-meta span,.confirmation-payment-summary span,.payment-contact>span{display:block;font:500 8px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}.confirmation-meta strong{font:600 17px var(--serif)}.confirmation-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);gap:14px;margin-top:18px}.confirmation-card{background:var(--card);border:1px solid var(--line);padding:clamp(22px,3.5vw,30px)}.confirmation-card h2{font:600 clamp(28px,3.5vw,42px)/1 var(--serif);letter-spacing:-.03em;margin:8px 0 20px}.confirmation-terms{display:grid}.confirmation-term{display:grid;grid-template-columns:27px 1fr;gap:12px;padding:16px 0;border-top:1px solid var(--line)}.confirmation-term:first-child{border-top:0;padding-top:0}.confirmation-term>span{font:500 9px var(--mono);color:var(--muted);padding-top:2px}.confirmation-term strong{display:block;font:600 14px var(--sans);margin-bottom:5px}.confirmation-term p{margin:0;color:var(--muted);line-height:1.7}.confirmation-plan-card{grid-column:1/-1}.confirmation-download-card{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:24px}.confirmation-download-card h2{margin-bottom:8px}.confirmation-download-card p{max-width:720px;margin:0}.confirmation-download-card .secondary-btn{flex:0 0 auto}.confirmation-payment-summary{border:1px solid var(--ink);padding:16px;background:#fffdf7;margin:0 0 15px}.confirmation-payment-summary strong{display:block;font:600 28px var(--serif)}.payment-contact{display:grid;gap:5px;border-top:1px solid var(--line);padding-top:16px}.payment-contact strong{font-size:14px}.payment-contact div{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:5px}.payment-contact div span{font:500 8px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.payment-contact div strong{font-size:12px;font-weight:600}.confirmation-instructions{white-space:pre-line;padding:15px;background:#fff9e9;border:1px solid #d9c38d;margin:17px 0}.confirmation-instructions:empty{display:none}.confirmation-card .primary-btn{width:100%}
-@media(max-width:820px){.confirmation-grid{grid-template-columns:1fr}.confirmation-plan-card,.confirmation-download-card{grid-column:auto}.confirmation-meta{grid-template-columns:1fr}.confirmation-meta>div{border-right:0;border-bottom:1px solid var(--line)}.confirmation-meta>div:last-child{border-bottom:0}.confirmation-download-card{align-items:flex-start;flex-direction:column}.confirmation-download-card .secondary-btn{width:100%}}
-@media(max-width:560px){.confirmation-hero{grid-template-columns:1fr;gap:14px;padding-top:28px}.confirmation-meta{margin-top:6px}.payment-contact div{grid-template-columns:1fr}.confirmation-card{padding:20px}.confirmation-hero h1{font-size:clamp(45px,14vw,68px)}}
+/* Signed confirmation page */
+.confirmation-page{margin:0 0 28px;padding:0;background:var(--card);border:1px solid var(--ink)}
+.confirmation-hero{background:var(--ink);color:#fff;padding:clamp(28px,5vw,54px);display:grid;grid-template-columns:56px minmax(0,1fr);gap:20px;align-items:start}
+.confirmation-mark{width:48px;height:48px;display:grid;place-items:center;background:#eef5ec;color:var(--success);border:1px solid #a8c0aa;margin-top:2px}
+.confirmation-mark svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.confirmation-hero .eyebrow{color:#bdb4a9}
+.confirmation-hero h1{font:600 clamp(42px,7vw,76px)/.9 var(--serif);letter-spacing:-.055em;margin:10px 0 16px;max-width:820px}
+.confirmation-hero h1 em{color:#df775e;font-style:normal}
+.confirmation-copy{max-width:720px;color:#d4ccc1;font-size:14px;line-height:1.8;margin:0}
+.confirmation-meta{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid rgba(255,255,255,.18);margin-top:8px}
+.confirmation-meta>div{min-width:0;padding:15px 18px;border-right:1px solid rgba(255,255,255,.14)}
+.confirmation-meta>div:last-child{border-right:0}
+.confirmation-meta span,.confirmation-payment-summary span,.payment-contact>span{display:block;font:500 8px/1.35 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#9c948b;margin-bottom:7px}
+.confirmation-meta strong{display:block;font:600 16px/1.2 var(--serif);overflow-wrap:anywhere}
+.confirmation-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:14px;padding:14px}
+.confirmation-card{min-width:0;background:#fffdf8;border:1px solid var(--line);padding:clamp(20px,3.5vw,30px)}
+.confirmation-card h2{font:600 clamp(28px,3.2vw,40px)/1 var(--serif);letter-spacing:-.035em;margin:7px 0 22px}
+.confirmation-terms{display:grid}
+.confirmation-term{display:grid;grid-template-columns:32px minmax(0,1fr);gap:12px;padding:18px 0;border-top:1px solid var(--line)}
+.confirmation-term:first-child{border-top:0;padding-top:0}
+.confirmation-term>span{width:26px;height:26px;display:grid;place-items:center;border:1px solid var(--line);font:500 9px/1 var(--mono);color:var(--muted);margin-top:1px}
+.confirmation-term strong{display:block;font:600 14px/1.35 var(--sans);margin:0 0 6px;overflow-wrap:anywhere}
+.confirmation-term p{margin:0;color:var(--muted);line-height:1.72;overflow-wrap:anywhere}
+.confirmation-card.payment-card{display:flex;flex-direction:column}
+.confirmation-payment-summary{border:1px solid var(--ink);padding:16px 17px;background:#f8f1e6;margin:0 0 16px}
+.confirmation-payment-summary strong{display:block;font:600 clamp(28px,3vw,34px)/1 var(--serif);overflow-wrap:anywhere}
+.confirmationPaymentIntro{}
+.payment-contact{border-top:1px solid var(--line);padding-top:16px;margin-top:2px}
+.payment-contact>strong{display:block;font:600 18px/1.25 var(--sans);overflow-wrap:anywhere}
+.payment-contact>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;margin-top:14px}
+.payment-contact>div>div{min-width:0;padding-top:11px;border-top:1px solid var(--line)}
+.payment-contact>div span{display:block;font:500 8px/1.35 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.payment-contact>div strong{display:block;font:600 12px/1.45 var(--sans);overflow-wrap:anywhere;word-break:break-word}
+.confirmation-instructions{white-space:pre-line;padding:14px 15px;background:#fff8e9;border:1px solid #d9c38d;margin:17px 0;font-size:12px;line-height:1.65;overflow-wrap:anywhere}
+.confirmation-instructions:empty{display:none}
+.confirmation-card .primary-btn{width:100%;margin-top:auto}
+.confirmation-plan-card,.confirmation-download-card{grid-column:1/-1}
+.confirmation-plan-card{padding-bottom:6px}
+.confirmation-plan-card .plan-list{margin-top:0}
+.confirmation-plan-card .plan-row{grid-template-columns:minmax(180px,.7fr) minmax(0,1fr);padding:16px 0}
+.confirmation-download-card{display:flex;align-items:center;justify-content:space-between;gap:30px;padding:24px 28px}
+.confirmation-download-card h2{margin:6px 0 8px}
+.confirmation-download-card p{max-width:700px;margin:0;line-height:1.7}
+.confirmation-download-card .secondary-btn{flex:0 0 auto;white-space:nowrap}
+
+/* Keep the signed view visually first when a client returns to the same private link. */
+#signedView + #portalProgress{margin:0 14px 14px}
+#signedView + #portalProgress + .portal-card,
+#signedView + #portalProgress + .portal-card + .portal-card,
+#signedView + #portalProgress + .portal-card + .portal-card + .portal-card,
+#signedView + #portalProgress + .portal-card + .portal-card + .portal-card + .portal-card{margin-left:14px;margin-right:14px}
+
+@media(max-width:900px){
+  .confirmation-grid{grid-template-columns:1fr}
+  .confirmation-plan-card,.confirmation-download-card{grid-column:auto}
+}
+@media(max-width:700px){
+  .confirmation-hero{grid-template-columns:1fr;gap:15px;padding:28px 22px 24px}
+  .confirmation-mark{width:44px;height:44px}
+  .confirmation-hero h1{font-size:clamp(42px,12.5vw,64px)}
+  .confirmation-meta{grid-template-columns:1fr;margin-top:6px}
+  .confirmation-meta>div{border-right:0;border-bottom:1px solid rgba(255,255,255,.14)}
+  .confirmation-meta>div:last-child{border-bottom:0}
+  .confirmation-grid{padding:10px;gap:10px}
+  .confirmation-card{padding:20px}
+  .confirmation-plan-card .plan-row{grid-template-columns:1fr;gap:6px}
+  .payment-contact>div{grid-template-columns:1fr}
+  .confirmation-download-card{align-items:stretch;flex-direction:column;gap:18px;padding:20px}
+  .confirmation-download-card .secondary-btn{width:100%;white-space:normal}
+}
+@media(max-width:560px){
+  .confirmation-page{margin-bottom:18px}
+  .confirmation-hero{padding:24px 17px 20px}
+  .confirmation-hero h1{font-size:clamp(40px,13.5vw,58px);margin-top:8px}
+  .confirmation-copy{font-size:13px}
+  .confirmation-grid{padding:8px}
+  .confirmation-card{padding:18px}
+  .confirmation-card h2{font-size:31px}
+  .confirmation-term{grid-template-columns:28px minmax(0,1fr);gap:10px;padding:15px 0}
+  .confirmation-term>span{width:24px;height:24px}
+  #signedView + #portalProgress{margin:0 8px 8px}
+  #signedView + #portalProgress + .portal-card,
+  #signedView + #portalProgress + .portal-card + .portal-card,
+  #signedView + #portalProgress + .portal-card + .portal-card + .portal-card,
+  #signedView + #portalProgress + .portal-card + .portal-card + .portal-card + .portal-card{margin-left:8px;margin-right:8px}
+}
