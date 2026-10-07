@@ -145,8 +145,10 @@ const cleanProject = (id, d) => ({ id, ...d });
 const currency = value => ALLOWED_CURRENCIES.includes(value) ? value : 'GHS';
 const amount = value => Math.round(Number(value || 0) * 100) / 100;
 const money = (value, code = 'GHS') => {
-  try { return new Intl.NumberFormat('en-GH', { style: 'currency', currency: code, maximumFractionDigits: 2 }).format(Number(value || 0)); }
-  catch { return `${code} ${Number(value || 0).toFixed(2)}`; }
+  const numeric = Number(value || 0);
+  if (code === 'GHS') return `GHS ${numeric.toLocaleString('en-GH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  try { return new Intl.NumberFormat('en-GH', { style: 'currency', currency: code, maximumFractionDigits: 2 }).format(numeric); }
+  catch { return `${code} ${numeric.toFixed(2)}`; }
 };
 const formatDate = value => value ? new Date(value).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }) : '';
 const shortDate = value => value ? new Date(value).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }) : '';
@@ -328,28 +330,188 @@ function pdfSection(doc, heading, body) {
 }
 async function agreementPdf(project, agreement, settings) {
   return pdfBuffer(doc => {
-    pdfHeader(doc, settings, 'Signed project agreement');
-    doc.font('Helvetica-Bold').fontSize(28).fillColor('#171512').text(agreement.projectName || project.projectName);
-    doc.moveDown(.35).font('Helvetica').fontSize(9).fillColor('#77716a').text(`Reference: ${agreement.ref || project.ref}`);
-    doc.moveDown(1.3);
-    const facts = [
-      ['Client', agreement.clientName], ['Email', agreement.clientEmail], ['Phone', agreement.clientPhone], ['Company', agreement.clientCompany || 'Not provided'],
-      ['Project value', money(agreement.total, agreement.currency)], ['Signed', `${formatDate(agreement.serverSignedAt)} UTC`], ['Terms version', agreement.termsVersion]
-    ];
-    facts.forEach(([k,v]) => { doc.font('Helvetica-Bold').fontSize(8).fillColor('#77716a').text(k.toUpperCase()); doc.font('Helvetica').fontSize(10).fillColor('#171512').text(String(v || '')); doc.moveDown(.5); });
-    doc.moveDown(.5); pdfSection(doc, 'Project scope', agreement.scope || '');
-    if (agreement.features?.length) pdfSection(doc, 'Included features', agreement.features.join(' • '));
-    pdfSection(doc, 'Payment plan', (agreement.paymentPlan?.milestones || []).map(m => `${m.label}: ${m.percent}% (${money(m.amount, agreement.currency)})`).join('\n'));
-    pdfSection(doc, 'Payment details', `Pay to: ${settings.ownerName || 'Senu James'}
-${settings.phone ? `Phone / WhatsApp: ${settings.phone}
-` : ''}${settings.email ? `Email: ${settings.email}
-` : ''}${settings.paymentInstructions || 'Payment instructions will be shared directly by JVO.'}`);
-    doc.addPage(); pdfHeader(doc, settings, 'Terms');
-    (agreement.terms || []).forEach(t => pdfSection(doc, t.title, t.body));
-    doc.moveDown(.7).strokeColor('#d6cec1').moveTo(54, doc.y).lineTo(541, doc.y).stroke().moveDown(1);
-    doc.font('Helvetica-Bold').fontSize(10).fillColor('#171512').text('Accepted by');
-    doc.font('Helvetica').fontSize(11).text(agreement.signature || agreement.clientName || '');
-    doc.fontSize(8.5).fillColor('#77716a').text(`Signed ${agreement.serverSignedAt || ''}`);
+    const pageLeft = 54;
+    const pageRight = doc.page.width - 54;
+    const contentWidth = pageRight - pageLeft;
+    const footerY = doc.page.height - 38;
+    const ink = '#171512';
+    const muted = '#746d64';
+    const line = '#ddd5ca';
+    const paper = '#fbf8f3';
+    const warm = '#f1ebe2';
+    const accent = '#a94d35';
+    const ref = agreement.ref || project.ref;
+
+    const footer = () => {
+      doc.save();
+      doc.strokeColor(line).lineWidth(.7).moveTo(pageLeft, footerY - 10).lineTo(pageRight, footerY - 10).stroke();
+      doc.font('Helvetica').fontSize(7.5).fillColor(muted)
+        .text(settings.businessName || 'JVO WEB', pageLeft, footerY, { width: 180 })
+        .text(`Project agreement  |  ${ref}`, pageLeft + 180, footerY, { width: contentWidth - 180, align: 'right' });
+      doc.restore();
+    };
+
+    const ensureSpace = (needed = 90) => {
+      if (doc.y + needed > footerY - 18) {
+        doc.addPage();
+        footer();
+      }
+    };
+
+    const sectionHeading = (number, title, subtitle = '') => {
+      ensureSpace(52);
+      const y = doc.y;
+      doc.save();
+      doc.fillColor(accent).rect(pageLeft, y + 2, 4, 24).fill();
+      doc.font('Helvetica-Bold').fontSize(8).fillColor(accent).text(String(number), pageLeft + 13, y + 2, { width: 20 });
+      doc.font('Helvetica-Bold').fontSize(12).fillColor(ink).text(title, pageLeft + 34, y, { width: contentWidth - 34 });
+      doc.restore();
+      if (subtitle) {
+        doc.font('Helvetica').fontSize(8).fillColor(muted).text(subtitle, pageLeft + 34, y + 18, { width: contentWidth - 34 });
+      }
+      doc.y = y + (subtitle ? 40 : 30);
+    };
+
+    const paragraph = body => {
+      if (!body) return;
+      const clean = String(body).trim();
+      const estimated = Math.max(54, doc.heightOfString(clean, { width: contentWidth - 4, font: 'Helvetica', fontSize: 9.5, lineGap: 3 }));
+      ensureSpace(estimated + 20);
+      doc.font('Helvetica').fontSize(9.5).fillColor('#49433d').text(clean, pageLeft, doc.y, { width: contentWidth, lineGap: 3 });
+      doc.moveDown(.65);
+    };
+
+    const infoCard = (label, value, width, x, y, strong = false) => {
+      doc.save();
+      doc.roundedRect(x, y, width, 62, 7).fillAndStroke(paper, line);
+      doc.font('Helvetica-Bold').fontSize(7).fillColor(muted).text(String(label).toUpperCase(), x + 12, y + 11, { width: width - 24 });
+      doc.font(strong ? 'Helvetica-Bold' : 'Helvetica').fontSize(strong ? 15 : 9.5).fillColor(ink)
+        .text(String(value || '-'), x + 12, y + 28, { width: width - 24, lineGap: 2 });
+      doc.restore();
+    };
+
+    const paymentCard = (milestone, x, y, width) => {
+      doc.save();
+      doc.roundedRect(x, y, width, 76, 8).fillAndStroke(paper, line);
+      doc.font('Helvetica-Bold').fontSize(9.5).fillColor(ink).text(String(milestone.label || 'Payment'), x + 12, y + 12, { width: width - 24 });
+      doc.font('Helvetica-Bold').fontSize(16).fillColor(accent).text(money(milestone.amount, agreement.currency), x + 12, y + 30, { width: width - 24 });
+      doc.font('Helvetica').fontSize(7.5).fillColor(muted).text(`${Number(milestone.percent || 0)}% of project value`, x + 12, y + 55, { width: width - 24 });
+      doc.restore();
+    };
+
+    const terms = agreement.terms || [];
+    const milestones = agreement.paymentPlan?.milestones || [];
+    const projectValue = money(agreement.total, agreement.currency);
+
+    // Page 1: agreement overview.
+    doc.rect(0, 0, doc.page.width, 112).fill(ink);
+    doc.font('Helvetica-Bold').fontSize(20).fillColor('#ffffff').text(settings.businessName || 'JVO WEB', pageLeft, 26);
+    doc.font('Helvetica').fontSize(8).fillColor('#c9c1b8').text('WEB DESIGN AND DEVELOPMENT', pageLeft, 53, { characterSpacing: 1.2 });
+    doc.font('Helvetica-Bold').fontSize(8).fillColor('#ffffff').text('SIGNED PROJECT AGREEMENT', pageLeft, 78, { characterSpacing: 1.05 });
+    doc.font('Helvetica').fontSize(8).fillColor('#c9c1b8').text(ref, pageLeft, 91, { width: contentWidth, align: 'right' });
+    footer();
+
+    doc.y = 143;
+    doc.font('Helvetica-Bold').fontSize(26).fillColor(ink).text(agreement.projectName || project.projectName, pageLeft, doc.y, { width: contentWidth - 120, lineGap: 2 });
+    doc.moveDown(.3);
+    doc.font('Helvetica').fontSize(9).fillColor(muted).text('This document records the terms accepted by the client for the project below.', pageLeft, doc.y, { width: contentWidth - 90 });
+
+    const badgeX = pageRight - 86;
+    doc.save();
+    doc.roundedRect(badgeX, 143, 86, 28, 14).fill(accent);
+    doc.font('Helvetica-Bold').fontSize(8).fillColor('#ffffff').text('SIGNED', badgeX, 153, { width: 86, align: 'center' });
+    doc.restore();
+
+    doc.moveDown(1.15);
+    const cardGap = 10;
+    const cardW = (contentWidth - cardGap * 2) / 3;
+    const cardY = doc.y;
+    infoCard('Client', agreement.clientName, cardW, pageLeft, cardY);
+    infoCard('Signed', formatDate(agreement.serverSignedAt), cardW, pageLeft + cardW + cardGap, cardY);
+    infoCard('Project value', projectValue, cardW, pageLeft + (cardW + cardGap) * 2, cardY, true);
+    doc.y = cardY + 78;
+
+    infoCard('Email', agreement.clientEmail || 'Not provided', cardW, pageLeft, doc.y);
+    infoCard('Phone', agreement.clientPhone || 'Not provided', cardW, pageLeft + cardW + cardGap, doc.y);
+    infoCard('Company', agreement.clientCompany || 'Not provided', cardW, pageLeft + (cardW + cardGap) * 2, doc.y);
+    doc.y += 88;
+
+    sectionHeading(1, 'Project scope');
+    paragraph(agreement.scope || 'No additional scope notes were provided.');
+
+    if (agreement.features?.length) {
+      sectionHeading(2, 'Included features');
+      const featureText = agreement.features.map((feature, index) => `${index + 1}. ${feature}`).join('\n');
+      paragraph(featureText);
+    }
+
+    sectionHeading(agreement.features?.length ? 3 : 2, 'Payment plan', 'The agreed project value is allocated below.');
+    if (milestones.length) {
+      const cols = Math.min(2, milestones.length);
+      const gap = 10;
+      const w = (contentWidth - gap * (cols - 1)) / cols;
+      const startY = doc.y;
+      milestones.forEach((m, index) => {
+        const row = Math.floor(index / cols);
+        const col = index % cols;
+        const y = startY + row * 88;
+        paymentCard(m, pageLeft + col * (w + gap), y, w);
+      });
+      doc.y = startY + Math.ceil(milestones.length / cols) * 88;
+    } else {
+      paragraph('No payment milestones were recorded.');
+    }
+
+    ensureSpace(128);
+    doc.moveDown(.4);
+    doc.save();
+    const paymentY = doc.y;
+    doc.roundedRect(pageLeft, paymentY, contentWidth, 116, 8).fill(warm);
+    doc.fillColor(accent).rect(pageLeft, paymentY, 4, 116).fill();
+    doc.font('Helvetica-Bold').fontSize(12).fillColor(ink).text('Payment details', pageLeft + 18, paymentY + 16);
+    doc.font('Helvetica-Bold').fontSize(9).fillColor(muted).text('PAY TO', pageLeft + 18, paymentY + 40);
+    doc.font('Helvetica-Bold').fontSize(12).fillColor(ink).text(settings.ownerName || 'Senu James', pageLeft + 18, paymentY + 53);
+    const detailX = pageLeft + contentWidth * .52;
+    if (settings.phone) {
+      doc.font('Helvetica-Bold').fontSize(8).fillColor(muted).text('PHONE / WHATSAPP', detailX, paymentY + 40);
+      doc.font('Helvetica').fontSize(9).fillColor(ink).text(settings.phone, detailX, paymentY + 53);
+    }
+    if (settings.email) {
+      doc.font('Helvetica-Bold').fontSize(8).fillColor(muted).text('EMAIL', detailX, paymentY + 72);
+      doc.font('Helvetica').fontSize(9).fillColor(ink).text(settings.email, detailX, paymentY + 85);
+    }
+    if (settings.paymentInstructions) {
+      doc.font('Helvetica').fontSize(8).fillColor('#5b544d').text(settings.paymentInstructions, pageLeft + 18, paymentY + 86, { width: contentWidth * .45, lineGap: 2 });
+    }
+    doc.restore();
+
+    // Page 2+: signed terms.
+    doc.addPage();
+    footer();
+    doc.y = 62;
+    doc.font('Helvetica-Bold').fontSize(23).fillColor(ink).text('Agreement terms');
+    doc.moveDown(.25);
+    doc.font('Helvetica').fontSize(9).fillColor(muted).text(`Accepted for ${agreement.projectName || project.projectName}  |  ${ref}`);
+    doc.moveDown(1.2);
+
+    terms.forEach((term, index) => {
+      sectionHeading(index + 1, term.title);
+      paragraph(term.body);
+      doc.moveDown(.15);
+    });
+
+    ensureSpace(118);
+    const signY = doc.y + 5;
+    doc.save();
+    doc.roundedRect(pageLeft, signY, contentWidth, 92, 8).fillAndStroke(paper, line);
+    doc.font('Helvetica-Bold').fontSize(8).fillColor(muted).text('ACCEPTED BY', pageLeft + 16, signY + 14);
+    doc.font('Helvetica-Bold').fontSize(15).fillColor(ink).text(agreement.signature || agreement.clientName || 'Client', pageLeft + 16, signY + 33, { width: contentWidth * .6 });
+    doc.font('Helvetica').fontSize(8.5).fillColor(muted).text(`Signed ${agreement.serverSignedAt || ''}`, pageLeft + 16, signY + 57);
+    doc.font('Helvetica-Bold').fontSize(8).fillColor(muted).text('TERMS VERSION', pageRight - 112, signY + 14, { width: 96, align: 'right' });
+    doc.font('Helvetica').fontSize(8.5).fillColor(ink).text(agreement.termsVersion || '-', pageRight - 112, signY + 33, { width: 96, align: 'right' });
+    doc.restore();
+
+    footer();
   });
 }
 async function receiptPdf(project, payment, totals, settings) {
